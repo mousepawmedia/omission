@@ -20,6 +20,8 @@ Passages have been trimmed and rearranged to be no more than four lines.
 ## Authors
 
  - Jason C. McDonald
+ - Anne McDonald (Content)
+ - Jane McArthur (Content)
 
 ## Dependencies
 

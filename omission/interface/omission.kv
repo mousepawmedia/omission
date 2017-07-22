@@ -1,0 +1,274 @@
+#:kivy 1.10.0
+#:import hex kivy.utils.get_color_from_hex
+
+#Top level element is a FloatLayout, for popup items.
+<OmissionWindow>:
+
+<Menu>:
+    # Game menu.
+    orientation: 'vertical'
+    size_hint: (0.9, 0.9)
+    pos_hint: {'center': (0.5, 0.5)}
+    spacing: '20px'
+    BoxLayout:
+        # Logo box
+        size_hint_y: 0.4
+        Image:
+            size_hint_x: 0.5
+            source: "resources/icons/omission_glow.png"
+    BoxLayout:
+        # Mode box.
+        orientation: 'horizontal'
+        size_hint_y: 0.2
+        OrbitronToggleButton:
+            id: btn_timed
+            group: 'game_mode'
+            text: 'Timed'
+            on_press: root.press_toggle('Timed', self)
+        OrbitronToggleButton:
+            id: btn_survival
+            group: 'game_mode'
+            text: 'Survival'
+            on_press: root.press_toggle('Survival', self)
+        OrbitronToggleButton:
+            id: btn_infinite
+            group: 'game_mode'
+            text: 'Infinite'
+            on_press: root.press_toggle('Infinite', self)
+    BoxLayout:
+        # Action box.
+        orientation: 'horizontal'
+        spacing: '20px'
+        id: box_controls
+
+<InfoBox>:
+    orientation: 'vertical'
+    OrbitronLabel:
+        size_hint_y: 0.3
+        font_size: '30sp'
+        text: "Select a mode above to play."
+    OrbitronLabel:
+        text: "Created by MousePaw Games\nwww.mousepawgames.com"
+        halign: 'center'
+        font_size: '20sp'
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 0.15
+        spacing: '20px'
+        OrbitronButton:
+            text: "Rules"
+            font_size: '15sp'
+            on_press: root.press_rules()
+        OrbitronButton:
+            text: "Credits"
+            font_size: '15sp'
+            on_press: root.press_credits()
+        OrbitronButton:
+            text: "Quit"
+            font_size: '15sp'
+            on_press: root.press_quit()
+
+<PlayBox>:
+    # Button box.
+    orientation: 'vertical'
+    size_hint_x: 2
+    OrbitronButton:
+        id: btn_play
+        on_press: root.press_play()
+        size_hint_y: 0.3
+        font_size: '30sp'
+        text: 'Play'
+    OrbitronLabel:
+        text: "HIGH SCORES"
+        font_size: '20sp'
+        size_hint_y: 0.2
+    OrbitronLabel:
+        id: lbl_scores
+        font_size: '20sp'
+        text: ""
+
+<TimedSettings>:
+    orientation: 'vertical'
+    spacing: '20px'
+    OrbitronLabel:
+        font_size: '20sp'
+        text: 'Timer Length'
+    OrbitronSpinner:
+        id: spn_time
+        text: '30'
+        values: ('15', '30', '60', '90', '120')
+    OrbitronLabel:
+        font_size: '20sp'
+        text: 'Bonus'
+    OrbitronSpinner:
+        id: spn_bonus
+        text: '3'
+        values: ('1', '2', '3', '4', '5')
+    OrbitronLabel:
+        font_size: '20sp'
+        text: 'Penalty'
+    OrbitronSpinner:
+        id: spn_penalty
+        text: '1'
+        values: ('1', '2', '3', '4', '5')
+
+<SurvivalSettings>:
+    orientation: 'vertical'
+    spacing: '20px'
+    OrbitronLabel:
+        font_size: '20sp'
+        text: 'Lives'
+    OrbitronSpinner:
+        id: spn_lives
+        text: '3'
+        values: ('1', '2', '3', '4', '5')
+
+<TrySettings>:
+    orientation: 'vertical'
+    OrbitronLabel:
+        text: 'Tries'
+        font_size: '20sp'
+    OrbitronSpinner:
+        id: spn_tries
+        text: '3'
+        values: ('1', '2', '3', '4', '5')
+    OrbitronLabel:
+        text: 'Hint On...'
+        font_size: '20sp'
+    OrbitronSpinner:
+        id: spn_hint
+        text: '2'
+        values: ('1', '2', '3', '4', '5')
+    OrbitronLabel:
+        text: 'Clue On...'
+        font_size: '20sp'
+    OrbitronSpinner:
+        id: spn_clue
+        text: '3'
+        values: ('1', '2', '3', '4', '5')
+    OrbitronLabel:
+        text: 'Show Passage'
+        font_size: '20sp'
+    OrbitronSpinner:
+        id: spn_passage
+        text: 'True'
+        values: ('True', 'False')
+
+<Gameplay>:
+    # Main box, holding the other three.
+    orientation: 'vertical'
+    size_hint: (0.9, 0.9)
+    pos_hint: {'center': (0.5, 0.5)}
+    spacing: '20px'
+    BoxLayout:
+        # Top bar.
+        orientation: 'horizontal'
+        size_hint_y: 0.08
+        spacing: '10px'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: '10px'
+            OrbitronLabel:
+                text: "Tries Left"
+                font_size: '15sp'
+            OrbitronLabel:
+                id: lbl_tries
+                text: "3"
+                font_size: '30sp'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: '10px'
+            OrbitronLabel:
+                text: "Score"
+                font_size: '15sp'
+            OrbitronLabel:
+                id: lbl_score
+                text: "00000000"
+                font_size: '30sp'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: '10px'
+            OrbitronLabel:
+                text: "Removals"
+                font_size: '15sp'
+            OrbitronLabel:
+                id: lbl_removals
+                text: "0"
+                font_size: '30sp'
+    BoxLayout:
+        # Center box.
+        orientation: 'horizontal'
+        spacing: '10px'
+        Label:
+            id: lbl_puzzle
+            rgba: hex('#FFFFFF')
+            text: "The passage you need to solve."
+            font_name: 'resources/font/source-sans-pro/SourceSansPro-Regular.otf'
+            font_size: '20sp'
+            text_size: self.size
+            halign: 'center'
+            valign: 'middle'
+            canvas.before:
+                Color:
+                    rgba: hex('#003300')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        OrbitronLabel:
+            # Display guesses
+            id: lbl_guess
+            size_hint_x: None
+            text: "g\nu\ne\ns\ns"
+            font_size: '30sp'
+    BoxLayout:
+        # Bottom bar.
+        orientation: 'horizontal'
+        size_hint_y: 0.08
+        Image:
+            id: img_mode
+            size_hint_x: None
+            color: hex("#00FF00")
+            source: "resources/icons/clock.png"
+        ProgressBar:
+            id: bar_remaining
+            value: 50
+        OrbitronLabel:
+            id: lbl_remaining
+            size_hint_x: None
+            text: "0:15"
+            font_size: '30sp'
+
+<OrbitronLabel@Label>:
+    color: hex("#00FF00")
+    outline_color: hex('#007700')
+    outline_width: '2px'
+    font_name: 'resources/font/orbitron/orbitron-medium.otf'
+
+<OrbitronSpinner@Spinner>:
+    color: hex("#FFFFFF")
+    outline_color: hex('#007700')
+    outline_width: '2px'
+    font_size: '20sp'
+    font_name: 'resources/font/orbitron/orbitron-medium.otf'
+
+<OrbitronButton@Button>:
+    color: hex("#FFFFFF")
+    outline_color: hex('#007700')
+    outline_width: '2px'
+    font_size: '20sp'
+    font_name: 'resources/font/orbitron/orbitron-medium.otf'
+
+<OrbitronToggleButton@ToggleButton>:
+    color: hex("#FFFFFF")
+    outline_color: hex('#007700')
+    outline_width: '2px'
+    font_size: '20sp'
+    font_name: 'resources/font/orbitron/orbitron-medium.otf'
+
+<PopupLabel>:
+    color: hex("#FFFFFF")
+    outline_color: hex('#000000')
+    outline_width: '5px'
+    font_size: '40sp'
+    font_name: 'resources/font/orbitron/orbitron-medium.otf'
+    text: "Popup"
