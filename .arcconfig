@@ -1,7 +1,4 @@
 {
 	"phabricator.uri" : "https://phabricator.mousepawmedia.net",
-	"repository.callsign" : "O",
-	"load" : [
-		".arclibs/cppcheck"
-	]
+	"repository.callsign" : "O"
 }
