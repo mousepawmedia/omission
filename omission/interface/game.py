@@ -268,7 +268,6 @@ class Gameplay(BoxLayout):
         Update the interface.
         """
         info = self.gameround.get_status()
-        print(info)
         if check_mode:
             if info[0] == GameMode.Survival:
                 self.ids.img_mode.source = "resources/icons/heart.png"
@@ -287,30 +286,36 @@ class Gameplay(BoxLayout):
             self.ids.lbl_lives.size_hint_x = 0.1
         else:
             self.ids.lbl_lives.text = ""
-            self.ids.lbl_lives.size_hint_x = 0
+            self.ids.lbl_lives.size_hint_x = 0.0
+
+        # Our default colors are green.
+        color = get_color_from_hex("#00FF00")
+        outline_color = get_color_from_hex('#007700')
 
         # In Timed or Survival mode, change color to reflect remaining time/lives.
         if info[0] == GameMode.Timed or info[0] == GameMode.Survival:
             # If we have 1/6 or less remaning, display as RED.
             if info[1] <= 16:
-                self.ids.lbl_remaining.color = get_color_from_hex("#FF0000")
-                self.ids.lbl_remaining.outline_color = get_color_from_hex('#960000')
+                color = get_color_from_hex("#FF0000")
+                outline_color = get_color_from_hex('#960000')
             # If we 1/3 or less remaining, display as ORANGE.
             elif info[1] <= 33:
-                self.ids.lbl_remaining.color = get_color_from_hex("#FFB600")
-                self.ids.lbl_remaining.outline_color = get_color_from_hex('#960000')
+                color = get_color_from_hex("#FFB600")
+                outline_color = get_color_from_hex('#960000')
             # If we have 50% or less remaining, display as YELLOW-ORANGE.
             elif info[1] <= 50:
-                self.ids.lbl_remaining.color = get_color_from_hex("#C8FF00")
-                self.ids.lbl_remaining.outline_color = get_color_from_hex('#960000')
+                color = get_color_from_hex("#C8FF00")
+                outline_color = get_color_from_hex('#960000')
             # If we have 75% or less remaining, display as YELLOW-GREEN.
             elif info[1] <= 75:
-                self.ids.lbl_remaining.color = get_color_from_hex("#C8FF00")
-                self.ids.lbl_remaining.outline_color = get_color_from_hex('#007700')
-            # Otherwise, display as GREEN.
-            else:
-                self.ids.lbl_remaining.color = get_color_from_hex("#00FF00")
-                self.ids.lbl_remaining.outline_color = get_color_from_hex('#007700')
+                color = get_color_from_hex("#C8FF00")
+                outline_color = get_color_from_hex('#007700')
+            # Otherwise, we use the default.
+
+            self.ids.lbl_remaining.color = color
+            self.ids.lbl_remaining.outline_color = outline_color
+            self.ids.lbl_lives.color = color
+            self.ids.lbl_lives.outline_color = outline_color
 
         # Update tries.
         self.ids.lbl_tries.text = str(self.gameround.get_tries())
@@ -325,8 +330,6 @@ class Gameplay(BoxLayout):
         self.ids.lbl_removals.text = "?"
         self.ids.lbl_guess.text = ""
         self.ids.lbl_puzzle.text = "GAME OVER\nENTER to return to menu."
-        self.ids.lbl_remaining.color = get_color_from_hex("#00FF00")
-        self.ids.lbl_remaining.outline_color = get_color_from_hex('#007700')
 
     def quit_game(self):
         """

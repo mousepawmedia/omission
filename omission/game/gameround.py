@@ -90,6 +90,7 @@ class GameRound(object):
         Returns the status of the game as (mode, percentage, seconds, lives).
         """
         remaining = 100
+        lives = 0
         if self.settings.mode == GameMode.Survival:
             lives = self._lives
             remaining = (lives / self.settings.limit) * 100
