@@ -268,6 +268,7 @@ class Gameplay(BoxLayout):
         Update the interface.
         """
         info = self.gameround.get_status()
+        print(info)
         if check_mode:
             if info[0] == GameMode.Survival:
                 self.ids.img_mode.source = "resources/icons/heart.png"

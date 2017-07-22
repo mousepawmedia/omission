@@ -89,11 +89,15 @@ class GameRound(object):
         """
         Returns the status of the game as (mode, percentage, seconds, lives).
         """
+        remaining = 100
         if self.settings.mode == GameMode.Survival:
             lives = self._lives
+            remaining = (lives / self.settings.limit) * 100
+        elif self.settings.mode == GameMode.Timed:
+            remaining = self._timer.get_remaining_percent()
         else:
             lives = 0
-        return (self.settings.mode, self._timer.get_remaining_percent(),
+        return (self.settings.mode, remaining,
                 self._timer.get_seconds(), lives)
 
     def get_puzzle(self):
