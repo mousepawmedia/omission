@@ -25,11 +25,11 @@ class PopupLabel(Label):
         """
         # Select a random location on the screen.
         # FloatLayer places absolute 0,0 at the center.
-        x_low_bound = -(parent_width / 2) + 100
-        x_upp_bound = (parent_width / 2) - int(self.width) - 100
+        x_low_bound = int(-(parent_width / 2) + 100)
+        x_upp_bound = int((parent_width / 2) - int(self.width) - 100)
         self.x = random.randint(x_low_bound, x_upp_bound)
-        y_low_bound = -(parent_height / 2) + 100
-        y_upp_bound = (parent_height / 2) - int(self.height) - 100
+        y_low_bound = int(-(parent_height / 2) + 100)
+        y_upp_bound = int((parent_height / 2) - int(self.height) - 100)
         self.y = random.randint(y_low_bound, y_upp_bound)
 
     def set_size(self, size):
