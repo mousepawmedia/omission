@@ -5,6 +5,7 @@ User Interface [Omission]
 import kivy
 from kivy.app import App
 from kivy.config import Config
+from kivy.core.window import Window
 from kivy.uix.floatlayout import FloatLayout
 
 from omission.interface.game import Gameplay
@@ -93,6 +94,7 @@ class OmissionApp(App):
         """
         super().__init__(**kwargs)
         self.kill_callback = None
+        self.max_size = (800, 600)
 
     def build_config(self, config):
         """
@@ -100,8 +102,8 @@ class OmissionApp(App):
        """
 
         # Prevent the window from resizing too small. (SDL2 windows only).
-        Config.set('graphics', 'minimum_width', '500')
-        Config.set('graphics', 'minimum_height', '300')
+        Config.set('graphics', 'minimum_width', self.max_size[0])
+        Config.set('graphics', 'minimum_height', self.max_size[1])
         Config.set('input', 'mouse', 'mouse,disable_multitouch')
 
         # Prevent exit on ESC
@@ -119,7 +121,24 @@ class OmissionApp(App):
 
         # Create the window.
         omission_app = OmissionWindow()
+
+        # Bind the resize event.
+        Window.bind(on_resize=self.check_resize)
+
+        # Return the application.
         return omission_app
+
+    def check_resize(self, instance, new_x, new_y):
+        """
+        Prevent resizing our screen too small if we're not using SDL2.
+        """
+        # pylint: disable=W0613
+        # Prevent resizing X too small...
+        if new_x < self.max_size[0]:
+            Window.size = (self.max_size[0], Window.size[1])
+        # Prevent resizing Y too small..
+        if new_y < self.max_size[1]:
+            Window.size = (Window.size[0], self.max_size[1])
 
     def set_kill_callback(self, callback):
         """
