@@ -3,6 +3,7 @@
 
 #Top level element is a FloatLayout, for popup items.
 <OmissionWindow>:
+    size_hint_x_minimum:
 
 <Menu>:
     # Game menu.
@@ -232,10 +233,17 @@
         ProgressBar:
             id: bar_remaining
             value: 50
+            #size_hint_x: None
         OrbitronLabel:
             id: lbl_remaining
-            size_hint_x: None
-            text: "0:15"
+            size_hint_x: 0.3
+            #size: self.texture_size
+            text: "00:00"
+            font_size: '30sp'
+        OrbitronLabel:
+            id: lbl_lives
+            size_hint_x: 0.1
+            text: "[3]"
             font_size: '30sp'
 
 <OrbitronLabel@Label>:

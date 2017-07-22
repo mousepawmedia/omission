@@ -94,7 +94,7 @@ class OmissionApp(App):
         """
         super().__init__(**kwargs)
         self.kill_callback = None
-        self.max_size = (800, 600)
+        self.min_size = (800, 600)
 
     def build_config(self, config):
         """
@@ -102,8 +102,8 @@ class OmissionApp(App):
        """
 
         # Prevent the window from resizing too small. (SDL2 windows only).
-        Config.set('graphics', 'minimum_width', self.max_size[0])
-        Config.set('graphics', 'minimum_height', self.max_size[1])
+        Config.set('graphics', 'minimum_width', self.min_size[0])
+        Config.set('graphics', 'minimum_height', self.min_size[1])
         Config.set('input', 'mouse', 'mouse,disable_multitouch')
 
         # Prevent exit on ESC
@@ -131,14 +131,15 @@ class OmissionApp(App):
     def check_resize(self, instance, new_x, new_y):
         """
         Prevent resizing our screen too small if we're not using SDL2.
+        If we resize too small, it will snap back to the minimum size.
         """
         # pylint: disable=W0613
         # Prevent resizing X too small...
-        if new_x < self.max_size[0]:
-            Window.size = (self.max_size[0], Window.size[1])
+        if new_x < self.min_size[0]:
+            Window.size = (self.min_size[0], Window.size[1])
         # Prevent resizing Y too small..
-        if new_y < self.max_size[1]:
-            Window.size = (Window.size[0], self.max_size[1])
+        if new_y < self.min_size[1]:
+            Window.size = (Window.size[0], self.min_size[1])
 
     def set_kill_callback(self, callback):
         """

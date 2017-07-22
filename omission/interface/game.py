@@ -275,13 +275,18 @@ class Gameplay(BoxLayout):
                 self.ids.img_mode.source = "resources/icons/clock.png"
             elif info[0] == GameMode.Infinite:
                 self.ids.img_mode.source = "resources/icons/infinity.png"
+
         # Update remaining time.
         self.ids.bar_remaining.value = info[1]
 
         # Update time remaining label.
         self.ids.lbl_remaining.text = sec_to_timestring(info[2])
         if info[0] == GameMode.Survival:
-            self.ids.lbl_remaining.text += " | " + str(info[3])
+            self.ids.lbl_lives.text = "[" + str(info[3]) + "]"
+            self.ids.lbl_lives.size_hint_x = 0.1
+        else:
+            self.ids.lbl_lives.text = ""
+            self.ids.lbl_lives.size_hint_x = 0
 
         # In Timed or Survival mode, change color to reflect remaining time/lives.
         if info[0] == GameMode.Timed or info[0] == GameMode.Survival:

@@ -8,7 +8,7 @@ def sec_to_timestring(seconds):
     """
     minutes = int(seconds/60)
     seconds -= (minutes*60)
-    return str(minutes) + ":" + str(seconds).zfill(2)
+    return str(minutes).zfill(2) + ":" + str(seconds).zfill(2)
 
 def score_to_scorestring(score):
     """
