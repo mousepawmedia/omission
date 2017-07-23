@@ -53,6 +53,9 @@ class Menu(BoxLayout):
         """
         Switch which settings we see and load.
         """
+        # Store the settings for retrieval on switching back later.
+        self.load_settings()
+
         # Store the mode.
         self.mode = mode
 
@@ -71,38 +74,75 @@ class Menu(BoxLayout):
             self.ids.box_controls.add_widget(self.play_box)
             self.ids.box_controls.add_widget(self.try_settings)
             self.ids.box_controls.add_widget(self.timed_settings)
+            self.get_settings(mode)
         elif mode == 'Survival':
             # Add the controls for Survival
             self.ids.box_controls.add_widget(self.play_box)
             self.ids.box_controls.add_widget(self.try_settings)
             self.ids.box_controls.add_widget(self.survival_settings)
+            self.get_settings(mode)
         elif mode == 'Infinite':
             # Add the control for Infinite
             self.ids.box_controls.add_widget(self.play_box)
             self.ids.box_controls.add_widget(self.try_settings)
+            self.get_settings(mode)
+
+    def get_settings(self, mode=None):
+        """
+        Load the saved settings into the interface.
+        """
+        saved = App.get_running_app().scoreloader.settings
+        if mode == 'Timed':
+            self.try_settings.ids.spn_tries.text = str(saved.timed.tries)
+            self.try_settings.ids.spn_hint.text = str(saved.timed.count_at + 1)
+            self.try_settings.ids.spn_clue.text = str(saved.timed.clue_at + 1)
+            self.try_settings.ids.spn_passage.text = str(saved.timed.solution_pause)
+
+            self.timed_settings.ids.spn_time.text = str(saved.timed.limit)
+            self.timed_settings.ids.spn_bonus.text = str(saved.timed.bonus)
+            self.timed_settings.ids.spn_penalty.text = str(saved.timed.penalty)
+
+        elif mode == 'Survival':
+            self.try_settings.ids.spn_tries.text = str(saved.survival.tries)
+            self.try_settings.ids.spn_hint.text = str(saved.survival.count_at + 1)
+            self.try_settings.ids.spn_clue.text = str(saved.survival.clue_at + 1)
+            self.try_settings.ids.spn_passage.text = str(saved.survival.solution_pause)
+
+            self.survival_settings.ids.spn_lives.text = str(saved.survival.limit)
+
+        elif mode == 'Infinite':
+            self.try_settings.ids.spn_tries.text = str(saved.infinite.tries)
+            self.try_settings.ids.spn_hint.text = str(saved.infinite.count_at + 1)
+            self.try_settings.ids.spn_clue.text = str(saved.infinite.clue_at + 1)
+            self.try_settings.ids.spn_passage.text = str(saved.infinite.solution_pause)
 
     def load_settings(self):
         """
         Load the settings from the interface.
         """
-        tries = int(self.try_settings.ids.spn_tries.text)
-        hint = int(self.try_settings.ids.spn_hint.text) - 1
-        clue = int(self.try_settings.ids.spn_clue.text) - 1
-        self.settings.set_clues(tries, hint, clue)
+        # For any of the modes...
+        if self.mode is not None:
+            tries = int(self.try_settings.ids.spn_tries.text)
+            hint = int(self.try_settings.ids.spn_hint.text) - 1
+            clue = int(self.try_settings.ids.spn_clue.text) - 1
+            self.settings.set_clues(tries, hint, clue)
 
-        passage = self.try_settings.ids.spn_passage.text == 'True'
-        self.settings.set_solution_pause(passage)
+            passage = self.try_settings.ids.spn_passage.text == 'True'
+            self.settings.set_solution_pause(passage)
 
         if self.mode == 'Timed':
             time = int(self.timed_settings.ids.spn_time.text)
             bonus = int(self.timed_settings.ids.spn_bonus.text)
             penalty = int(self.timed_settings.ids.spn_penalty.text)
             self.settings.set_timed(time, bonus, penalty)
+            App.get_running_app().scoreloader.settings.save_timed(self.settings)
         elif self.mode == 'Survival':
             lives = int(self.survival_settings.ids.spn_lives.text)
             self.settings.set_survival(lives)
+            App.get_running_app().scoreloader.settings.save_survival(self.settings)
         elif self.mode == 'Infinite':
             self.settings.set_infinite()
+            App.get_running_app().scoreloader.settings.save_infinite(self.settings)
 
 class InfoBox(BoxLayout):
     """

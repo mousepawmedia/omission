@@ -341,5 +341,14 @@ class Gameplay(BoxLayout):
         App.get_running_app().set_kill_callback(None)
         # Disconnect the keyboard.
         self._unbind_keyboard()
+
+        # Check for score logging.
+        datastring = self.gameround.settings.get_datastring()
+        score = self.gameround.get_score()
+        highscore = App.get_running_app().scoreloader.check_score(datastring, score)
+        if highscore:
+            # TODO: Prompt for name here!
+            App.get_running_app().scoreloader.add_score(datastring, score, "Jason")
+
         # Switch to the menu.
         self.parent.show_menu(self)

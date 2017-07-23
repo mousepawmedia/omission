@@ -20,12 +20,15 @@ Passages have been trimmed and rearranged to be no more than four lines.
 ## Authors
 
  - Jason C. McDonald
+ - Jarek G. Thomas
  - Anne McDonald (Content)
  - Jane McArthur (Content)
 
 ## Dependencies
 
-- Kivy >=1.10
+ - Python3
+ - Kivy >= 1.10
+ - appdirs >= 1.4.3
 
 ## Building
 

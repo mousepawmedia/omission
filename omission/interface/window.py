@@ -8,6 +8,7 @@ from kivy.config import Config
 from kivy.core.window import Window
 from kivy.uix.floatlayout import FloatLayout
 
+from omission.scores.score_loader import ScoreLoader
 from omission.interface.game import Gameplay
 from omission.interface.menu import Menu
 from omission.interface.popup import PopupLabel
@@ -28,9 +29,9 @@ class OmissionWindow(FloatLayout):
         Initialize a new OmissionWindow.
         """
         super().__init__(**kwargs)
+
         self.menu = Menu()
         self.show_menu()
-        #self.start_game()
 
     def show_menu(self, to_remove=None):
         """
@@ -96,6 +97,9 @@ class OmissionApp(App):
         self.kill_callback = None
         self.min_size = (800, 600)
 
+        # Create our score loader.
+        self.scoreloader = ScoreLoader()
+
     def build_config(self, config):
         """
        Configure the application.
@@ -154,3 +158,4 @@ class OmissionApp(App):
         """
         if self.kill_callback:
             self.kill_callback()
+        self.scoreloader.write_out()

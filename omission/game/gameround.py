@@ -336,3 +336,36 @@ class GameRoundSettings(object):
         self.tries = tries
         self.count_at = count_at
         self.clue_at = clue_at
+
+    def get_datastring(self):
+        """
+        Get the datastring representing the settings.
+        """
+        output = ""
+
+        if self.mode == GameMode.Timed:
+            output += "T:" + \
+                str(self.tries) + ":" + \
+                str(self.count_at) + ":" + \
+                str(self.clue_at) + ":" + \
+                str(int(self.solution_pause)) + ":" + \
+                str(self.limit) + ":" + \
+                str(self.bonus) + ":" + \
+                str(self.penalty)
+
+        elif self.mode == GameMode.Survival:
+            output += "S:" + \
+                str(self.tries) + ":" + \
+                str(self.count_at) + ":" + \
+                str(self.clue_at) + ":" + \
+                str(int(self.solution_pause)) + ":" + \
+                str(self.limit)
+
+        elif self.mode == GameMode.Infinite:
+            output += "I:" + \
+                str(self.tries) + ":" + \
+                str(self.count_at) + ":" + \
+                str(self.clue_at) + ":" + \
+                str(int(self.solution_pause))
+
+        return output
