@@ -10,6 +10,7 @@ import re
 from appdirs import user_data_dir
 
 from omission.game.gameround import GameRoundSettings
+from omission.interface.sound import SoundPlayer
 
 # Our data layout following these conventions:
 # DEF=T:3:2:3:1:30:3:1
@@ -32,6 +33,7 @@ class ScoreLoader(object):
         Initialize a new score loader object.
         """
         self.settings = Settings()
+        self.soundplayer = SoundPlayer()
         self.scoreboards = []
 
         appname = "Omission"
@@ -166,7 +168,7 @@ class Scoreboard(object):
         """
         self.scoreboard[str(score)] = name
         self.sort_scores()
-        # TODO: These aren't actually saving?
+        # TODO: These aren't actually saving?ig
 
     def check_score(self, new_score):
         """

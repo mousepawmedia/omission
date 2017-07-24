@@ -26,6 +26,8 @@ class Gameplay(BoxLayout):
         self.playing = False
         self.gameround = None
 
+        self.soundplayer = App.get_running_app().scoreloader.soundplayer
+
         #Track guesses.
         self._guesses = []
         # Indicates whether we're paused for a solution.
@@ -69,6 +71,8 @@ class Gameplay(BoxLayout):
                     self.update_score()
                     # Clear our guess list.
                     self.update_guesses()
+                    # Play ding.
+                    self.soundplayer.play_ding()
                     # Show the solution.
                     self.show_feedback(True)
                 # If the answer was wrong, but we have guesses left...
@@ -88,6 +92,8 @@ class Gameplay(BoxLayout):
                     self.update_guesses()
                     # IF the game is NOT over...
                     if self.playing:
+                        # Play low bell.
+                        self.soundplayer.play_lowbell()
                         # Show the solution.
                         self.show_feedback(False)
                         # NOTE: Without this check, the gameover doesn't
@@ -137,6 +143,8 @@ class Gameplay(BoxLayout):
         self.playing = False
         # Reset the interface
         self.reset()
+        # Play the gameover sound.
+        self.soundplayer.play_gameover()
         # Show the last solution
         self.show_feedback(False, True)
 
@@ -298,6 +306,8 @@ class Gameplay(BoxLayout):
             if info[1] <= 16:
                 color = get_color_from_hex("#FF0000")
                 outline_color = get_color_from_hex('#960000')
+                # Also play warning sound.
+                self.soundplayer.play_alarm()
             # If we 1/3 or less remaining, display as ORANGE.
             elif info[1] <= 33:
                 color = get_color_from_hex("#FFB600")
