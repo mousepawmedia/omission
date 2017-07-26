@@ -139,6 +139,9 @@ class ScoreLoader(object):
         """
         Check if a score is worthy of adding to the scoreboard.
         """
+        # Scores less than 1 are never worth logging.
+        if score < 1:
+            return False
         try:
             scoreboard = self.scoreboards[setting_datastring]
             return scoreboard.check_score(score)

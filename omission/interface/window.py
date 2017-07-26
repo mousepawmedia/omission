@@ -9,12 +9,12 @@ from kivy.core.window import Window
 from kivy.uix.floatlayout import FloatLayout
 
 from omission.scores.score_loader import ScoreLoader
+from omission.interface.credits import Credits
 from omission.interface.game import Gameplay
 from omission.interface.highscore import Highscore
 from omission.interface.menu import Menu
 from omission.interface.popup import PopupLabel
-#from omission.interface.rules import Rules
-#from omission.interface.credits import Credits
+from omission.interface.rules import Rules
 
 kivy.require('1.10.0')
 
@@ -34,6 +34,16 @@ class OmissionWindow(FloatLayout):
         self.show_menu()
         #self.show_highscore("", 0)
 
+    def show_credits(self, to_remove=None):
+        """
+        Show the main menu.
+        """
+        if to_remove:
+            self.remove_widget(to_remove)
+        creds = Credits()
+        self.add_widget(creds)
+        creds.display()
+
     def show_menu(self, to_remove=None):
         """
         Show the main menu.
@@ -42,6 +52,15 @@ class OmissionWindow(FloatLayout):
             self.remove_widget(to_remove)
         menu = Menu()
         self.add_widget(menu)
+
+    def show_rules(self, to_remove=None):
+        """
+        Show the main menu.
+        """
+        if to_remove:
+            self.remove_widget(to_remove)
+        rules = Rules()
+        self.add_widget(rules)
 
     def show_highscore(self, datastring, score, to_remove=None):
         """

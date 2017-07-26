@@ -136,17 +136,11 @@ class Menu(BoxLayout):
                 self.load_settings(settings)
             # Use the datastring to get the scores.
             scores = App.get_running_app().scoreloader.get_scores(settings.get_datastring())
-            scores_scores = ""
-            scores_names = ""
+            scores_str = ""
             if scores:
                 for item in scores:
-                    scores_scores += str(item[0]) + "\n"
-                    scores_names += str(item[1]) + "\n"
-            else:
-                scores_scores += "NO"
-                scores_names += "SCORES"
-            self.play_box.ids.lbl_scores_scores.text = scores_scores
-            self.play_box.ids.lbl_scores_names.text = scores_names
+                    scores_str += str(item[0]) + " | " + str(item[1]) + "\n"
+            self.play_box.ids.lbl_scores.text = scores_str
 
     def load_settings(self, settings=None):
         """
@@ -189,13 +183,13 @@ class InfoBox(BoxLayout):
         """
         Display the rules.
         """
-        pass
+        self.parent.parent.parent.show_rules(self.parent.parent)
 
     def press_credits(self):
         """
         Display the credits.
         """
-        pass
+        self.parent.parent.parent.show_credits(self.parent.parent)
 
     #pylint: disable=R0201
     def press_quit(self):

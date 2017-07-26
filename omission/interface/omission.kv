@@ -51,6 +51,7 @@
     OrbitronLabel:
         text: "Created by MousePaw Games\nwww.mousepawgames.com"
         halign: 'center'
+        color: hex("#FFFFFF")
         font_size: '20sp'
     BoxLayout:
         orientation: 'horizontal'
@@ -81,45 +82,43 @@
         text: 'Play'
     OrbitronLabel:
         text: "HIGH SCORES"
-        font_size: '20sp'
+        font_size: '25sp'
         size_hint_y: 0.2
-    BoxLayout:
-        orientation: 'horizontal'
-        OrbitronLabel:
-            id: lbl_scores_scores
-            font_size: '20sp'
-            text: ""
-            valign: 'top'
-            halign: 'left'
-        OrbitronLabel:
-            id: lbl_scores_names
-            font_size: '20sp'
-            text: ""
-            valign: 'top'
-            halign: 'left'
+    OrbitronLabel:
+        id: lbl_scores
+        font_size: '20sp'
+        color: hex("#FFFFFF")
+        size_hint_y: 1.0
+        text: ""
+        text_size: self.size
+        valign: 'top'
+        halign: 'center'
 
 <TimedSettings>:
     orientation: 'vertical'
     spacing: '20px'
     OrbitronLabel:
-        font_size: '20sp'
         text: 'Timer Length'
+        font_size: '20sp'
+        color: hex("#FFFFFF")
     OrbitronSpinner:
         id: spn_time
         text: '30'
         values: ('15', '30', '60', '90', '120')
         on_text: root.changed()
     OrbitronLabel:
-        font_size: '20sp'
         text: 'Bonus'
+        font_size: '20sp'
+        color: hex("#FFFFFF")
     OrbitronSpinner:
         id: spn_bonus
         text: '3'
         values: ('1', '2', '3', '4', '5')
         on_text: root.changed()
     OrbitronLabel:
-        font_size: '20sp'
         text: 'Penalty'
+        font_size: '20sp'
+        color: hex("#FFFFFF")
     OrbitronSpinner:
         id: spn_penalty
         text: '1'
@@ -130,8 +129,9 @@
     orientation: 'vertical'
     spacing: '20px'
     OrbitronLabel:
-        font_size: '20sp'
         text: 'Lives'
+        font_size: '20sp'
+        color: hex("#FFFFFF")
     OrbitronSpinner:
         id: spn_lives
         text: '3'
@@ -142,6 +142,7 @@
     orientation: 'vertical'
     OrbitronLabel:
         text: 'Tries'
+        color: hex("#FFFFFF")
         font_size: '20sp'
     OrbitronSpinner:
         id: spn_tries
@@ -150,6 +151,7 @@
         on_text: root.changed()
     OrbitronLabel:
         text: 'Hint On...'
+        color: hex("#FFFFFF")
         font_size: '20sp'
     OrbitronSpinner:
         id: spn_hint
@@ -158,6 +160,7 @@
         on_text: root.changed()
     OrbitronLabel:
         text: 'Clue On...'
+        color: hex("#FFFFFF")
         font_size: '20sp'
     OrbitronSpinner:
         id: spn_clue
@@ -166,6 +169,7 @@
         on_text: root.changed()
     OrbitronLabel:
         text: 'Show Passage'
+        color: hex("#FFFFFF")
         font_size: '20sp'
     OrbitronSpinner:
         id: spn_passage
@@ -189,19 +193,40 @@
         font_size: '30sp'
     OrbitronLabel:
         text: 'Enter your name and press ENTER to continue.'
-    TextInput:
-        id: txt_name
-        foreground_color: hex('#00FF00')
-        background_color: hex('#262626')
-        font_size: '25sp'
-        font_name: 'resources/font/orbitron/orbitron-medium.otf'
-        size_hint_y: None
-        # Single line
-        multiline: False
-        # When we press enter, submit the form.
-        on_text_validate: root.submit()
-        # Grab focus.
-        focus: True
+        color: hex("#FFFFFF")
+        font_size: '20sp'
+    NameTextInput:
+
+<NameTextInput>:
+    id: txt_name
+    foreground_color: hex('#00FF00')
+    background_color: hex('#262626')
+    font_size: '25sp'
+    font_name: 'resources/font/orbitron/orbitron-medium.otf'
+    size_hint_y: None
+    # Single line
+    multiline: False
+    # When we press enter, submit the form.
+    on_text_validate: root.submit()
+    # Grab focus.
+    focus: True
+
+<Credits>:
+    size_hint: (0.9, 0.9)
+    pos_hint: {'center': (0.5, 0.5)}
+    OrbitronLabel:
+        id: lbl_credits
+        text: "CREDITS"
+        halign: 'center'
+        color: hex("#FFFFFF")
+        font_size: '20sp'
+
+<Rules>:
+    OrbitronLabel:
+        id: lbl_rules
+        text: ''
+        color: hex("#FFFFFF")
+        font_size: '20sp'
 
 <Gameplay>:
     # Main box, holding the other three.
