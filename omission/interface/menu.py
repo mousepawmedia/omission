@@ -27,6 +27,12 @@ class Menu(BoxLayout):
         self.mode = ""
         self.switch_mode(None)
 
+    def changed(self):
+        """
+        Called when a setting is changed, so we can update scores.
+        """
+        self.get_scores()
+
     def press_play(self):
         """
         Callback for Play button.
@@ -87,6 +93,8 @@ class Menu(BoxLayout):
             self.ids.box_controls.add_widget(self.try_settings)
             self.get_settings(mode)
 
+        self.get_scores()
+
     def get_settings(self, mode=None):
         """
         Load the saved settings into the interface.
@@ -116,33 +124,61 @@ class Menu(BoxLayout):
             self.try_settings.ids.spn_clue.text = str(saved.infinite.clue_at + 1)
             self.try_settings.ids.spn_passage.text = str(saved.infinite.solution_pause)
 
-    def load_settings(self):
+    def get_scores(self, settings=None):
+        """
+        Load the scores into the interface.
+        """
+        # If we have a mode loaded.
+        if self.mode:
+            # If no settings were specified
+            if not settings:
+                settings = GameRoundSettings()
+                self.load_settings(settings)
+            # Use the datastring to get the scores.
+            scores = App.get_running_app().scoreloader.get_scores(settings.get_datastring())
+            scores_scores = ""
+            scores_names = ""
+            if scores:
+                for item in scores:
+                    scores_scores += str(item[0]) + "\n"
+                    scores_names += str(item[1]) + "\n"
+            else:
+                scores_scores += "NO"
+                scores_names += "SCORES"
+            self.play_box.ids.lbl_scores_scores.text = scores_scores
+            self.play_box.ids.lbl_scores_names.text = scores_names
+
+    def load_settings(self, settings=None):
         """
         Load the settings from the interface.
         """
+        # If no settings were specified...
+        if not settings:
+            # Store in the main settings.
+            settings = self.settings
         # For any of the modes...
         if self.mode is not None:
             tries = int(self.try_settings.ids.spn_tries.text)
             hint = int(self.try_settings.ids.spn_hint.text) - 1
             clue = int(self.try_settings.ids.spn_clue.text) - 1
-            self.settings.set_clues(tries, hint, clue)
+            settings.set_clues(tries, hint, clue)
 
             passage = self.try_settings.ids.spn_passage.text == 'True'
-            self.settings.set_solution_pause(passage)
+            settings.set_solution_pause(passage)
 
         if self.mode == 'Timed':
             time = int(self.timed_settings.ids.spn_time.text)
             bonus = int(self.timed_settings.ids.spn_bonus.text)
             penalty = int(self.timed_settings.ids.spn_penalty.text)
-            self.settings.set_timed(time, bonus, penalty)
-            App.get_running_app().scoreloader.settings.save_timed(self.settings)
+            settings.set_timed(time, bonus, penalty)
+            App.get_running_app().scoreloader.settings.save_timed(settings)
         elif self.mode == 'Survival':
             lives = int(self.survival_settings.ids.spn_lives.text)
-            self.settings.set_survival(lives)
-            App.get_running_app().scoreloader.settings.save_survival(self.settings)
+            settings.set_survival(lives)
+            App.get_running_app().scoreloader.settings.save_survival(settings)
         elif self.mode == 'Infinite':
-            self.settings.set_infinite()
-            App.get_running_app().scoreloader.settings.save_infinite(self.settings)
+            settings.set_infinite()
+            App.get_running_app().scoreloader.settings.save_infinite(settings)
 
 class InfoBox(BoxLayout):
     """
@@ -180,17 +216,41 @@ class PlayBox(BoxLayout):
         # MUST go back two parents, based on the .kv layout.
         self.parent.parent.press_play()
 
+    def changed(self):
+        """
+        When we change an event, call the parent's changed() function.
+        """
+        self.parent.parent.changed()
+
 class TimedSettings(BoxLayout):
     """
     Settings for Timed mode.
     """
+
+    def changed(self):
+        """
+        When we change an event, call the parent's changed() function.
+        """
+        self.parent.parent.changed()
 
 class SurvivalSettings(BoxLayout):
     """
     Settings for Survival mode.
     """
 
+    def changed(self):
+        """
+        When we change an event, call the parent's changed() function.
+        """
+        self.parent.parent.changed()
+
 class TrySettings(BoxLayout):
     """
     Settings for Survival mode.
     """
+
+    def changed(self):
+        """
+        When we change an event, call the parent's changed() function.
+        """
+        self.parent.parent.changed()

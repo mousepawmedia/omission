@@ -83,10 +83,20 @@
         text: "HIGH SCORES"
         font_size: '20sp'
         size_hint_y: 0.2
-    OrbitronLabel:
-        id: lbl_scores
-        font_size: '20sp'
-        text: ""
+    BoxLayout:
+        orientation: 'horizontal'
+        OrbitronLabel:
+            id: lbl_scores_scores
+            font_size: '20sp'
+            text: ""
+            valign: 'top'
+            halign: 'left'
+        OrbitronLabel:
+            id: lbl_scores_names
+            font_size: '20sp'
+            text: ""
+            valign: 'top'
+            halign: 'left'
 
 <TimedSettings>:
     orientation: 'vertical'
@@ -98,6 +108,7 @@
         id: spn_time
         text: '30'
         values: ('15', '30', '60', '90', '120')
+        on_text: root.changed()
     OrbitronLabel:
         font_size: '20sp'
         text: 'Bonus'
@@ -105,6 +116,7 @@
         id: spn_bonus
         text: '3'
         values: ('1', '2', '3', '4', '5')
+        on_text: root.changed()
     OrbitronLabel:
         font_size: '20sp'
         text: 'Penalty'
@@ -112,6 +124,7 @@
         id: spn_penalty
         text: '1'
         values: ('1', '2', '3', '4', '5')
+        on_text: root.changed()
 
 <SurvivalSettings>:
     orientation: 'vertical'
@@ -123,6 +136,7 @@
         id: spn_lives
         text: '3'
         values: ('1', '2', '3', '4', '5')
+        on_text: root.changed()
 
 <TrySettings>:
     orientation: 'vertical'
@@ -133,6 +147,7 @@
         id: spn_tries
         text: '3'
         values: ('1', '2', '3', '4', '5')
+        on_text: root.changed()
     OrbitronLabel:
         text: 'Hint On...'
         font_size: '20sp'
@@ -140,6 +155,7 @@
         id: spn_hint
         text: '2'
         values: ('1', '2', '3', '4', '5')
+        on_text: root.changed()
     OrbitronLabel:
         text: 'Clue On...'
         font_size: '20sp'
@@ -147,6 +163,7 @@
         id: spn_clue
         text: '3'
         values: ('1', '2', '3', '4', '5')
+        on_text: root.changed()
     OrbitronLabel:
         text: 'Show Passage'
         font_size: '20sp'
@@ -154,6 +171,37 @@
         id: spn_passage
         text: 'True'
         values: ('True', 'False')
+        on_text: root.changed()
+
+<Highscore>:
+    # Highscore prompt.
+    orientation: 'vertical'
+    size_hint: (0.9, 0.9)
+    pos_hint: {'center': (0.5, 0.5)}
+    spacing: '20px'
+
+    OrbitronLabel:
+        text: 'New Highscore!'
+        font_size: '35sp'
+    OrbitronLabel:
+        id: lbl_score
+        text: '000000'
+        font_size: '30sp'
+    OrbitronLabel:
+        text: 'Enter your name and press ENTER to continue.'
+    TextInput:
+        id: txt_name
+        foreground_color: hex('#00FF00')
+        background_color: hex('#262626')
+        font_size: '25sp'
+        font_name: 'resources/font/orbitron/orbitron-medium.otf'
+        size_hint_y: None
+        # Single line
+        multiline: False
+        # When we press enter, submit the form.
+        on_text_validate: root.submit()
+        # Grab focus.
+        focus: True
 
 <Gameplay>:
     # Main box, holding the other three.

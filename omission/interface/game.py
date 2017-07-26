@@ -16,6 +16,7 @@ class Gameplay(BoxLayout):
     """
     The gameplay interface.
     """
+    # pylint: disable=R0902
     def __init__(self, **kwargs):
         """
         Initialize a new Gameplay box.
@@ -355,10 +356,8 @@ class Gameplay(BoxLayout):
         # Check for score logging.
         datastring = self.gameround.settings.get_datastring()
         score = self.gameround.get_score()
-        highscore = App.get_running_app().scoreloader.check_score(datastring, score)
-        if highscore:
-            # TODO: Prompt for name here!
-            App.get_running_app().scoreloader.add_score(datastring, score, "Jason")
-
-        # Switch to the menu.
-        self.parent.show_menu(self)
+        if App.get_running_app().scoreloader.check_score(datastring, score[0]):
+            self.parent.show_highscore(datastring, score[0], self)
+        else:
+            # Switch to the menu.
+            self.parent.show_menu(self)

@@ -34,7 +34,7 @@ class ScoreLoader(object):
         """
         self.settings = Settings()
         self.soundplayer = SoundPlayer()
-        self.scoreboards = []
+        self.scoreboards = OrderedDict()
 
         appname = "Omission"
         appauthor = "MousePaw Media"
@@ -86,24 +86,25 @@ class ScoreLoader(object):
         """
         Parse scores out of our file data.
         """
+        # Temporary datastring storage.
+        datastring = ""
+
         if self._data:
             for line in self._data:
-                scores = None
                 # If we found a settings line...
                 if re.match(r'SCO=.*', line):
-                    scoreboard = Scoreboard(line[4:])
-                    # Append the score object to our list.
-                    self.scoreboards.append(copy.deepcopy(scoreboard))
+                    # Store the datastring.
+                    datastring = line[4:]
+                    self.scoreboards[datastring] = Scoreboard(datastring)
                 # Else if we found a score line...
-                elif re.match(r'^:.*$', line) and scoreboard:
+                elif re.match(r'^:.*$', line) and datastring != "":
                     tokens = re.split(r':', line[1:])
-                    scoreboard.add_score(tokens[0], tokens[1])
-                # Else if we find anything else...
-                else:
-                    # If we HAVE a scores object.
-                    if scores:
-                        # Append the score object to our list.
-                        self.scoreboards.append(copy.deepcopy(scoreboard))
+                    try:
+                        self.scoreboards[datastring].add_score(int(tokens[0]),
+                                                               tokens[1])
+                    except KeyError:
+                        pass
+                # If we find anything else, ignore the line.
 
     def write_out(self):
         """
@@ -115,7 +116,8 @@ class ScoreLoader(object):
         # Generate the output for the file.
         output = ""
         output += self.settings.get_datastring()
-        for scoreboard in self.scoreboards:
+        #pylint: disable=W0612
+        for datastr, scoreboard in self.scoreboards.items():
             output += scoreboard.get_datastring()
 
         # Write out the output.
@@ -123,35 +125,40 @@ class ScoreLoader(object):
             # Write out
             print(output, file=scorefile)
 
+    def get_scores(self, setting_datastring):
+        """
+        Get the scores from the scoreboard for the given datastring.
+        """
+        try:
+            scoreboard = self.scoreboards[setting_datastring]
+            return scoreboard.get_scores()
+        except KeyError:
+            return None
+
     def check_score(self, setting_datastring, score):
         """
         Check if a score is worthy of adding to the scoreboard.
         """
-        for scoreboard in self.scoreboards:
-            if setting_datastring == scoreboard.setting_datastring:
-                return scoreboard.check_score(score)
-
-        # If we reach this far, we have no scores for that datastring,
-        # and the score is therefore DEFINITELY worth logging.
-        return True
+        try:
+            scoreboard = self.scoreboards[setting_datastring]
+            return scoreboard.check_score(score)
+        except KeyError:
+            # We have no scores for that datastring,
+            # and thus the score is DEFINITELY worth logging.
+            return True
 
     def add_score(self, setting_datastring, score, name):
         """
         Add a new score to the scoreboard.
         """
-        for scoreboard in self.scoreboards:
-            # If the scoreboard exists...
-            if setting_datastring == scoreboard.setting_datastring:
-                # Add our score to it.
-                scoreboard.add_score(score, name)
-                return
-
-        # If we reach this far, we need to create a new scoreboard
-        # and add our score to it.
-        new_scoreboard = Scoreboard(setting_datastring)
-        new_scoreboard.add_score(score, name)
-        self.scoreboards.append(new_scoreboard)
-
+        try:
+            scoreboard = self.scoreboards[setting_datastring]
+            # Add our score to it.
+            scoreboard.add_score(score, name)
+        except KeyError:
+            # We need to create a new scoreboard and add our score to it.
+            self.scoreboards[setting_datastring] = Scoreboard(setting_datastring)
+            self.scoreboards[setting_datastring].add_score(score, name)
 
 class Scoreboard(object):
     """
@@ -161,21 +168,23 @@ class Scoreboard(object):
     def __init__(self, setting_datastring):
         self.setting_datastring = setting_datastring
         self.scoreboard = OrderedDict()
+        self.full = False
+        # This determines how many scores we keep.
+        self.retain = 8
 
     def add_score(self, score, name):
         """
         Add a new score.
         """
-        self.scoreboard[str(score)] = name
+        self.scoreboard[score] = name
         self.sort_scores()
-        # TODO: These aren't actually saving?ig
 
     def check_score(self, new_score):
         """
         Check if the score is worth logging.
         """
         # If any scores are logged...
-        if len(self.scoreboard):
+        if len(self.scoreboard) >= self.retain:
             for score in self.scoreboard:
                 # As soon as we find a score the new one is greater than...
                 if new_score > score:
@@ -190,22 +199,30 @@ class Scoreboard(object):
         """
         Sort the scores and only retain the top 10.
         """
-        # Clear the main dictionary for refilling.
-        self.scoreboard.clear()
-        # Sort.
-        self.scoreboard = OrderedDict(sorted(self.scoreboard.items()))
-        # Keep only the top 10.
+        # Sort (descending)
+        self.scoreboard = OrderedDict(reversed(sorted(self.scoreboard.items())))
+        # Keep only the top 'n' items:
+        # Counts how many elements we've seen.
         i = 0
+        # For each item...
         for item in self.scoreboard:
-            if i >= 10:
+            # If we have more than the max...
+            if i >= self.retain:
+                # Remove the item.
                 del self.scoreboard[item]
             i += 1
 
     def get_scores(self):
         """
-        Get data.
+        Get the scores from this scoreboard.
         """
-        pass
+        # We'll return as a list of tuples.
+        scores = []
+        # Iterate through the OrderedDict...
+        for score, name in self.scoreboard.items():
+            # Append a tuple for each pair to our return list.
+            scores.append((score, name))
+        return scores
 
     def get_datastring(self):
         """
@@ -213,8 +230,8 @@ class Scoreboard(object):
         our settings file.
         """
         output = "SCO=" + str(self.setting_datastring) + "\n"
-        for key in self.scoreboard:
-            output += ":" + str(key) + ":" + str(self.scoreboard[key]) + "\n"
+        for score, name in self.scoreboard.items():
+            output += ":" + str(score) + ":" + str(name) + "\n"
         return output
 
 class Settings(object):
