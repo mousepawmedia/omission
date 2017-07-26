@@ -299,7 +299,7 @@ class GameRoundSettings(object):
         # Whether to pause on solution.
         self.solution_pause = True
 
-    def set_timed(self, time=30, bonus=3, penalty=1):
+    def set_timed(self, time=30, bonus=2, penalty=1, tries=3):
         """
         Switch to Timed mode.
         """
@@ -307,19 +307,22 @@ class GameRoundSettings(object):
         self.limit = time
         self.bonus = bonus
         self.penalty = penalty
+        self.tries = tries
 
-    def set_survival(self, lives=5):
+    def set_survival(self, lives=5, tries=1):
         """
         Switch to Survival mode.
         """
         self.mode = GameMode.Survival
         self.limit = lives
+        self.tries = tries
 
-    def set_infinite(self):
+    def set_infinite(self, tries=3):
         """
         Switch to Infinite mode.
         """
         self.mode = GameMode.Infinite
+        self.tries = tries
 
     def set_solution_pause(self, solution_pause=True):
         """
@@ -327,13 +330,12 @@ class GameRoundSettings(object):
         """
         self.solution_pause = solution_pause
 
-    def set_clues(self, tries=3, count_at=1, clue_at=3):
+    def set_clues(self, count_at=1, clue_at=3):
         """
-        Define the number of attempts at a puzzle, and clue timings.
+        Define the clue timings.
         If count_at or clue_at are > tries, it won't ever be displayed.
         If count_at or clue_at is at 0, it'll always be displayed.
         """
-        self.tries = tries
         self.count_at = count_at
         self.clue_at = clue_at
 
@@ -343,24 +345,28 @@ class GameRoundSettings(object):
         """
         output = ""
 
+        # DEF=T:time:bonus:penalty:tries:hint:clue:solution
         if self.mode == GameMode.Timed:
             output += "T:" + \
-                str(self.tries) + ":" + \
-                str(self.count_at) + ":" + \
-                str(self.clue_at) + ":" + \
-                str(int(self.solution_pause)) + ":" + \
                 str(self.limit) + ":" + \
                 str(self.bonus) + ":" + \
-                str(self.penalty)
-
-        elif self.mode == GameMode.Survival:
-            output += "S:" + \
+                str(self.penalty) + ":" + \
                 str(self.tries) + ":" + \
                 str(self.count_at) + ":" + \
                 str(self.clue_at) + ":" + \
-                str(int(self.solution_pause)) + ":" + \
-                str(self.limit)
+                str(int(self.solution_pause))
 
+        # DEF=S:lives:tries:hint:clue:solution
+        elif self.mode == GameMode.Survival:
+            output += "S:" + \
+                str(self.limit) + ":" + \
+                str(self.tries) + ":" + \
+                str(self.count_at) + ":" + \
+                str(self.clue_at) + ":" + \
+                str(int(self.solution_pause))
+
+
+        # DEF=I:tries:hint:clue:solution
         elif self.mode == GameMode.Infinite:
             output += "I:" + \
                 str(self.tries) + ":" + \

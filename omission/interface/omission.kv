@@ -124,6 +124,15 @@
         text: '1'
         values: ('1', '2', '3', '4', '5')
         on_text: root.changed()
+    OrbitronLabel:
+        text: 'Tries'
+        color: hex("#FFFFFF")
+        font_size: '20sp'
+    OrbitronSpinner:
+        id: spn_tries
+        text: '3'
+        values: ('1', '2', '3', '4', '5')
+        on_text: root.changed()
 
 <SurvivalSettings>:
     orientation: 'vertical'
@@ -137,9 +146,6 @@
         text: '3'
         values: ('1', '2', '3', '4', '5')
         on_text: root.changed()
-
-<TrySettings>:
-    orientation: 'vertical'
     OrbitronLabel:
         text: 'Tries'
         color: hex("#FFFFFF")
@@ -149,6 +155,22 @@
         text: '3'
         values: ('1', '2', '3', '4', '5')
         on_text: root.changed()
+
+<InfiniteSettings>:
+    orientation: 'vertical'
+    spacing: '20px'
+    OrbitronLabel:
+        text: 'Tries'
+        color: hex("#FFFFFF")
+        font_size: '20sp'
+    OrbitronSpinner:
+        id: spn_tries
+        text: '3'
+        values: ('1', '2', '3', '4', '5')
+        on_text: root.changed()
+
+<TrySettings>:
+    orientation: 'vertical'
     OrbitronLabel:
         text: 'Hint On...'
         color: hex("#FFFFFF")

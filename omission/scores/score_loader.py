@@ -62,23 +62,26 @@ class ScoreLoader(object):
                 # If we found a settings line...
                 if re.match(r'DEF=.*', line):
                     tokens = re.split(r':', line)
+                    # DEF=T:time:bonus:penalty:tries:hint:clue:solution
                     if tokens[0] == "DEF=T":
-                        self.settings.timed.set_clues(int(tokens[1]),
+                        self.settings.timed.set_timed(int(tokens[1]),
                                                       int(tokens[2]),
-                                                      int(tokens[3]))
-                        self.settings.timed.set_solution_pause(bool(int(tokens[4])))
-                        self.settings.timed.set_timed(int(tokens[5]),
-                                                      int(tokens[6]),
-                                                      int(tokens[7]))
+                                                      int(tokens[3]),
+                                                      int(tokens[4]))
+                        self.settings.timed.set_clues(int(tokens[5]),
+                                                      int(tokens[6]))
+                        self.settings.timed.set_solution_pause(bool(int(tokens[7])))
+                    # DEF=S:lives:tries:hint:clue:solution
                     elif tokens[0] == "DEF=S":
-                        self.settings.survival.set_clues(int(tokens[1]),
-                                                         int(tokens[2]),
-                                                         int(tokens[3]))
-                        self.settings.survival.set_solution_pause(bool(int(tokens[4])))
-                        self.settings.survival.set_survival(int(tokens[5]))
+                        self.settings.survival.set_survival(int(tokens[1]),
+                                                            int(tokens[2]))
+                        self.settings.survival.set_clues(int(tokens[3]),
+                                                         int(tokens[4]))
+                        self.settings.survival.set_solution_pause(bool(int(tokens[5])))
+                    # DEF=I:tries:hint:clue:solution
                     elif tokens[0] == "DEF=I":
-                        self.settings.infinite.set_clues(int(tokens[1]),
-                                                         int(tokens[2]),
+                        self.settings.infinite.set_infinite(int(tokens[1]))
+                        self.settings.infinite.set_clues(int(tokens[2]),
                                                          int(tokens[3]))
                         self.settings.infinite.set_solution_pause(bool(int(tokens[4])))
 

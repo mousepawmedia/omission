@@ -23,6 +23,7 @@ class Menu(BoxLayout):
         self.try_settings = TrySettings()
         self.timed_settings = TimedSettings()
         self.survival_settings = SurvivalSettings()
+        self.infinite_settings = InfiniteSettings()
 
         self.mode = ""
         self.switch_mode(None)
@@ -71,6 +72,7 @@ class Menu(BoxLayout):
         self.ids.box_controls.remove_widget(self.try_settings)
         self.ids.box_controls.remove_widget(self.survival_settings)
         self.ids.box_controls.remove_widget(self.timed_settings)
+        self.ids.box_controls.remove_widget(self.infinite_settings)
 
         if not mode:
             # Display info instead of control boxes.
@@ -78,18 +80,19 @@ class Menu(BoxLayout):
         elif mode == 'Timed':
             # Add the controls for Timed.
             self.ids.box_controls.add_widget(self.play_box)
-            self.ids.box_controls.add_widget(self.try_settings)
             self.ids.box_controls.add_widget(self.timed_settings)
+            self.ids.box_controls.add_widget(self.try_settings)
             self.get_settings(mode)
         elif mode == 'Survival':
             # Add the controls for Survival
             self.ids.box_controls.add_widget(self.play_box)
-            self.ids.box_controls.add_widget(self.try_settings)
             self.ids.box_controls.add_widget(self.survival_settings)
+            self.ids.box_controls.add_widget(self.try_settings)
             self.get_settings(mode)
         elif mode == 'Infinite':
             # Add the control for Infinite
             self.ids.box_controls.add_widget(self.play_box)
+            self.ids.box_controls.add_widget(self.infinite_settings)
             self.ids.box_controls.add_widget(self.try_settings)
             self.get_settings(mode)
 
@@ -101,25 +104,26 @@ class Menu(BoxLayout):
         """
         saved = App.get_running_app().scoreloader.settings
         if mode == 'Timed':
-            self.try_settings.ids.spn_tries.text = str(saved.timed.tries)
+            self.timed_settings.ids.spn_time.text = str(saved.timed.limit)
+            self.timed_settings.ids.spn_bonus.text = str(saved.timed.bonus)
+            self.timed_settings.ids.spn_penalty.text = str(saved.timed.penalty)
+            self.timed_settings.ids.spn_tries.text = str(saved.timed.tries)
+
             self.try_settings.ids.spn_hint.text = str(saved.timed.count_at + 1)
             self.try_settings.ids.spn_clue.text = str(saved.timed.clue_at + 1)
             self.try_settings.ids.spn_passage.text = str(saved.timed.solution_pause)
 
-            self.timed_settings.ids.spn_time.text = str(saved.timed.limit)
-            self.timed_settings.ids.spn_bonus.text = str(saved.timed.bonus)
-            self.timed_settings.ids.spn_penalty.text = str(saved.timed.penalty)
-
         elif mode == 'Survival':
-            self.try_settings.ids.spn_tries.text = str(saved.survival.tries)
+            self.survival_settings.ids.spn_lives.text = str(saved.survival.limit)
+            self.survival_settings.ids.spn_tries.text = str(saved.survival.tries)
+
             self.try_settings.ids.spn_hint.text = str(saved.survival.count_at + 1)
             self.try_settings.ids.spn_clue.text = str(saved.survival.clue_at + 1)
             self.try_settings.ids.spn_passage.text = str(saved.survival.solution_pause)
 
-            self.survival_settings.ids.spn_lives.text = str(saved.survival.limit)
-
         elif mode == 'Infinite':
-            self.try_settings.ids.spn_tries.text = str(saved.infinite.tries)
+            self.infinite_settings.ids.spn_tries.text = str(saved.infinite.tries)
+
             self.try_settings.ids.spn_hint.text = str(saved.infinite.count_at + 1)
             self.try_settings.ids.spn_clue.text = str(saved.infinite.clue_at + 1)
             self.try_settings.ids.spn_passage.text = str(saved.infinite.solution_pause)
@@ -152,10 +156,9 @@ class Menu(BoxLayout):
             settings = self.settings
         # For any of the modes...
         if self.mode is not None:
-            tries = int(self.try_settings.ids.spn_tries.text)
             hint = int(self.try_settings.ids.spn_hint.text) - 1
             clue = int(self.try_settings.ids.spn_clue.text) - 1
-            settings.set_clues(tries, hint, clue)
+            settings.set_clues(hint, clue)
 
             passage = self.try_settings.ids.spn_passage.text == 'True'
             settings.set_solution_pause(passage)
@@ -164,14 +167,17 @@ class Menu(BoxLayout):
             time = int(self.timed_settings.ids.spn_time.text)
             bonus = int(self.timed_settings.ids.spn_bonus.text)
             penalty = int(self.timed_settings.ids.spn_penalty.text)
-            settings.set_timed(time, bonus, penalty)
+            tries = int(self.timed_settings.ids.spn_tries.text)
+            settings.set_timed(time, bonus, penalty, tries)
             App.get_running_app().scoreloader.settings.save_timed(settings)
         elif self.mode == 'Survival':
             lives = int(self.survival_settings.ids.spn_lives.text)
+            tries = int(self.survival_settings.ids.spn_tries.text)
             settings.set_survival(lives)
             App.get_running_app().scoreloader.settings.save_survival(settings)
         elif self.mode == 'Infinite':
-            settings.set_infinite()
+            tries = int(self.infinite_settings.ids.spn_tries.text)
+            settings.set_infinite(tries)
             App.get_running_app().scoreloader.settings.save_infinite(settings)
 
 class InfoBox(BoxLayout):
@@ -230,6 +236,17 @@ class TimedSettings(BoxLayout):
 class SurvivalSettings(BoxLayout):
     """
     Settings for Survival mode.
+    """
+
+    def changed(self):
+        """
+        When we change an event, call the parent's changed() function.
+        """
+        self.parent.parent.changed()
+
+class InfiniteSettings(BoxLayout):
+    """
+    Settings for Infinite mode.
     """
 
     def changed(self):
