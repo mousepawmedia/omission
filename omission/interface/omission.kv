@@ -57,6 +57,12 @@
         orientation: 'horizontal'
         size_hint_y: 0.15
         spacing: '20px'
+        OrbitronSpinner:
+            id: spn_vol
+            text: 'Vol: High'
+            font_size: '15sp'
+            values: ('Vol: Off', 'Vol: Low', 'Vol: Med', 'Vol: High')
+            on_text: root.volume()
         OrbitronButton:
             text: "Rules"
             font_size: '15sp'

@@ -78,6 +78,7 @@ class Menu(BoxLayout):
         if not mode:
             # Display info instead of control boxes.
             self.ids.box_controls.add_widget(self.info_box)
+            self.get_settings()
         elif mode == 'Timed':
             # Add the controls for Timed.
             self.ids.box_controls.add_widget(self.play_box)
@@ -132,6 +133,19 @@ class Menu(BoxLayout):
             self.try_settings.ids.spn_chain.text = str(saved.infinite.chain)
             self.try_settings.ids.spn_passage.text = str(saved.infinite.solution_pause)
 
+        else:
+            vol_str = "Vol: "
+            vol = App.get_running_app().scoreloader.soundplayer.get_volume()
+            if vol == 0:
+                vol_str += "Off"
+            elif vol <= 3:
+                vol_str += "Low"
+            elif vol <= 6:
+                vol_str += "Med"
+            else:
+                vol_str += "High"
+            self.info_box.ids.spn_vol.text = vol_str
+
     def get_scores(self, settings=None):
         """
         Load the scores into the interface.
@@ -159,7 +173,7 @@ class Menu(BoxLayout):
             # Store in the main settings.
             settings = self.settings
         # For any of the modes...
-        if self.mode is not None:
+        if self.mode:
             hint = int(self.try_settings.ids.spn_hint.text) - 1
             clue = int(self.try_settings.ids.spn_clue.text) - 1
             settings.set_clues(hint, clue)
@@ -210,6 +224,20 @@ class InfoBox(BoxLayout):
         Quit the game.
         """
         App.get_running_app().stop()
+
+    def volume(self):
+        """
+        Change the volume.
+        """
+        vol_str = self.ids.spn_vol.text
+        if vol_str == "Vol: Off":
+            App.get_running_app().scoreloader.soundplayer.set_volume(0)
+        elif vol_str == 'Vol: Low':
+            App.get_running_app().scoreloader.soundplayer.set_volume(3)
+        elif vol_str == 'Vol: Med':
+            App.get_running_app().scoreloader.soundplayer.set_volume(6)
+        elif vol_str == 'Vol: High':
+            App.get_running_app().scoreloader.soundplayer.set_volume(10)
 
 class PlayBox(BoxLayout):
     """

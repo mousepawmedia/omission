@@ -87,6 +87,9 @@ class ScoreLoader(object):
                                                          int(tokens[3]))
                         self.settings.timed.set_chain(int(tokens[4]))
                         self.settings.infinite.set_solution_pause(bool(int(tokens[5])))
+                elif re.match(r'VOL=.*', line):
+                    tokens = re.split(r'=', line)
+                    self.soundplayer.set_volume(int(tokens[1]))
 
     def parse_scores(self):
         """
@@ -122,6 +125,7 @@ class ScoreLoader(object):
         # Generate the output for the file.
         output = ""
         output += self.settings.get_datastring()
+        output += self.soundplayer.get_datastring()
         #pylint: disable=W0612
         for datastr, scoreboard in self.scoreboards.items():
             output += scoreboard.get_datastring()
