@@ -96,7 +96,7 @@
 
 <TimedSettings>:
     orientation: 'vertical'
-    spacing: '20px'
+    spacing: '5px'
     OrbitronLabel:
         text: 'Timer Length'
         font_size: '20sp'
@@ -136,7 +136,7 @@
 
 <SurvivalSettings>:
     orientation: 'vertical'
-    spacing: '20px'
+    spacing: '5px'
     OrbitronLabel:
         text: 'Lives'
         font_size: '20sp'
@@ -158,7 +158,7 @@
 
 <InfiniteSettings>:
     orientation: 'vertical'
-    spacing: '20px'
+    spacing: '5px'
     OrbitronLabel:
         text: 'Tries'
         color: hex("#FFFFFF")
@@ -171,6 +171,7 @@
 
 <TrySettings>:
     orientation: 'vertical'
+    spacing: '5px'
     OrbitronLabel:
         text: 'Hint On...'
         color: hex("#FFFFFF")
@@ -187,6 +188,15 @@
     OrbitronSpinner:
         id: spn_clue
         text: '3'
+        values: ('1', '2', '3', '4', '5')
+        on_text: root.changed()
+    OrbitronLabel:
+        text: 'Chain Time'
+        color: hex("#FFFFFF")
+        font_size: '20sp'
+    OrbitronSpinner:
+        id: spn_chain
+        text: '2'
         values: ('1', '2', '3', '4', '5')
         on_text: root.changed()
     OrbitronLabel:
@@ -310,12 +320,21 @@
                 Rectangle:
                     pos: self.pos
                     size: self.size
-        OrbitronLabel:
-            # Display guesses
-            id: lbl_guess
+        BoxLayout:
             size_hint_x: None
-            text: "g\nu\ne\ns\ns"
-            font_size: '30sp'
+            orientation: 'vertical'
+            OrbitronLabel:
+                # Display chain bonus.
+                id: lbl_chain
+                size_hint_y: 0.1
+                text: "CHAIN"
+                font_size: '30sp'
+            OrbitronLabel:
+                # Display guesses
+                id: lbl_guess
+                size_hint_y: 0.9
+                text: "g\nu\ne\ns\ns"
+                font_size: '30sp'
     BoxLayout:
         # Bottom bar.
         orientation: 'horizontal'

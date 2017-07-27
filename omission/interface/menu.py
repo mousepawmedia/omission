@@ -11,6 +11,7 @@ class Menu(BoxLayout):
     """
     The main menu of the game.
     """
+    # pylint: disable=R0902
     def __init__(self, **kwargs):
         """
         Initialize a new Menu box.
@@ -111,6 +112,7 @@ class Menu(BoxLayout):
 
             self.try_settings.ids.spn_hint.text = str(saved.timed.count_at + 1)
             self.try_settings.ids.spn_clue.text = str(saved.timed.clue_at + 1)
+            self.try_settings.ids.spn_chain.text = str(saved.timed.chain)
             self.try_settings.ids.spn_passage.text = str(saved.timed.solution_pause)
 
         elif mode == 'Survival':
@@ -119,6 +121,7 @@ class Menu(BoxLayout):
 
             self.try_settings.ids.spn_hint.text = str(saved.survival.count_at + 1)
             self.try_settings.ids.spn_clue.text = str(saved.survival.clue_at + 1)
+            self.try_settings.ids.spn_chain.text = str(saved.survival.chain)
             self.try_settings.ids.spn_passage.text = str(saved.survival.solution_pause)
 
         elif mode == 'Infinite':
@@ -126,6 +129,7 @@ class Menu(BoxLayout):
 
             self.try_settings.ids.spn_hint.text = str(saved.infinite.count_at + 1)
             self.try_settings.ids.spn_clue.text = str(saved.infinite.clue_at + 1)
+            self.try_settings.ids.spn_chain.text = str(saved.infinite.chain)
             self.try_settings.ids.spn_passage.text = str(saved.infinite.solution_pause)
 
     def get_scores(self, settings=None):
@@ -159,6 +163,9 @@ class Menu(BoxLayout):
             hint = int(self.try_settings.ids.spn_hint.text) - 1
             clue = int(self.try_settings.ids.spn_clue.text) - 1
             settings.set_clues(hint, clue)
+
+            chain = int(self.try_settings.ids.spn_chain.text)
+            settings.set_chain(chain)
 
             passage = self.try_settings.ids.spn_passage.text == 'True'
             settings.set_solution_pause(passage)

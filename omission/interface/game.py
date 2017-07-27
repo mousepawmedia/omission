@@ -68,12 +68,10 @@ class Gameplay(BoxLayout):
                 status = self.gameround.answer(key)
                 # If the answer was right...
                 if status == GameStatus.Correct:
-                    # Update the score.
+                    # Update the score. Sound is played from here.
                     self.update_score()
                     # Clear our guess list.
                     self.update_guesses()
-                    # Play ding.
-                    self.soundplayer.play_ding()
                     # Show the solution.
                     self.show_feedback(True)
                 # If the answer was wrong, but we have guesses left...
@@ -271,6 +269,16 @@ class Gameplay(BoxLayout):
         score = self.gameround.get_score()
         self.ids.lbl_score.text = score_to_scorestring(score[0])
         self.parent.popup_score("+" + str(score[1]))
+        # Update chain.
+        if score[2] > 1:
+            self.ids.lbl_chain.text = "x" + str(score[2])
+            # Play bonus sound.
+            self.soundplayer.play_bonus(score[2] - 1)
+        else:
+            # No chain.
+            self.ids.lbl_chain.text = ""
+            # Play ding.
+            self.soundplayer.play_ding()
 
     def update_status(self, check_mode=False):
         """
@@ -331,6 +339,10 @@ class Gameplay(BoxLayout):
         # Update tries.
         self.ids.lbl_tries.text = str(self.gameround.get_tries())
 
+        # Check if the chain has expired.
+        if not info[4]:
+            self.ids.lbl_chain.text = ""
+
     def reset(self):
         """
         Reset the interface to game-over mode.
@@ -339,6 +351,7 @@ class Gameplay(BoxLayout):
         self.ids.lbl_remaining.text = "0:00"
         self.ids.lbl_tries.text = "?"
         self.ids.lbl_removals.text = "?"
+        self.ids.lbl_chain.text = ""
         self.ids.lbl_guess.text = ""
         self.ids.lbl_puzzle.text = "GAME OVER\nENTER to return to menu."
 

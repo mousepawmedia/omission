@@ -13,7 +13,7 @@ class GameRound(object):
     A single round of gameplay. Generates the content for the round and
     manages the score and gameplay dynamics.
     """
-    # Ensure we don't use any passage more than once per round.
+    #pylint: disable=R0902
 
     # pylint: disable=R0902
     def __init__(self, life_signal, gameover_callback=None, tick_callback=None,
@@ -63,6 +63,8 @@ class GameRound(object):
         self._score = 0
         # The last item score.
         self._item_score = 0
+        # The current chain multiplier. Default 1.
+        self._chain = 1
 
     def start_round(self):
         """
@@ -87,7 +89,8 @@ class GameRound(object):
 
     def get_status(self):
         """
-        Returns the status of the game as (mode, percentage, seconds, lives).
+        Returns the status of the game as (mode, percentage, seconds,
+        lives, has_chain).
         """
         remaining = 100
         lives = 0
@@ -98,8 +101,12 @@ class GameRound(object):
             remaining = self._timer.get_remaining_percent()
         else:
             lives = 0
+
+        # Return whether our chain is valid (True) or has expired (False)
+        has_chain = self._timer.since_bookmark() < self.settings.chain
+
         return (self.settings.mode, remaining,
-                self._timer.get_seconds(), lives)
+                self._timer.get_seconds(), lives, has_chain)
 
     def get_puzzle(self):
         """
@@ -160,6 +167,8 @@ class GameRound(object):
                 self._timer.remove_time(self.settings.penalty)
                 # Mark the attempt.
                 self._try += 1
+                # Expire any chains.
+                self._chain = 1
                 # If we've used all our tries...
                 if self._try >= self.settings.tries:
                     # No attempts on this puzzle left.
@@ -206,14 +215,23 @@ class GameRound(object):
         if time > 6:
             time = 6
         time_bonus = 6 - time
-        self._item_score = base_score * (try_bonus + time_bonus)
+
+        # Calculate item score WITH current chain.
+        self._item_score = base_score * (try_bonus + time_bonus) * self._chain
+        # Add to the main score.
         self._score += self._item_score
+
+        # Update the chain bonus for NEXT time, if claimed.
+        if time < self.settings.chain:
+            self._chain += 1
+        else:
+            self._chain = 1
 
     def get_score(self):
         """
-        Get score. Returns (score, item_score)
+        Get score. Returns (score, item_score, chain)
         """
-        return (self._score, self._item_score)
+        return (self._score, self._item_score, self._chain)
 
     def get_solution(self):
         """
@@ -296,6 +314,8 @@ class GameRoundSettings(object):
         self.bonus = 3
         # The time to remove from the lock on a wrong guess in Timed mode.
         self.penalty = 1
+        # The time under which we have to answer to extend the chain.
+        self.chain = 2
         # Whether to pause on solution.
         self.solution_pause = True
 
@@ -330,6 +350,12 @@ class GameRoundSettings(object):
         """
         self.solution_pause = solution_pause
 
+    def set_chain(self, chain=2):
+        """
+        Set the cutoff time for chain bonuses.
+        """
+        self.chain = chain
+
     def set_clues(self, count_at=1, clue_at=3):
         """
         Define the clue timings.
@@ -345,7 +371,7 @@ class GameRoundSettings(object):
         """
         output = ""
 
-        # DEF=T:time:bonus:penalty:tries:hint:clue:solution
+        # DEF=T:time:bonus:penalty:tries:hint:clue:chain:solution
         if self.mode == GameMode.Timed:
             output += "T:" + \
                 str(self.limit) + ":" + \
@@ -354,24 +380,27 @@ class GameRoundSettings(object):
                 str(self.tries) + ":" + \
                 str(self.count_at) + ":" + \
                 str(self.clue_at) + ":" + \
+                str(self.chain) + ":" + \
                 str(int(self.solution_pause))
 
-        # DEF=S:lives:tries:hint:clue:solution
+        # DEF=S:lives:tries:hint:clue:chain:solution
         elif self.mode == GameMode.Survival:
             output += "S:" + \
                 str(self.limit) + ":" + \
                 str(self.tries) + ":" + \
                 str(self.count_at) + ":" + \
                 str(self.clue_at) + ":" + \
+                str(self.chain) + ":" + \
                 str(int(self.solution_pause))
 
 
-        # DEF=I:tries:hint:clue:solution
+        # DEF=I:tries:hint:clue:chain:solution
         elif self.mode == GameMode.Infinite:
             output += "I:" + \
                 str(self.tries) + ":" + \
                 str(self.count_at) + ":" + \
                 str(self.clue_at) + ":" + \
+                str(self.chain) + ":" + \
                 str(int(self.solution_pause))
 
         return output

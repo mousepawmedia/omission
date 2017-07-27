@@ -63,14 +63,16 @@ class SoundPlayer(object):
         """
         Plays the bonus sound effect.
         """
-        if level > 0 and level <= 8:
-            soundlev = level
-        elif level > 9:
-            soundlev = 8
-        sound = SoundLoader.load('resources/audio/bonus' + soundlev + '.ogg')
-        sound.volume = self.vol
-        if sound:
-            sound.play()
+        if level > 0:
+            if level <= 8:
+                soundlev = level
+            else:
+                soundlev = 8
+
+            sound = SoundLoader.load('resources/audio/bonus' + str(soundlev) + '.ogg')
+            sound.volume = self.vol
+            if sound:
+                sound.play()
 
     def play_gameover(self):
         """
