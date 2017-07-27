@@ -1,5 +1,5 @@
 """
-Scores and Settings Loader [Omission]
+Data (Scores and Settings) Loader [Omission]
 """
 
 from collections import OrderedDict
@@ -9,13 +9,16 @@ import re
 
 from appdirs import user_data_dir
 
+from omission.data.font_loader import FontLoader
+from omission.data.sound import SoundPlayer
 from omission.game.gameround import GameRoundSettings
-from omission.interface.sound import SoundPlayer
 
 # Our data layout following these conventions:
 # DEF=T:3:2:3:1:30:3:1
 # DEF=S:3:2:3:1:3
 # DEF=I:3:2:3:1
+# VOL=10
+# DYS=1
 # SCO=T:3:2:3:1:30:3:1
 # :852:Fred
 # :1936523:Jason
@@ -23,7 +26,7 @@ from omission.interface.sound import SoundPlayer
 # :100:Bob
 # SCO=T:5:2:3:1:30:3:1
 
-class ScoreLoader(object):
+class DataLoader(object):
     """
     Load scores and other stored data from our config file.
     """
@@ -35,6 +38,7 @@ class ScoreLoader(object):
         self.settings = Settings()
         self.soundplayer = SoundPlayer()
         self.scoreboards = OrderedDict()
+        self.fontloader = FontLoader()
 
         appname = "Omission"
         appauthor = "MousePaw Media"
@@ -90,6 +94,9 @@ class ScoreLoader(object):
                 elif re.match(r'VOL=.*', line):
                     tokens = re.split(r'=', line)
                     self.soundplayer.set_volume(int(tokens[1]))
+                elif re.match(r'DYS=.*', line):
+                    tokens = re.split(r'=', line)
+                    self.fontloader.set_dyslexic_mode(bool(int(tokens[1])))
 
     def parse_scores(self):
         """
@@ -126,6 +133,7 @@ class ScoreLoader(object):
         output = ""
         output += self.settings.get_datastring()
         output += self.soundplayer.get_datastring()
+        output += self.fontloader.get_datastring()
         #pylint: disable=W0612
         for datastr, scoreboard in self.scoreboards.items():
             output += scoreboard.get_datastring()

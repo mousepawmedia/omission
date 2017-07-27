@@ -6,6 +6,7 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 
 from omission.game.gameround import GameRoundSettings
+from omission.interface.message import PopupMessage
 
 class Menu(BoxLayout):
     """
@@ -104,7 +105,7 @@ class Menu(BoxLayout):
         """
         Load the saved settings into the interface.
         """
-        saved = App.get_running_app().scoreloader.settings
+        saved = App.get_running_app().dataloader.settings
         if mode == 'Timed':
             self.timed_settings.ids.spn_time.text = str(saved.timed.limit)
             self.timed_settings.ids.spn_bonus.text = str(saved.timed.bonus)
@@ -135,7 +136,7 @@ class Menu(BoxLayout):
 
         else:
             vol_str = "Vol: "
-            vol = App.get_running_app().scoreloader.soundplayer.get_volume()
+            vol = App.get_running_app().dataloader.soundplayer.get_volume()
             if vol == 0:
                 vol_str += "Off"
             elif vol <= 3:
@@ -145,6 +146,12 @@ class Menu(BoxLayout):
             else:
                 vol_str += "High"
             self.info_box.ids.spn_vol.text = vol_str
+
+            dys = App.get_running_app().dataloader.fontloader.get_dyslexic_mode()
+            if dys:
+                self.info_box.ids.spn_dys.text = "Dyslexic"
+            else:
+                self.info_box.ids.spn_dys.text = "Normal"
 
     def get_scores(self, settings=None):
         """
@@ -157,7 +164,7 @@ class Menu(BoxLayout):
                 settings = GameRoundSettings()
                 self.load_settings(settings)
             # Use the datastring to get the scores.
-            scores = App.get_running_app().scoreloader.get_scores(settings.get_datastring())
+            scores = App.get_running_app().dataloader.get_scores(settings.get_datastring())
             scores_str = ""
             if scores:
                 for item in scores:
@@ -190,16 +197,16 @@ class Menu(BoxLayout):
             penalty = int(self.timed_settings.ids.spn_penalty.text)
             tries = int(self.timed_settings.ids.spn_tries.text)
             settings.set_timed(time, bonus, penalty, tries)
-            App.get_running_app().scoreloader.settings.save_timed(settings)
+            App.get_running_app().dataloader.settings.save_timed(settings)
         elif self.mode == 'Survival':
             lives = int(self.survival_settings.ids.spn_lives.text)
             tries = int(self.survival_settings.ids.spn_tries.text)
             settings.set_survival(lives)
-            App.get_running_app().scoreloader.settings.save_survival(settings)
+            App.get_running_app().dataloader.settings.save_survival(settings)
         elif self.mode == 'Infinite':
             tries = int(self.infinite_settings.ids.spn_tries.text)
             settings.set_infinite(tries)
-            App.get_running_app().scoreloader.settings.save_infinite(settings)
+            App.get_running_app().dataloader.settings.save_infinite(settings)
 
 class InfoBox(BoxLayout):
     """
@@ -225,19 +232,37 @@ class InfoBox(BoxLayout):
         """
         App.get_running_app().stop()
 
+    def font_mode(self):
+        """
+        Switch between normal and dyslexic display modes.
+        """
+        dys = App.get_running_app().dataloader.fontloader.get_dyslexic_mode()
+
+        if self.ids.spn_dys.text == "Normal":
+            mode = False
+        elif self.ids.spn_dys.text == "Dyslexic":
+            mode = True
+
+        if mode != dys:
+            App.get_running_app().dataloader.fontloader.set_dyslexic_mode(mode)
+            popup_message = PopupMessage()
+            popup_message.set("Display Mode Changed",
+                              "You must restart Omission to apply your changes.")
+            popup_message.open()
+
     def volume(self):
         """
         Change the volume.
         """
         vol_str = self.ids.spn_vol.text
         if vol_str == "Vol: Off":
-            App.get_running_app().scoreloader.soundplayer.set_volume(0)
+            App.get_running_app().dataloader.soundplayer.set_volume(0)
         elif vol_str == 'Vol: Low':
-            App.get_running_app().scoreloader.soundplayer.set_volume(3)
+            App.get_running_app().dataloader.soundplayer.set_volume(3)
         elif vol_str == 'Vol: Med':
-            App.get_running_app().scoreloader.soundplayer.set_volume(6)
+            App.get_running_app().dataloader.soundplayer.set_volume(6)
         elif vol_str == 'Vol: High':
-            App.get_running_app().scoreloader.soundplayer.set_volume(10)
+            App.get_running_app().dataloader.soundplayer.set_volume(10)
 
 class PlayBox(BoxLayout):
     """

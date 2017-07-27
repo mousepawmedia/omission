@@ -8,13 +8,17 @@ from kivy.config import Config
 from kivy.core.window import Window
 from kivy.uix.floatlayout import FloatLayout
 
-from omission.scores.score_loader import ScoreLoader
+from omission.data.data_loader import DataLoader
 from omission.interface.credits import Credits
 from omission.interface.game import Gameplay
 from omission.interface.highscore import Highscore
 from omission.interface.menu import Menu
 from omission.interface.popup import PopupLabel
 from omission.interface.rules import Rules
+
+# We need this imported, just to ensure it is seen by the .kv file
+# pylint: disable=W0401,W0614
+from omission.interface.decorative_widgets import *
 
 kivy.require('1.10.0')
 
@@ -128,7 +132,7 @@ class OmissionApp(App):
         self.min_size = (800, 600)
 
         # Create our score loader.
-        self.scoreloader = ScoreLoader()
+        self.dataloader = DataLoader()
 
     def build_config(self, config):
         """
@@ -188,4 +192,4 @@ class OmissionApp(App):
         """
         if self.kill_callback:
             self.kill_callback()
-        self.scoreloader.write_out()
+        self.dataloader.write_out()

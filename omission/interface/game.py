@@ -27,7 +27,7 @@ class Gameplay(BoxLayout):
         self.playing = False
         self.gameround = None
 
-        self.soundplayer = App.get_running_app().scoreloader.soundplayer
+        self.soundplayer = App.get_running_app().dataloader.soundplayer
 
         #Track guesses.
         self._guesses = []
@@ -369,7 +369,7 @@ class Gameplay(BoxLayout):
         # Check for score logging.
         datastring = self.gameround.settings.get_datastring()
         score = self.gameround.get_score()
-        if App.get_running_app().scoreloader.check_score(datastring, score[0]):
+        if App.get_running_app().dataloader.check_score(datastring, score[0]):
             self.parent.show_highscore(datastring, score[0], self)
         else:
             # Switch to the menu.

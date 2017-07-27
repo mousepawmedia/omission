@@ -31,8 +31,8 @@ class Highscore(BoxLayout):
         # If we actually have a name...
         if not name == "":
             # Register the high score.
-            App.get_running_app().scoreloader.add_score(self.datastring,
-                                                        self.score, name)
+            App.get_running_app().dataloader.add_score(self.datastring,
+                                                       self.score, name)
             # Switch to the menu.
             self.parent.show_menu(self)
 
@@ -40,6 +40,10 @@ class NameTextInput(TextInput):
     """
     Extend the TextInput widget to introduce a character maximum.
     """
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.font_name = App.get_running_app().dataloader.fontloader.decorative()
 
     def insert_text(self, substring, from_undo=False):
         """

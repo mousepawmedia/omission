@@ -2,6 +2,8 @@
 Sound Playback Functions [Omission]
 """
 
+import os.path
+
 from kivy.core.audio import SoundLoader
 
 class SoundPlayer(object):
@@ -40,7 +42,8 @@ class SoundPlayer(object):
         """
         Plays the alarm sound effect.
         """
-        sound = SoundLoader.load('resources/audio/alarm.ogg')
+        soundpath = os.path.join('resources', 'audio', 'alarm.ogg')
+        sound = SoundLoader.load(soundpath)
         if sound:
             sound.volume = self.vol
             sound.play()
@@ -49,7 +52,8 @@ class SoundPlayer(object):
         """
         Plays the low bell (wrong) sound effect.
         """
-        sound = SoundLoader.load('resources/audio/bell.ogg')
+        soundpath = os.path.join('resources', 'audio', 'bell.ogg')
+        sound = SoundLoader.load(soundpath)
         if sound:
             sound.volume = self.vol
             sound.play()
@@ -58,7 +62,8 @@ class SoundPlayer(object):
         """
         Plays the low bell (wrong) sound effect.
         """
-        sound = SoundLoader.load('resources/audio/lowbell.ogg')
+        soundpath = os.path.join('resources', 'audio', 'lowbell.ogg')
+        sound = SoundLoader.load(soundpath)
         if sound:
             sound.volume = self.vol
             sound.play()
@@ -67,7 +72,8 @@ class SoundPlayer(object):
         """
         Plays the ding (correct) sound effect.
         """
-        sound = SoundLoader.load('resources/audio/ding.ogg')
+        soundpath = os.path.join('resources', 'audio', 'ding.ogg')
+        sound = SoundLoader.load(soundpath)
         if sound:
             sound.volume = self.vol
             sound.play()
@@ -82,7 +88,9 @@ class SoundPlayer(object):
             else:
                 soundlev = 8
 
-            sound = SoundLoader.load('resources/audio/bonus' + str(soundlev) + '.ogg')
+            soundpath = os.path.join('resources', 'audio',
+                                     'bonus' + str(soundlev) + '.ogg')
+            sound = SoundLoader.load(soundpath)
             if sound:
                 sound.volume = self.vol
                 sound.play()
@@ -91,7 +99,8 @@ class SoundPlayer(object):
         """
         Plays the gameover sound effect.
         """
-        sound = SoundLoader.load('resources/audio/gameover.ogg')
+        soundpath = os.path.join('resources', 'audio', 'gameover.ogg')
+        sound = SoundLoader.load(soundpath)
         sound.volume = self.vol
         if sound:
             sound.play()
