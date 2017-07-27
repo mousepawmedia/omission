@@ -102,8 +102,7 @@ class GameRound(object):
         else:
             lives = 0
 
-        # Return whether our chain is valid (True) or has expired (False)
-        has_chain = self._timer.since_bookmark() < self.settings.chain
+        has_chain = self._chain > 1
 
         return (self.settings.mode, remaining,
                 self._timer.get_seconds(), lives, has_chain)
@@ -275,6 +274,9 @@ class GameRound(object):
         """
         Runs every second.
         """
+        # If we had a chain but it should have expired...
+        if self._chain > 1 and self._timer.since_bookmark() >= self.settings.chain:
+            self._chain = 1
         # If we have a tick callback, call it now...
         if self._tick_callback:
             self._tick_callback()
