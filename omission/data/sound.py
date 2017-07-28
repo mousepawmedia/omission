@@ -12,6 +12,18 @@ class SoundPlayer(object):
     """
     def __init__(self):
         self.vol = 1
+        self.alarm = SoundLoader.load(os.path.join('resources', 'audio', 'alarm.ogg'))
+        self.bell = SoundLoader.load(os.path.join('resources', 'audio', 'bell.ogg'))
+        self.lowbell = SoundLoader.load(os.path.join('resources', 'audio', 'lowbell.ogg'))
+        self.ding = SoundLoader.load(os.path.join('resources', 'audio', 'ding.ogg'))
+        self.gameover = SoundLoader.load(os.path.join('resources', 'audio', 'gameover.ogg'))
+        self.bonus = list()
+
+        for i in range(1, 9):
+            soundpath = os.path.join('resources', 'audio',
+                                     'bonus' + str(i) + '.ogg')
+            sound = SoundLoader.load(soundpath)
+            self.bonus.append(sound)
 
     def get_datastring(self):
         """
@@ -42,41 +54,33 @@ class SoundPlayer(object):
         """
         Plays the alarm sound effect.
         """
-        soundpath = os.path.join('resources', 'audio', 'alarm.ogg')
-        sound = SoundLoader.load(soundpath)
-        if sound:
-            sound.volume = self.vol
-            sound.play()
+        if self.alarm:
+            self.alarm.volume = self.vol
+            self.alarm.play()
 
     def play_bell(self):
         """
         Plays the low bell (wrong) sound effect.
         """
-        soundpath = os.path.join('resources', 'audio', 'bell.ogg')
-        sound = SoundLoader.load(soundpath)
-        if sound:
-            sound.volume = self.vol
-            sound.play()
+        if self.bell:
+            self.bell.volume = self.vol
+            self.bell.play()
 
     def play_lowbell(self):
         """
         Plays the low bell (wrong) sound effect.
         """
-        soundpath = os.path.join('resources', 'audio', 'lowbell.ogg')
-        sound = SoundLoader.load(soundpath)
-        if sound:
-            sound.volume = self.vol
-            sound.play()
+        if self.lowbell:
+            self.lowbell.volume = self.vol
+            self.lowbell.play()
 
     def play_ding(self):
         """
         Plays the ding (correct) sound effect.
         """
-        soundpath = os.path.join('resources', 'audio', 'ding.ogg')
-        sound = SoundLoader.load(soundpath)
-        if sound:
-            sound.volume = self.vol
-            sound.play()
+        if self.ding:
+            self.ding.volume = self.vol
+            self.ding.play()
 
     def play_bonus(self, level):
         """
@@ -84,23 +88,18 @@ class SoundPlayer(object):
         """
         if level > 0:
             if level <= 8:
-                soundlev = level
+                soundlev = level - 1
             else:
-                soundlev = 8
+                soundlev = 7
 
-            soundpath = os.path.join('resources', 'audio',
-                                     'bonus' + str(soundlev) + '.ogg')
-            sound = SoundLoader.load(soundpath)
-            if sound:
-                sound.volume = self.vol
-                sound.play()
+            if self.bonus[soundlev]:
+                self.bonus[soundlev].volume = self.vol
+                self.bonus[soundlev].play()
 
     def play_gameover(self):
         """
         Plays the gameover sound effect.
         """
-        soundpath = os.path.join('resources', 'audio', 'gameover.ogg')
-        sound = SoundLoader.load(soundpath)
-        sound.volume = self.vol
-        if sound:
-            sound.play()
+        self.gameover.volume = self.vol
+        if self.gameover:
+            self.gameover.play()

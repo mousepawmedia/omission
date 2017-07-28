@@ -30,7 +30,22 @@ Passages have been trimmed and rearranged to be no more than four lines.
  - Kivy >= 1.10
  - appdirs >= 1.4.3
 
-## Building
+[Instructions for installing Kivy can be found on their website.](https://kivy.org/docs/installation/installation.html)
+
+### Installing Dependencies on Windows
+
+We'll use `pip` to install the necessary packages.
+
+    python -m pip install --upgrade pip wheel setuptools
+    python -m pip install docutils pygments pypiwin32 kivy.deps.sdl2 kivy.deps.glew kivy.deps.gstreamer
+    python -m pip install kivy appdirs
+
+### Installing Dependencies on Ubuntu
+
+We can install the necessary packages using apt. If you would rather set up a
+virtual environment, use the pip commands for `Installing Dependencies on Linux`.
+
+    sudo apt install python3-kivy
 
 ## Contributions
 

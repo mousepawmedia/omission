@@ -139,6 +139,9 @@ class OmissionApp(App):
        Configure the application.
        """
 
+        # Workaround for https://github.com/kivy/kivy/issues/3576
+        Config.set('graphics', 'multisamples', '0')
+
         # Prevent the window from resizing too small. (SDL2 windows only).
         Config.set('graphics', 'minimum_width', self.min_size[0])
         Config.set('graphics', 'minimum_height', self.min_size[1])
