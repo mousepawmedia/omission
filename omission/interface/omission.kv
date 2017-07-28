@@ -258,8 +258,15 @@
 <Credits>:
     size_hint: (0.9, 0.9)
     pos_hint: {'center': (0.5, 0.5)}
-    DecorativeLabel:
+    canvas.before:
+        Color:
+            rgba: hex('#003300')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    PassageLabel:
         id: lbl_credits
+        padding: ('10sp', '10sp')
         text: "CREDITS"
         halign: 'center'
         valign: 'middle'
@@ -267,15 +274,29 @@
         font_size: '20sp'
 
 <Rules>:
-    size_hint: (0.9, 0.9)
+    size_hint: (0.95, 0.95)
     pos_hint: {'center': (0.5, 0.5)}
-    DecorativeLabel:
-        id: lbl_rules
-        text: "RULES"
-        halign: 'center'
-        valign: 'middle'
-        color: hex("#FFFFFF")
-        font_size: '20sp'
+    canvas.before:
+        Color:
+            rgba: hex('#003300')
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    ScrollView:
+        id: scroll
+        bar_width: 5
+        PassageLabel:
+            id: lbl_rules
+            padding: ('10sp', '10sp')
+            text: "RULES"
+            font_size: '20sp'
+            #text_size: self.size
+            text_size: self.width, None
+            height: self.texture_size[1]
+            size_hint_y: None
+            halign: 'left'
+            valign: 'top'
+            color: hex("#FFFFFF")
 
 <Gameplay>:
     # Main box, holding the other three.

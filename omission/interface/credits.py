@@ -31,9 +31,7 @@ class Credits(BoxLayout):
     # pylint: disable=R0201
     def _on_kbd_down(self, keyboard, keycode, text, modifiers):
         """
-        Handles keyboard progresses. Also calls all game reponses to
-        user input. Thus, this is basically our governing function
-        during gameplay.
+        Handles keyboard events, namely the enter and esc keys.
         """
         # pylint: disable=W0613
         if keycode[1] == 'enter' or keycode[0] == 27:
@@ -45,38 +43,70 @@ class Credits(BoxLayout):
         Return the credits text.
         """
         credits_text = ("""
-        OMISSION \n
-        \n
-        Produced by MousePaw Games\n
-        www.mousepawgames.com\n
-        \n
-        Concept by Jason C. McDonald\n
-        """, """
-        -- Programming --\n
-        Jason C. McDonald\n
-        Jarek Thomas\n
-        Wesley Kerfoot\n
-        """, """
-        -- Content --\n
-        Anne McDonald\n
-        Jane McArthur\n
-        """, """
-        -- Sound Effects --\n
-        Jason C. McDonald\n
-        Created using LMMS\n
-        """, """
-        -- Game Testing --\n
-        Chris "Fox" Frasier\n
-        Allie Jensen\n
-        Jarek Thomas\n
-        (More go here)\n
-        """, """
-        -- Special Thanks --\n
-        #python and #kivy IRC channels (Freenode)\n
-        Project Gutenberg\n
-        """, """
-        Press ENTER or ESC to return to menu.
-        """)
+OMISSION
+Produced by MousePaw Games
+
+Concept by Jason C. McDonald
+""", """
+-- Programming --
+Jason C. McDonald
+Jarek Thomas
+""", """
+-- Content --
+Anne McDonald
+Jane McArthur
+""", """
+-- Sound Effects --
+Jason C. McDonald
+Created using LMMS
+""", """
+-- Fonts --
+Orbitron
+by Matt McInerney
+SIL Open Font License
+
+Source Sans Pro
+by Adobe Systems Incorporated
+SIL Open Font License
+""", """
+-- Fonts (cont.) --
+Open Dyslexic
+by Abbie Gonzalez
+http://dyslexicfonts.com
+
+Based on Bitstream Vera
+by Jim Lyles
+Bitstream Vera License v1.00
+""", """
+-- Game Testing --
+Chris "Fox" Frasier
+Allie Jensen
+Jarek Thomas
+Ethan Thompson
+(Your Name Here, Tester!)
+""", """
+-- Special Thanks --
+#python and #kivy IRC channels (Freenode)
+Project Gutenberg
+""", """
+-- License --
+OMISSION is open source, and licensed under
+The 3-Clause BSD License.
+This means, you're free to download and share!
+""", """
+-- License (Cont.) --
+The OMISSION text content (content.txt) is Public Domain.
+""", """
+-- License (Cont.) --
+The OMISSION logo and sound effects are
+Copyright 2017 MousePaw Media. All Rights Reserved.
+""", """
+MousePaw Games
+Scamper Into Adventure!
+www.mousepawgames.com
+
+Press ENTER or ESC to return to menu.
+""")
 
         for item in credits_text:
             self.ids.lbl_credits.text = item

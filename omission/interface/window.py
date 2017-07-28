@@ -65,6 +65,7 @@ class OmissionWindow(FloatLayout):
             self.remove_widget(to_remove)
         rules = Rules()
         self.add_widget(rules)
+        rules.display()
 
     def show_highscore(self, datastring, score, to_remove=None):
         """
