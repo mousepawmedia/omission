@@ -11,12 +11,14 @@ class PopupLabel(Label):
     """
     A popup label item.
     """
-
+    #pylint: disable=R0902
     def __init__(self, **kwargs):
         """
         Initialize a new OmissionWindow.
         """
         super().__init__(**kwargs)
+        self.color = (1, 1, 1, 1)
+        self.flash = False
         self.event = Clock.schedule_interval(self.animate, 0.1)
 
     def random_location(self, parent_width, parent_height):
@@ -39,6 +41,12 @@ class PopupLabel(Label):
         self.font_size = str(size*10) + "sp"
         self.outline_width = str(size) + "px"
 
+    def set_flash(self, flash):
+        """
+        Turns on the flashing effect.
+        """
+        self.flash = flash
+
     def animate(self, *args):
         """
         Move up 1 px and fade 10%. Ten step animation.
@@ -46,9 +54,13 @@ class PopupLabel(Label):
         """
         #pylint: disable=W0613
         self.y = self.y + 3
-        self.opacity = self.opacity - 0.1
-        # WHY is this line needed to update widget?
-        #print("A: " + str(self.y) + " " + str(self.opacity))
+        self.opacity = self.opacity - 0.05
+        if self.flash:
+            if int(self.opacity * 10) % 2:
+                self.color = (0, 1, 0, 1)
+            else:
+                self.color = (1, 1, 1, 1)
+
         # If we're 0% opacity, the animation is done. Remove.
         if self.opacity <= 0:
             self.event.cancel()

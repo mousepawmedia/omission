@@ -87,7 +87,7 @@ class OmissionWindow(FloatLayout):
         self.add_widget(gameplay)
         gameplay.play()
 
-    def popup_score(self, message):
+    def popup_score(self, message, flash):
         """
         Add a popup to a random location on the screen.
         """
@@ -99,6 +99,8 @@ class OmissionWindow(FloatLayout):
         popup.random_location(self.width, self.height)
         # Set the popup size.
         popup.set_size(4)
+        # Set the flash
+        popup.set_flash(flash)
         # Add the widget.
         self.add_widget(popup)
 

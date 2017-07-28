@@ -201,7 +201,7 @@ class Menu(BoxLayout):
         elif self.mode == 'Survival':
             lives = int(self.survival_settings.ids.spn_lives.text)
             tries = int(self.survival_settings.ids.spn_tries.text)
-            settings.set_survival(lives)
+            settings.set_survival(lives, tries)
             App.get_running_app().dataloader.settings.save_survival(settings)
         elif self.mode == 'Infinite':
             tries = int(self.infinite_settings.ids.spn_tries.text)

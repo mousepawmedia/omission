@@ -268,17 +268,20 @@ class Gameplay(BoxLayout):
         """
         score = self.gameround.get_score()
         self.ids.lbl_score.text = score_to_scorestring(score[0])
-        self.parent.popup_score("+" + str(score[1]))
         # Update chain.
         if score[2] > 1:
             self.ids.lbl_chain.text = "x" + str(score[2])
             # Play bonus sound.
             self.soundplayer.play_bonus(score[2] - 1)
+            # Flash popup
+            self.parent.popup_score("+" + str(score[1]), True)
         else:
             # No chain.
             self.ids.lbl_chain.text = ""
             # Play ding.
             self.soundplayer.play_ding()
+            # Flash popup
+            self.parent.popup_score("+" + str(score[1]), False)
 
     def update_status(self, check_mode=False):
         """
