@@ -161,11 +161,21 @@ class Gameplay(BoxLayout):
         # If we're supposed to pause on solution.
         if self.gameround.settings.solution_pause:
             solution = self.gameround.get_solution()
+
+            # If we got the answer correct, say so...
             if correct:
                 solution_str += "CORRECT!" + "\n\n"
+
+            # Otherwise, if the answer was wrong...
             else:
+                # Update the rest of the interface: lives, tries, etc.
+                self.update_status(False, True)
                 solution_str += "ANSWER: " + str(solution[0]) + "\n\n"
+
+            # Either way, display the solution.
             solution_str += str(solution[1]) + "\n\n"
+
+            # If the game is over...
             if not gameover:
                 solution_str += "ENTER to continue.\nESC to quit."
             else:
@@ -182,6 +192,8 @@ class Gameplay(BoxLayout):
                 # Set a string, which we'll display anyway.
                 solution_str = "GAME OVER\nENTER to return to menu."
                 self.ids.lbl_puzzle.text = solution_str
+                # Update the rest of the interface: lives, tries, etc.
+                self.update_status(False, True)
             # We always pause, since resuming handles game progression.
             self.pause_game(True)
             # If the game is NOT over...
@@ -283,10 +295,11 @@ class Gameplay(BoxLayout):
             # Flash popup
             self.parent.popup_score("+" + str(score[1]), False)
 
-    def update_status(self, check_mode=False):
+    def update_status(self, check_mode=False, no_alarm=False):
         """
         Update the interface.
         """
+        # pylint: disable=R0912
         info = self.gameround.get_status()
         if check_mode:
             if info[0] == GameMode.Survival:
@@ -319,7 +332,8 @@ class Gameplay(BoxLayout):
                 color = get_color_from_hex("#FF0000")
                 outline_color = get_color_from_hex('#960000')
                 # Also play warning sound.
-                self.soundplayer.play_alarm()
+                if not no_alarm:
+                    self.soundplayer.play_alarm()
             # If we 1/3 or less remaining, display as ORANGE.
             elif info[1] <= 33:
                 color = get_color_from_hex("#FFB600")
@@ -350,8 +364,9 @@ class Gameplay(BoxLayout):
         """
         Reset the interface to game-over mode.
         """
+        self.ids.lbl_score.text = score_to_scorestring(0)
         self.ids.bar_remaining.value = 0
-        self.ids.lbl_remaining.text = "0:00"
+        self.ids.lbl_remaining.text = sec_to_timestring(0)
         self.ids.lbl_tries.text = "?"
         self.ids.lbl_removals.text = "?"
         self.ids.lbl_chain.text = ""

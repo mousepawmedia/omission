@@ -53,7 +53,6 @@ class GameTimer(object):
         """
         The timer is finished.
         """
-        print("End!")
         # If a callback was defined...
         if self.over_callback:
             # Call it now.

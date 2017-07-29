@@ -27,6 +27,9 @@ class Menu(BoxLayout):
         self.survival_settings = SurvivalSettings()
         self.infinite_settings = InfiniteSettings()
 
+        # Prevent reacting to changes WHILE loading settings.
+        self._change_killswitch = False
+
         self.mode = ""
         self.switch_mode(None)
 
@@ -34,7 +37,8 @@ class Menu(BoxLayout):
         """
         Called when a setting is changed, so we can update scores.
         """
-        self.get_scores()
+        if not self._change_killswitch:
+            self.get_scores()
 
     def press_play(self):
         """
@@ -48,12 +52,6 @@ class Menu(BoxLayout):
         Switch between game modes on menu using toggle buttons.
         """
         if button.state == "down":
-            if mode == 'Timed':
-                pass
-            elif mode == 'Survival':
-                pass
-            elif mode == 'Infinite':
-                pass
             self.switch_mode(mode)
         else:
             self.switch_mode(None)
@@ -86,25 +84,29 @@ class Menu(BoxLayout):
             self.ids.box_controls.add_widget(self.timed_settings)
             self.ids.box_controls.add_widget(self.try_settings)
             self.get_settings(mode)
+            self.get_scores()
         elif mode == 'Survival':
             # Add the controls for Survival
             self.ids.box_controls.add_widget(self.play_box)
             self.ids.box_controls.add_widget(self.survival_settings)
             self.ids.box_controls.add_widget(self.try_settings)
             self.get_settings(mode)
+            self.get_scores()
         elif mode == 'Infinite':
             # Add the control for Infinite
             self.ids.box_controls.add_widget(self.play_box)
             self.ids.box_controls.add_widget(self.infinite_settings)
             self.ids.box_controls.add_widget(self.try_settings)
             self.get_settings(mode)
-
-        self.get_scores()
+            self.get_scores()
 
     def get_settings(self, mode=None):
         """
         Load the saved settings into the interface.
         """
+        # Prevent UI changes from triggering a save.
+        self._change_killswitch = True
+
         saved = App.get_running_app().dataloader.settings
         if mode == 'Timed':
             self.timed_settings.ids.spn_time.text = str(saved.timed.limit)
@@ -153,60 +155,56 @@ class Menu(BoxLayout):
             else:
                 self.info_box.ids.spn_dys.text = "Normal"
 
-    def get_scores(self, settings=None):
+        # UI changes should now cause settings to be saved.
+        self._change_killswitch = False
+
+    def get_scores(self):
         """
         Load the scores into the interface.
         """
+        self.load_settings()
         # If we have a mode loaded.
         if self.mode:
-            # If no settings were specified
-            if not settings:
-                settings = GameRoundSettings()
-                self.load_settings(settings)
             # Use the datastring to get the scores.
-            scores = App.get_running_app().dataloader.get_scores(settings.get_datastring())
+            scores = App.get_running_app().dataloader.get_scores(self.settings.get_datastring())
             scores_str = ""
             if scores:
                 for item in scores:
                     scores_str += str(item[0]) + " | " + str(item[1]) + "\n"
             self.play_box.ids.lbl_scores.text = scores_str
 
-    def load_settings(self, settings=None):
+    def load_settings(self):
         """
         Load the settings from the interface.
         """
-        # If no settings were specified...
-        if not settings:
-            # Store in the main settings.
-            settings = self.settings
         # For any of the modes...
         if self.mode:
             hint = int(self.try_settings.ids.spn_hint.text) - 1
             clue = int(self.try_settings.ids.spn_clue.text) - 1
-            settings.set_clues(hint, clue)
+            self.settings.set_clues(hint, clue)
 
             chain = int(self.try_settings.ids.spn_chain.text)
-            settings.set_chain(chain)
+            self.settings.set_chain(chain)
 
             passage = self.try_settings.ids.spn_passage.text == 'True'
-            settings.set_solution_pause(passage)
+            self.settings.set_solution_pause(passage)
 
         if self.mode == 'Timed':
             time = int(self.timed_settings.ids.spn_time.text)
             bonus = int(self.timed_settings.ids.spn_bonus.text)
             penalty = int(self.timed_settings.ids.spn_penalty.text)
             tries = int(self.timed_settings.ids.spn_tries.text)
-            settings.set_timed(time, bonus, penalty, tries)
-            App.get_running_app().dataloader.settings.save_timed(settings)
+            self.settings.set_timed(time, bonus, penalty, tries)
+            App.get_running_app().dataloader.settings.save_timed(self.settings)
         elif self.mode == 'Survival':
             lives = int(self.survival_settings.ids.spn_lives.text)
             tries = int(self.survival_settings.ids.spn_tries.text)
-            settings.set_survival(lives, tries)
-            App.get_running_app().dataloader.settings.save_survival(settings)
+            self.settings.set_survival(lives, tries)
+            App.get_running_app().dataloader.settings.save_survival(self.settings)
         elif self.mode == 'Infinite':
             tries = int(self.infinite_settings.ids.spn_tries.text)
-            settings.set_infinite(tries)
-            App.get_running_app().dataloader.settings.save_infinite(settings)
+            self.settings.set_infinite(tries)
+            App.get_running_app().dataloader.settings.save_infinite(self.settings)
 
 class InfoBox(BoxLayout):
     """
@@ -230,6 +228,7 @@ class InfoBox(BoxLayout):
         """
         Quit the game.
         """
+        self.parent.parent.load_settings()
         App.get_running_app().stop()
 
     def font_mode(self):

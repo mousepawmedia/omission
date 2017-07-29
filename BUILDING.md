@@ -42,17 +42,17 @@ python -m pip install docutils pygments pypiwin32 kivy.deps.sdl2 kivy.deps.glew 
 python -m pip install kivy
 ~~~
 
-7. Download the .zip for Omission and put it in your main user folder.
+7. Download the .zip for Omission and put it directly on the `C:` drive.
 Right-click the file, click "Extract All", and follow the instructions.
 
 8. In your command prompt, we'll start Omission.
 
 ~~~
-cd omission
+cd C:\omission-master
 python -m omission
 ~~~
 
-**Every time you want to run Omission again, open a new command prompt
+**Every time you want to run Omission again, open a command prompt
 and follow ONLY step 8 again!**
 
 ## Mac OS X/appleOS
@@ -99,11 +99,10 @@ Double-click it to unzip it.
 7. In your Terminal, we'll start Omission.
 
 ~~~
-cd omission
-python3 -m omission
+cd ~/omission-master; python3 -m omission
 ~~~
 
-**Every time you want to run Omission again, open a new Terminal
+**Every time you want to run Omission again, open a Terminal
 and follow ONLY step 7 again!**
 
 ## Ubuntu/Linux Mint
@@ -144,11 +143,10 @@ Right-click it and select `Extract Here`.
 6. In your Terminal, we'll start Omission.
 
 ~~~
-cd omission
-python3 -m omission
+cd ~/omission-master; python3 -m omission
 ~~~
 
-**Every time you want to run Omission again, open a new Terminal
+**Every time you want to run Omission again, open a Terminal
 and follow ONLY step 7 again!**
 
 ## Debian Jessie
@@ -193,11 +191,10 @@ Right-click it and select `Extract Here`.
 6. In your Terminal, we'll start Omission.
 
 ~~~
-cd omission
-python3 -m omission
+cd ~/omission-master; python3 -m omission
 ~~~
 
-**Every time you want to run Omission again, open a new Terminal
+**Every time you want to run Omission again, open a Terminal
 and follow ONLY step 7 again!**
 
 ## Other Systems

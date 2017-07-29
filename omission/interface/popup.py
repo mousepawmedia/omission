@@ -19,7 +19,7 @@ class PopupLabel(Label):
         super().__init__(**kwargs)
         self.color = (1, 1, 1, 1)
         self.flash = False
-        self.event = Clock.schedule_interval(self.animate, 0.1)
+        self.event = Clock.schedule_interval(self.animate, 0.06)
 
     def random_location(self, parent_width, parent_height):
         """
