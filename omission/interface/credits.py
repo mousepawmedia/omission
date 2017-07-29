@@ -83,6 +83,7 @@ Chris "Fox" Frasier
 Allie Jensen
 Jarek Thomas
 Ethan Thompson
+Jane McArthur
 (Your Name Here, Tester!)
 """, """
 -- Special Thanks --
