@@ -80,17 +80,18 @@ followed by the ENTER key.
 for `pip`, Python's package installer.
 
 ~~~
-port install python36
-port select --set python python36
-port install pip-36
-port select --set pip pip-36
+sudo port install python36
+sudo port select --set python python36
+sudo port install py36-pip
+sudo port select --set pip pip36
 ~~~
 
 5. Install the dependencies for Kivy.
 
 ~~~
-port install libsdl2 libsdl2_image libsdl2_ttf libsdl2_mixer
+sudo port install libsdl2 libsdl2_image libsdl2_ttf libsdl2_mixer
 pip install -U Cython
+pip install Pillow pygame
 ~~~
 
 6. Install Kivy.
@@ -111,7 +112,7 @@ In your Finder, double-click it to unzip it.
 9. In your Terminal, we'll start Omission.
 
 ~~~
-cd ~/omission-master/Downloads; python -m omission
+cd ~/Downloads/omission-master; python -m omission
 ~~~
 
 **Every time you want to run Omission again, open a Terminal
