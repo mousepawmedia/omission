@@ -1,6 +1,9 @@
 # Building
 
-Use these instructions to run Omission from the repository.
+Use these instructions to run Omission from the repository. These should
+work in nearly all cases.
+
+If you run into trouble, contact support@mousepawmedia.com
 
 ## Windows 7 and later
 
@@ -55,11 +58,16 @@ python -m omission
 **Every time you want to run Omission again, open a command prompt
 and follow ONLY step 8 again!**
 
-## Mac OS X/appleOS
+## macOS/Mac OS X 10.7.5 Lion or later
 
-We'll be using Homebrew to set up our Python environment.
+We'll be using Macports to set up our Python environment.
 
-1. Open the Terminal application.
+1. Install Xcode from your App Store. If it reports that your system is
+too old, you can download the version for your OS from [developer.apple.com/download](https://developer.apple.com/download).
+
+2. Download Macports for your operating system from [the MacPorts website](https://www.macports.org/install.php). Install it on your system.
+
+3. Open the Terminal application, which is under Utilities.
 
 ~~~
 Future sections that look like this
@@ -68,42 +76,46 @@ followed by the ENTER key.
 (Don't type this one in.)
 ~~~
 
-2. Start by installing Python 3 on Homebrew.
+4. Install Python 3.6, and set it as your new default. We'll do the same
+for `pip`, Python's package installer.
 
 ~~~
-brew install python3
+port install python36
+port select --set python python36
+port install pip-36
+port select --set pip pip-36
 ~~~
 
-3. Install the dependencies for Kivy.
+5. Install the dependencies for Kivy.
 
 ~~~
-brew install pkg-config sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer
+port install libsdl2 libsdl2_image libsdl2_ttf libsdl2_mixer
 pip install -U Cython
 ~~~
 
-4. Install Kivy.
+6. Install Kivy.
 
 ~~~
 pip install kivy
 ~~~
 
-5. Install `appdirs`.
+7. Install `appdirs`.
 
 ~~~
 pip install appdirs
 ~~~
 
-6. Download the .zip for Omission and put it in your main user folder.
-Double-click it to unzip it.
+8. Download the .zip for Omission. We'll leave it in Downloads for convenience.
+In your Finder, double-click it to unzip it.
 
-7. In your Terminal, we'll start Omission.
+9. In your Terminal, we'll start Omission.
 
 ~~~
-cd ~/omission-master; python3 -m omission
+cd ~/omission-master/Downloads; python -m omission
 ~~~
 
 **Every time you want to run Omission again, open a Terminal
-and follow ONLY step 7 again!**
+and follow ONLY step 9 again!**
 
 ## Ubuntu/Linux Mint
 
