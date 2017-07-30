@@ -54,7 +54,7 @@ Right-click the file, click "Extract All", and follow the instructions.
 8. In your command prompt, we'll start Omission.
 
 ~~~
-cd C:\omission-master
+cd C:\omission-master\omission-master
 python -m omission
 ~~~
 
