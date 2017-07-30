@@ -12,6 +12,9 @@ and install it on your computer. Choose `Customize Installation`, use the
 defaults on the first page, and additionally check `Add Python to Environment Path`
 on the second page.
 
+2. Download and install the Visual C++ Redistributable for Visual Studio 2015.
+[64-bit download](http://download.microsoft.com/download/0/4/1/041224F6-A7DC-486B-BD66->BCAAF74B6919/vc_redist.x64.exe) or [32-bit download](http://download.microsoft.com/download/0/4/1/041224F6-A7DC-486B-BD66-BCAAF74B6919/vc_redist.x86.exe)
+
 2. Open your command prompt by searching for the program `cmd`.
 
 ~~~
