@@ -3,6 +3,7 @@ Sound Playback Functions [Omission]
 """
 
 import os.path
+import pkg_resources
 
 from kivy.core.audio import SoundLoader
 
@@ -11,17 +12,42 @@ class SoundPlayer(object):
     Play game sounds.
     """
     def __init__(self):
+        soundfolder = os.path.join(os.pardir, "resources", "audio")
+
         self.vol = 1
-        self.alarm = SoundLoader.load(os.path.join('resources', 'audio', 'alarm.ogg'))
-        self.bell = SoundLoader.load(os.path.join('resources', 'audio', 'bell.ogg'))
-        self.lowbell = SoundLoader.load(os.path.join('resources', 'audio', 'lowbell.ogg'))
-        self.ding = SoundLoader.load(os.path.join('resources', 'audio', 'ding.ogg'))
-        self.gameover = SoundLoader.load(os.path.join('resources', 'audio', 'gameover.ogg'))
+
+        self.alarm = SoundLoader.load(pkg_resources.resource_filename(
+            __name__,
+            os.path.join(
+                soundfolder, 'alarm.ogg')))
+
+        self.bell = SoundLoader.load(pkg_resources.resource_filename(
+            __name__,
+            os.path.join(
+                soundfolder, 'bell.ogg')))
+
+        self.lowbell = SoundLoader.load(pkg_resources.resource_filename(
+            __name__,
+            os.path.join(
+                soundfolder, 'lowbell.ogg')))
+
+        self.ding = SoundLoader.load(pkg_resources.resource_filename(
+            __name__,
+            os.path.join(
+                soundfolder, 'ding.ogg')))
+
+        self.gameover = SoundLoader.load(pkg_resources.resource_filename(
+            __name__,
+            os.path.join(
+                soundfolder, 'gameover.ogg')))
+
         self.bonus = list()
 
         for i in range(1, 9):
-            soundpath = os.path.join('resources', 'audio',
-                                     'bonus' + str(i) + '.ogg')
+            soundpath = pkg_resources.resource_filename(
+                __name__,
+                os.path.join(
+                    soundfolder, 'bonus' + str(i) + '.ogg'))
             sound = SoundLoader.load(soundpath)
             self.bonus.append(sound)
 

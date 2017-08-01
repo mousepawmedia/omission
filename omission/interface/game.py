@@ -7,6 +7,7 @@ from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.utils import get_color_from_hex
 
+from omission.data import img_loader
 from omission.interface.helpful import sec_to_timestring, score_to_scorestring
 from omission.game.contentloader import ContentLoader
 from omission.game.gameround import GameRound, GameMode, GameStatus
@@ -303,11 +304,11 @@ class Gameplay(BoxLayout):
         info = self.gameround.get_status()
         if check_mode:
             if info[0] == GameMode.Survival:
-                self.ids.img_mode.source = "resources/icons/heart.png"
+                self.ids.img_mode.source = img_loader.load_image("heart.png")
             elif info[0] == GameMode.Timed:
-                self.ids.img_mode.source = "resources/icons/clock.png"
+                self.ids.img_mode.source = img_loader.load_image("clock.png")
             elif info[0] == GameMode.Infinite:
-                self.ids.img_mode.source = "resources/icons/infinity.png"
+                self.ids.img_mode.source = img_loader.load_image("infinity.png")
 
         # Update remaining time.
         self.ids.bar_remaining.value = info[1]

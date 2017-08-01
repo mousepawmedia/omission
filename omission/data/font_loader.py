@@ -3,6 +3,7 @@ Font Loader [Omission]
 """
 
 import os.path
+import pkg_resources
 
 class FontLoader(object):
     """
@@ -12,18 +13,35 @@ class FontLoader(object):
     def __init__(self):
         self.dyslexic_mode = False
 
-        self.opendyslexic_bold = os.path.join("resources", "font",
-                                              "open-dyslexic",
-                                              "OpenDyslexic-Bold.otf")
-        self.opendyslexic_regular = os.path.join("resources", "font",
-                                                 "open-dyslexic",
-                                                 "OpenDyslexic-Regular.otf")
-        self.orbitron = os.path.join("resources", "font",
-                                     "orbitron",
-                                     "orbitron-medium.otf")
-        self.sourcesans_regular = os.path.join("resources", "font",
-                                               "source-sans-pro",
-                                               "SourceSansPro-Regular.otf")
+        fontfolder = os.path.join(os.pardir, "resources", "font")
+
+        self.opendyslexic_bold = pkg_resources.resource_filename(
+            __name__,
+            os.path.join(
+                fontfolder, "open-dyslexic", "OpenDyslexic-Bold.otf"
+                )
+            )
+
+        self.opendyslexic_regular = pkg_resources.resource_filename(
+            __name__,
+            os.path.join(
+                fontfolder, "open-dyslexic", "OpenDyslexic-Regular.otf"
+                )
+            )
+
+        self.orbitron = pkg_resources.resource_filename(
+            __name__,
+            os.path.join(
+                fontfolder, "orbitron", "orbitron-medium.otf"
+                )
+            )
+
+        self.sourcesans_regular = pkg_resources.resource_filename(
+            __name__,
+            os.path.join(
+                fontfolder, "source-sans-pro", "SourceSansPro-Regular.otf"
+                )
+            )
 
     def get_datastring(self):
         """

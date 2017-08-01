@@ -4,6 +4,7 @@ Content Loader [Omission]
 
 import random
 import re
+import os.path
 import pkg_resources
 
 class ContentLoader(object):
@@ -21,7 +22,9 @@ class ContentLoader(object):
         # Start tracking the last given index.
         self._index = 0
         # Load the content from the file into an array.
-        path = pkg_resources.resource_filename(__name__, "../resources/content/content.txt")
+        path = pkg_resources.resource_filename(
+            __name__,
+            os.path.join(os.pardir, "resources", "content", "content.txt"))
         with open(path) as contentfile:
             rawcontent = contentfile.read()
         # Passages are separated by double newlines (blank lines).

@@ -1,14 +1,14 @@
 """
 Main Class [Omission]
 """
-from omission.interface.window import OmissionApp
+
+from omission import run
 
 def main():
     """
     Main function.
     """
-    app = OmissionApp()
-    app.run()
+    run.run()
 
 if __name__ == '__main__':
     main()

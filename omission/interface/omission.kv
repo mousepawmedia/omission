@@ -1,5 +1,6 @@
 #:kivy 1.10.0
 #:import hex kivy.utils.get_color_from_hex
+#:import img_loader omission.data.img_loader
 
 #Top level element is a FloatLayout, for popup items.
 <OmissionWindow>:
@@ -16,7 +17,7 @@
         size_hint_y: 0.4
         Image:
             size_hint_x: 0.5
-            source: "resources/icons/omission_glow.png"
+            source: img_loader.load_image("omission_glow.png")
     BoxLayout:
         # Mode box.
         orientation: 'horizontal'
@@ -379,7 +380,7 @@
             id: img_mode
             size_hint_x: None
             color: hex("#00FF00")
-            source: "resources/icons/clock.png"
+            source: img_loader.load_image("clock.png")
         ProgressBar:
             id: bar_remaining
             value: 50
