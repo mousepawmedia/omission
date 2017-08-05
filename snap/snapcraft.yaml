@@ -1,0 +1,45 @@
+name: omission # you probably want to 'snapcraft register <name>'
+version: '1.0' # just for humans, typically '1.2+git' or '1.3.2'
+summary: A deceptively simple word puzzle. # 79 char long summary
+description: |
+  Omission challenges you to put your language detective skills to the test with
+  a deceptively simple challenge - Find the missing letter! A famous quotation
+  will be displayed, with all the instances of a single letter removed. How fast
+  can you figure out the missing letter? It's a race to beat the clock (unless
+  you choose another mode) as you try to complete as many passages as you can.
+  The faster you answer, the more points you gain.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+parts:
+  omission:
+    # See 'snapcraft plugins'
+    plugin: python
+    python-version: python3
+    source: .
+    stage-packages:
+        - build-essential
+        - git
+        - python3-dev
+        - ffmpeg
+        - libsdl2-dev
+        - libsdl2-image-dev
+        - libsdl2-mixer-dev
+        - libsdl2-ttf-dev
+        - libportmidi-dev
+        - libswscale-dev
+        - libavformat-dev
+        - libavcodec-dev
+        - zlib1g-dev
+        - libgstreamer1.0-0
+        - libgstreamer1.0-dev
+        - gstreamer1.0-plugins-base
+        - gstreamer1.0-plugins-good
+        - libmtdev1
+        - libgl1-mesa-dri # libgl1-mesa-glx for x86, libgles2-mesa for ARM
+        - cython3
+
+apps:
+    omission:
+        command: bin/omission

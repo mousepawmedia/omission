@@ -1,3 +1,14 @@
+# Created by https://www.gitignore.io/api/snapcraft
+
+### Snapcraft ###
+# Snapcraft
+parts/
+prime/
+stage/
+*.snap
+
+# End of https://www.gitignore.io/api/snapcraft
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
