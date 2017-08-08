@@ -326,15 +326,18 @@ class Gameplay(BoxLayout):
         color = get_color_from_hex("#00FF00")
         outline_color = get_color_from_hex('#007700')
 
+        # If we're supposed to play the warning sound...
+        if not no_alarm:
+            # If we're in timed mode and have 5 or less seconds left...
+            if info[0] == GameMode.Timed and info[2] <= 5:
+                self.soundplayer.play_alarm()
+
         # In Timed or Survival mode, change color to reflect remaining time/lives.
         if info[0] == GameMode.Timed or info[0] == GameMode.Survival:
             # If we have 1/6 or less remaning, display as RED.
             if info[1] <= 16:
                 color = get_color_from_hex("#FF0000")
                 outline_color = get_color_from_hex('#960000')
-                # Also play warning sound.
-                if not no_alarm:
-                    self.soundplayer.play_alarm()
             # If we 1/3 or less remaining, display as ORANGE.
             elif info[1] <= 33:
                 color = get_color_from_hex("#FFB600")
