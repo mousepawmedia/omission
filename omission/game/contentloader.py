@@ -25,7 +25,7 @@ class ContentLoader(object):
         path = pkg_resources.resource_filename(
             __name__,
             os.path.join(os.pardir, "resources", "content", "content.txt"))
-        with open(path) as contentfile:
+        with open(path, 'rt', encoding='utf-8') as contentfile:
             rawcontent = contentfile.read()
         # Passages are separated by double newlines (blank lines).
         self._content = re.split(r'\n\n', rawcontent)

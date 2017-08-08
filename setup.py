@@ -13,6 +13,15 @@ setup(name='Omission',
                 'omission.data',
                 'omission.game',
                 'omission.interface'],
+      package_data={'omission': ['resources/audio/*.ogg',
+                                 'resources/content/*.txt',
+                                 'resources/font/open-dyslexic/*.otf',
+                                 'resources/font/orbitron/*.otf',
+                                 'resources/font/source-sans-pro/*.otf',
+                                 'resources/icons/*.png',
+                                 'interface/omission.kv'
+                                ]
+                   },
       entry_points={'gui_scripts': ['omission = omission.__main__:main']},
       install_requires=[
           'cython == 0.25.2',

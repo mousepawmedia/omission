@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Omission
+Comment=A deceptively simple word puzzle.
+Exec=omission
+Icon=${SNAP}/meta/gui/omission_icon.png
+Type=Application
+Categories=Game;LogicGame;
+Terminal=false

@@ -141,8 +141,8 @@ class Gameplay(BoxLayout):
         """
         # Stop the game
         self.playing = False
-        # Reset the interface
-        self.reset()
+        # Reset the interface without hiding the score.
+        self.reset(False)
         # Play the gameover sound.
         self.soundplayer.play_gameover()
         # Show the last solution
@@ -361,11 +361,12 @@ class Gameplay(BoxLayout):
         if not info[4]:
             self.ids.lbl_chain.text = ""
 
-    def reset(self):
+    def reset(self, reset_score=True):
         """
         Reset the interface to game-over mode.
         """
-        self.ids.lbl_score.text = score_to_scorestring(0)
+        if reset_score:
+            self.ids.lbl_score.text = score_to_scorestring(0)
         self.ids.bar_remaining.value = 0
         self.ids.lbl_remaining.text = sec_to_timestring(0)
         self.ids.lbl_tries.text = "?"

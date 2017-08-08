@@ -9,37 +9,51 @@ description: |
   you choose another mode) as you try to complete as many passages as you can.
   The faster you answer, the more points you gain.
 
+icon: snap/gui/omission_icon.png
+
 grade: devel # must be 'stable' to release into candidate/stable channels
 confinement: devmode # use 'strict' once you have the right plugs and slots
 
 parts:
-  omission:
-    # See 'snapcraft plugins'
-    plugin: python
-    python-version: python3
-    source: .
-    stage-packages:
-        - build-essential
-        - git
-        - python3-dev
-        - ffmpeg
-        - libsdl2-dev
-        - libsdl2-image-dev
-        - libsdl2-mixer-dev
-        - libsdl2-ttf-dev
-        - libportmidi-dev
-        - libswscale-dev
-        - libavformat-dev
-        - libavcodec-dev
-        - zlib1g-dev
-        - libgstreamer1.0-0
-        - libgstreamer1.0-dev
-        - gstreamer1.0-plugins-base
-        - gstreamer1.0-plugins-good
-        - libmtdev1
-        - libgl1-mesa-dri # libgl1-mesa-glx for x86, libgles2-mesa for ARM
-        - cython3
+    omission:
+        # See 'snapcraft plugins'
+        plugin: python
+        python-version: python3
+        source: .
+        stage-packages:
+            - build-essential
+            - git
+            - python3-dev
+            - ffmpeg
+            - libsdl2-dev
+            - libsdl2-image-dev
+            - libsdl2-mixer-dev
+            - libsdl2-ttf-dev
+            - libportmidi-dev
+            - libswscale-dev
+            - libavformat-dev
+            - libavcodec-dev
+            - zlib1g-dev
+            - libgstreamer1.0-0
+            - libgstreamer1.0-dev
+            - gstreamer1.0-plugins-base
+            - gstreamer1.0-plugins-good
+            - gstreamer1.0-plugins-bad
+            - gstreamer1.0-plugins-ugly
+            - xclip
+            - libmtdev1
+            - libmtdev-dev
+            - libgl1-mesa-dri
+            - libgl1-mesa-glx
+            - libgles2-mesa
+            - cython3
+    launcher:
+        plugin: dump
+        source: ./linux_deploy
+        organize:
+            'launch_omission': 'bin/launch_omission'
 
 apps:
     omission:
-        command: bin/omission
+        command: bin/launch_omission
+        #command: bin/omission

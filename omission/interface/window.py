@@ -2,6 +2,13 @@
 User Interface [Omission]
 """
 
+# This is needed to force use of SDL2 for audio, needed for Windows and
+# for Snapcraft.
+import os
+os.environ['KIVY_AUDIO'] = 'sdl2'
+
+#pylint: disable=C0413
+
 import kivy
 from kivy.app import App
 from kivy.config import Config
@@ -161,7 +168,7 @@ class OmissionApp(App):
 
         # Set the title and icon.
         self.title = "Omission"
-        #self.icon = "icons/app/elements_icon_512.png"
+        self.icon = "resources/icons/omission_icon.png"
 
         # Create the window.
         omission_app = OmissionWindow()
