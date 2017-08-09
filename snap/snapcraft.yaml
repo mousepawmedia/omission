@@ -25,9 +25,13 @@ parts:
             - git
             - python3-dev
             - ffmpeg
+            #- libsdl2-2.0-0 # see https://github.com/kivy/kivy/issues/3002
             - libsdl2-dev
+            #- libsdl2-image-2.0-0
             - libsdl2-image-dev
+            #- libsdl2-mixer-2.0-0
             - libsdl2-mixer-dev
+            #- libsdl2-ttf-2.0-0
             - libsdl2-ttf-dev
             - libportmidi-dev
             - libswscale-dev
@@ -57,3 +61,9 @@ apps:
     omission:
         command: bin/launch_omission
         #command: bin/omission
+        plugs:
+            - pulseaudio
+            - x11
+            - opengl
+            - alsa
+            - mount-observe
