@@ -15,10 +15,20 @@ grade: devel # must be 'stable' to release into candidate/stable channels
 confinement: strict
 
 parts:
+    #cython:
+    #    plugin: python
+    #    python-version: python3
+    #    python-packages:
+    #        - Cython==0.25.2
     omission:
         # See 'snapcraft plugins'
         plugin: python
         python-version: python3
+        #after: [cython]
+        python-packages:
+            #- Cython==0.25.2
+            - kivy==1.10.0
+            - appdirs>=1.4.3
         source: .
         stage-packages:
             - build-essential
@@ -50,6 +60,7 @@ parts:
             - libgl1-mesa-dri
             - libgl1-mesa-glx
             - libgles2-mesa
+            - libc6
             - cython3
     launcher:
         plugin: dump

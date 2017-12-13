@@ -23,8 +23,11 @@ setup(name='Omission',
                                 ]
                    },
       entry_points={'gui_scripts': ['omission = omission.__main__:main']},
+      setup_requires=[
+          #'Cython == 0.25.2'
+          ],
       install_requires=[
-          'cython == 0.25.2',
+          #'Cython == 0.25.2',
           'kivy >= 1.10.0',
           'appdirs >= 1.4.3'
           ],

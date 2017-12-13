@@ -1,0 +1,18 @@
+Source: omission
+Maintainer: Jason C. McDonald <indeliblebluepen@gmail.com>
+Section: games
+Priority: optional
+Build-Depends: debhelper (>= 9), python3 (>= 3.5)
+Standards-Version: 4.1.0
+
+Package: omission
+Architecture: any
+Pre-Depends: dpkg (>= 1.16.1), python3-minimal, ${misc:Pre-Depends}
+Depends: ${python3:Depends}, ${misc:Depends}
+Description: A deceptively simple word puzzle.
+ Omission challenges you to put your language detective skills to the test with
+ a deceptively simple challenge - Find the missing letter! A famous quotation
+ will be displayed, with all the instances of a single letter removed. How fast
+ can you figure out the missing letter? It's a race to beat the clock (unless
+ you choose another mode) as you try to complete as many passages as you can.
+ The faster you answer, the more points you gain.

@@ -1,0 +1,10 @@
+.git
+.idea
+debian
+dist
+snap
+blacklist.txt
+pylintrc
+BUILDING.md
+.arcconfig
+.gitignore
