@@ -19,6 +19,12 @@ Passages have been trimmed and rearranged to be no more than 4-5 lines.
  - Jarek G. Thomas
  - Anne McDonald (Content)
  - Jane McArthur (Content)
+ - tshirtman (omission.spec)
+
+Thanks to the following:
+
+ - tshirtman (Freenode/#kivy): Pyinstaller help
+ - pabs (OFTC/#packaging): Debian packaging help
 
 ## Dependencies
 
@@ -28,7 +34,7 @@ Passages have been trimmed and rearranged to be no more than 4-5 lines.
 
 ## Installing
 
-To install from source, see BUILDING.md
+To install from source, see BUILDING.md.
 
 ## Contributions
 
