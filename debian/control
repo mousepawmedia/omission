@@ -2,7 +2,7 @@ Source: omission
 Maintainer: Jason C. McDonald <indeliblebluepen@gmail.com>
 Section: games
 Priority: optional
-Build-Depends: debhelper (>= 9), python3 (>= 3.5)
+Build-Depends: debhelper (>= 9), python3 (>= 3.5), virtualenv (>= 15.1), ffmpeg, libsdl2-dev, libsdl2-image-dev libsdl2-mixer-dev, libsdl2-ttf-dev, libportmidi-dev, libswscale-dev, libavformat-dev, libavcodec-dev, zlib1g-dev, libgstreamer1.0, gstreamer1.0-plugins-base, gstreamer1.0-plugins-good
 Standards-Version: 4.1.0
 
 Package: omission
@@ -10,9 +10,4 @@ Architecture: any
 Pre-Depends: dpkg (>= 1.16.1), python3-minimal, ${misc:Pre-Depends}
 Depends: ${python3:Depends}, ${misc:Depends}
 Description: A deceptively simple word puzzle.
- Omission challenges you to put your language detective skills to the test with
- a deceptively simple challenge - Find the missing letter! A famous quotation
- will be displayed, with all the instances of a single letter removed. How fast
- can you figure out the missing letter? It's a race to beat the clock (unless
- you choose another mode) as you try to complete as many passages as you can.
- The faster you answer, the more points you gain.
+ Omission challenges you to put your language detective skills to the test with a deceptively simple challenge - Find the missing letter! It's a race to beat the clock (unless you choose another mode) as you try to complete as many passages as you can. The faster you answer, the more points you gain.

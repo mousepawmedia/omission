@@ -38,7 +38,7 @@ a = Analysis(['omission/__main__.py'],
 
 pyz = PYZ(a.pure)
 
-name = '%s%s' % (NAME, '.exe' if os.name == 'nt' else '.run')
+name = '%s%s' % (NAME, '.exe' if os.name == 'nt' else '')
 
 def not_in(x, binexcludes):
     return not any(y in x.lower() for y in binexcludes)

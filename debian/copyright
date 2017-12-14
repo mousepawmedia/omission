@@ -1,0 +1,7 @@
+Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
+Name: omission
+Maintainer: Jason C. McDonald <indeliblebluepen@gmail.com>
+Source: https://github.com/mousepawmedia/omission
+
+Copyright: 2017 MousePaw Media <developers@mousepawmedia.com>
+License: BSD

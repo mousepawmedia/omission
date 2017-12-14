@@ -1,6 +1,6 @@
 # LICENSE
 
-Copyright (C) 2016 MousePaw Media.
+Copyright (C) 2017 MousePaw Media.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,

@@ -121,7 +121,7 @@ cd ~/Downloads/omission-master; python -m omission
 **Every time you want to run Omission again, open a Terminal
 and follow ONLY step 9 again!**
 
-## Ubuntu/Linux Mint
+## Linux
 
 1. Open the Terminal application.
 
@@ -132,96 +132,31 @@ followed by the ENTER key.
 (Don't type this one in.)
 ~~~
 
-2. Make sure Python 3 is installed.
+2. Make sure Python 3 and virtualenv are installed. On a Debian-based system,
+run...
 
 ~~~
 sudo apt-get update
-sudo apt-get install python3
+sudo apt-get install python3 virtualenv
 ~~~
 
-3. Install Kivy using their repository.
+3. Install Kivy's system dependencies. On a Debian-based system, you can run...
 
 ~~~
-sudo add-apt-repository ppa:kivy-team/kivy
-sudo apt-get update
-sudo apt-get install python3-kivy
+sudo apt-get install ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev libgstreamer1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good
 ~~~
 
-4. Install `appdirs`
+3. Ensure you are in the Omission repository directory, and run the Makefile:
 
 ~~~
-sudo apt-get install python3-appdirs
+make
 ~~~
 
-5. Download the .zip for Omission and put it in your main user folder.
-Right-click it and select `Extract Here`.
+The output directory is `/dist/Omission`.
 
-6. In your Terminal, we'll start Omission.
-
-~~~
-cd ~/omission-master; python3 -m omission
-~~~
-
-**Every time you want to run Omission again, open a Terminal
-and follow ONLY step 7 again!**
-
-## Debian Jessie
-
-1. Open the Terminal application.
+4. To start Omission from your Terminal, run the following from within the
+Omission repository...
 
 ~~~
-Future sections that look like this
-should be typed in the Terminal,
-followed by the ENTER key.
-(Don't type this one in.)
+dist/Omission/Omission
 ~~~
-
-2. Make sure Python 3 is installed.
-
-~~~
-sudo apt-get update
-sudo apt-get install python3
-~~~
-
-3. Install Kivy using their repository.
-
-~~~
-sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
-echo "deb http://ppa.launchpad.net/kivy-team/kivy/ubuntu trusty main" | sudo tee -a /etc/apt/sources.list
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A863D2D6
-sudo apt-get update
-sudo apt-get install python3-kivy
-~~~
-
-4. Install `appdirs`
-
-~~~
-sudo apt-get install python3-appdirs
-~~~
-
-For more information, see [Kivy's official installation instructions for Debian](https://kivy.org/docs/installation/installation-linux.html#debian-jessie-or-newer)
-
-5. Download the .zip for Omission and put it in your main user folder.
-Right-click it and select `Extract Here`.
-
-6. In your Terminal, we'll start Omission.
-
-~~~
-cd ~/omission-master; python3 -m omission
-~~~
-
-**Every time you want to run Omission again, open a Terminal
-and follow ONLY step 7 again!**
-
-## Other Systems
-
-If you're running Fedora, OpenSUSE, or a virtual environment on just about any
-modern operating system, you can still run Omission. You will need to be running
-Python 3, the ``appdirs`` Python package (installable via ``pip``), as well
-as Kivy and its dependencies.
-
-[Full installation instructions for Kivy can be found on their website](https://kivy.org/docs/installation/installation.html).
-
-Finally, download and extract the .zip for Omission, navigate into it,
-and execute it via `python3 -m omission` (or whatever similar as appropriate
-for your environment.)
