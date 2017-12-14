@@ -8,9 +8,4 @@ build:
 	dh_testdir
 	dh_auto_build
 
-clean:
-	dh_testdir
-	rm -rf dist/
-	dh_clean
-
 binary:

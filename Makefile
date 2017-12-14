@@ -1,5 +1,8 @@
+PREFIX = /opt
+
 none: build
 
+.PHONY: build
 build: clean
 	# Create a virtual environment for Python3 and use it for building
 	( \
@@ -13,11 +16,18 @@ build: clean
 		deactivate; \
 	)
 
+.PHONY: clean
 clean:
 	# Remove the virtualenv and the built files.
 	rm -rf build/
 	rm -rf dist/
 
-cleanall: clean
+.PHONY: distclean
+distclean: clean
 	# Remove the virtualenv AND the built files.
 	rm -rf buildvenv/
+
+.PHONY: install
+install:
+	mkdir -p $(DESTDIR)$(PREFIX)
+	cp -r dist/Omission $(DESTDIR)$(PREFIX)/omission
