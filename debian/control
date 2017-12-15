@@ -20,7 +20,7 @@ Build-Depends:
  python3 (>= 3.5),
  python3-dev (>= 3.5),
  upx-ucl,
- virtualenv (>= 15.1),
+ virtualenv,
  zlib1g-dev,
 Standards-Version: 4.1.0
 

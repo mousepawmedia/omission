@@ -8,7 +8,7 @@ build: clean
 	@echo "\033[1mBuilding Omission.\033[0m"
 	@( \
 		mkdir -p buildvenv/home; \
-		export HOME=$(pwd)/buildvenv/home; \
+		export HOME=$$(pwd)/buildvenv/home; \
 		virtualenv --no-site-packages -p python3 buildvenv; \
 		# in sh, `.` == `source` (bash). This still works in bash. \
 		. buildvenv/bin/activate; \
