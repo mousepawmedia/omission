@@ -1,5 +1,11 @@
 buildvenv/
 
+debian/.debhelper/
+debian/omission
+debian/debhelper-build-stamp
+debian/files
+debian/omission.substvars
+
 # Created by https://www.gitignore.io/api/snapcraft
 
 ### Snapcraft ###

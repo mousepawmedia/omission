@@ -1,4 +1,4 @@
-Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
+Format-Specification: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Name: omission
 Maintainer: Jason C. McDonald <indeliblebluepen@gmail.com>
 Source: https://github.com/mousepawmedia/omission

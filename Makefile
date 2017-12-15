@@ -3,9 +3,10 @@ PREFIX = /opt
 none: build
 
 .PHONY: build
+# Create a virtual environment for Python3 and use it for building
 build: clean
-	# Create a virtual environment for Python3 and use it for building
-	( \
+	@echo "\033[1mBuilding Omission.\033[0m"
+	@( \
 		virtualenv --no-site-packages -p python3 buildvenv; \
 		# in sh, `.` == `source` (bash). This still works in bash. \
 		. buildvenv/bin/activate; \
@@ -14,20 +15,27 @@ build: clean
 		pip install -r requirements.txt; \
 		pyinstaller omission.spec -y; \
 		deactivate; \
+		sh ./strip.sh; \
 	)
 
 .PHONY: clean
+# Remove the virtualenv and the built files.
 clean:
-	# Remove the virtualenv and the built files.
-	rm -rf build/
-	rm -rf dist/
+	@echo "\033[1mCleaning up build files.\033[0m"
+	@rm -rf build/
+	@rm -rf dist/
 
 .PHONY: distclean
+# Remove the virtualenv AND the built files.
 distclean: clean
-	# Remove the virtualenv AND the built files.
-	rm -rf buildvenv/
+	@echo "\033[1mCleaning up virtualenv.\033[0m"
+	@rm -rf buildvenv/
 
 .PHONY: install
 install:
 	mkdir -p $(DESTDIR)$(PREFIX)
 	cp -r dist/Omission $(DESTDIR)$(PREFIX)/omission
+
+.PHONY: tarball
+tarball: distclean
+	tar -cvzf ../omission_1.0.orig.tar.gz ./
