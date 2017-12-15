@@ -7,6 +7,8 @@ none: build
 build: clean
 	@echo "\033[1mBuilding Omission.\033[0m"
 	@( \
+		mkdir -p buildvenv/home; \
+		export HOME=$(pwd)/buildvenv/home; \
 		virtualenv --no-site-packages -p python3 buildvenv; \
 		# in sh, `.` == `source` (bash). This still works in bash. \
 		. buildvenv/bin/activate; \
@@ -38,4 +40,4 @@ install:
 
 .PHONY: tarball
 tarball: distclean
-	tar -cvzf ../omission_1.0.orig.tar.gz ./
+	git archive --format=tar.gz master > ../omission_1.0-1.orig.tar.gz
