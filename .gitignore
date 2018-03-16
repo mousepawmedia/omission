@@ -45,6 +45,7 @@ var/
 .installed.cfg
 *.egg
 *.AppImage
+*.tar.gz
 
 # IDLE
 .idea/

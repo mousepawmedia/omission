@@ -1,6 +1,17 @@
 PREFIX = /opt
 
-none: build
+none:
+	@echo "=== Omission 1.0 ==="
+	@echo "Select a build target:"
+	@echo "  make build           Create a pyinstaller binary in a virtualenv."
+	@echo "  make clean           Remove the build files."
+	@echo "  make distclean       Remove the build files, virtualenv, AND final files."
+	@echo "  make appimage        Package as AppImage. Requires APPIMAGETOOL to be specified."
+	@echo
+	@echo "  make appimage_check  Ensure APPIMAGETOOL is a valid path."
+	@echo "  make appimage_pre    Prepare the build files for AppImage packaging."
+	@echo "  make appimage_build  Prepare the build files for AppImage packaging."
+	@echo "  make appimage_post   Tarball the AppImage with it's install scripts for deployment."
 
 .PHONY: build
 # Create a virtual environment for Python3 and use it for building
@@ -20,18 +31,8 @@ build: clean
 		sh ./strip.sh; \
 	)
 
-.PHONY: appimage_prep
-appimage_prep: build
-	@mkdir -p dist/Omission.AppDir/usr/bin
-	@mv dist/Omission/* dist/Omission.AppDir/usr/bin/
-	@chmod +x -R dist/Omission.AppDir/usr/bin
-	@cp appimage/AppRun dist/Omission.AppDir/
-	@cp appimage/omission_icon.png dist/Omission.AppDir/
-	@cp appimage/omission.desktop dist/Omission.AppDir/
-	@echo "Run appimagetool on the dist/Omission folder to package!"
-
 .PHONY: clean
-# Remove the virtualenv and the built files.
+# Remove the build files.
 clean:
 	@echo "\033[1mCleaning up build files.\033[0m"
 	@rm -rf build/
@@ -42,8 +43,40 @@ clean:
 distclean: clean
 	@echo "\033[1mCleaning up virtualenv.\033[0m"
 	@rm -rf buildvenv/
+	@echo "\033[1mCleaning up deployment files.\033[0m"
+	@rm Omission-x86_64.AppImage
+	@rm Omission.tar.gz
 
-.PHONY: install
-install:
-	mkdir -p $(DESTDIR)$(PREFIX)
-	cp -r dist/Omission $(DESTDIR)$(PREFIX)/omission
+.PHONY: appimage
+appimage: appimage_check build appimage_prep appimage_build appimage_post
+	@echo "AppImage created! See Omission.tar.gz"
+
+.PHONY: appimage_check
+appimage_check:
+	@test -s ${APPIMAGETOOL}
+	@echo "appimagetool location confirmed."
+
+.PHONY: appimage_prep
+appimage_prep:
+	@mkdir -p dist/Omission.AppDir/usr/bin
+	@cp -rf dist/Omission/* dist/Omission.AppDir/usr/bin
+	@chmod +x -R dist/Omission.AppDir
+	@cp appimage/AppRun dist/Omission.AppDir/
+	@cp appimage/omission.png dist/Omission.AppDir/
+	@cp appimage/omission.desktop dist/Omission.AppDir/
+	@echo "Run appimagetool on the dist/Omission.AppDir folder to package."
+
+.PHONY: appimage_build
+appimage_build:
+	@test -s ${APPIMAGETOOL}
+	@${APPIMAGETOOL} dist/Omission.AppDir
+	@echo "AppImage created!"
+
+.PHONY: appimage_post
+appimage_post:
+	@test -s Omission-*.AppImage
+	@mkdir -p dist/deploy
+	@cp -f Omission-*.AppImage dist/deploy/
+	@cp -rf deploy_linux/* dist/deploy/
+	@tar -cvzf Omission.tar.gz -C dist/deploy .
+	@echo "Deployment tarball created!"
