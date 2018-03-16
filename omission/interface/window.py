@@ -9,6 +9,8 @@ os.environ['KIVY_AUDIO'] = 'sdl2'
 
 #pylint: disable=C0413
 
+import os.path
+
 import kivy
 from kivy.app import App
 from kivy.config import Config
@@ -149,6 +151,9 @@ class OmissionApp(App):
        Configure the application.
        """
 
+        # Icon
+        Config.set('kivy', 'window_icon', os.path.join("omission", "resources", "icons", "omission_icon.png"))
+
         # Workaround for https://github.com/kivy/kivy/issues/3576
         Config.set('graphics', 'multisamples', '0')
 
@@ -168,7 +173,7 @@ class OmissionApp(App):
 
         # Set the title and icon.
         self.title = "Omission"
-        self.icon = "resources/icons/omission_icon.png"
+        self.icon = os.path.join("omission", "resources", "icons", "omission_icon.png")
 
         # Create the window.
         omission_app = OmissionWindow()

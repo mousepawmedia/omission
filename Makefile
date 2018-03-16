@@ -20,6 +20,16 @@ build: clean
 		sh ./strip.sh; \
 	)
 
+.PHONY: appimage_prep
+appimage_prep: build
+	@mkdir -p dist/Omission.AppDir/usr/bin
+	@mv dist/Omission/* dist/Omission.AppDir/usr/bin/
+	@chmod +x -R dist/Omission.AppDir/usr/bin
+	@cp appimage/AppRun dist/Omission.AppDir/
+	@cp appimage/omission_icon.png dist/Omission.AppDir/
+	@cp appimage/omission.desktop dist/Omission.AppDir/
+	@echo "Run appimagetool on the dist/Omission folder to package!"
+
 .PHONY: clean
 # Remove the virtualenv and the built files.
 clean:
@@ -37,7 +47,3 @@ distclean: clean
 install:
 	mkdir -p $(DESTDIR)$(PREFIX)
 	cp -r dist/Omission $(DESTDIR)$(PREFIX)/omission
-
-.PHONY: tarball
-tarball: distclean
-	git archive --format=tar.gz master > ../omission_1.0-1.orig.tar.gz
