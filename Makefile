@@ -6,11 +6,12 @@ none:
 	@echo "  make build           Create a pyinstaller binary in a virtualenv."
 	@echo "  make clean           Remove the build files."
 	@echo "  make distclean       Remove the build files, virtualenv, AND final files."
-	@echo "  make appimage        Package as AppImage. Requires APPIMAGETOOL to be specified."
+	@echo "  make appimage        Package as AppImage. Requires TOOL= to be specified."
+	@echo "    e.g. 'make appimage TOOL=~/Downloads/appimagetool-x86_64.AppImage'"
 	@echo
-	@echo "  make appimage_check  Ensure APPIMAGETOOL is a valid path."
+	@echo "  make appimage_check  Ensure TOOL is a valid path to appimagetool."
 	@echo "  make appimage_pre    Prepare the build files for AppImage packaging."
-	@echo "  make appimage_build  Prepare the build files for AppImage packaging."
+	@echo "  make appimage_build  Package the AppImage using the appimagetool (specified with TOOL=)."
 	@echo "  make appimage_post   Tarball the AppImage with it's install scripts for deployment."
 
 .PHONY: build
@@ -43,40 +44,49 @@ clean:
 distclean: clean
 	@echo "\033[1mCleaning up virtualenv.\033[0m"
 	@rm -rf buildvenv/
-	@echo "\033[1mCleaning up deployment files.\033[0m"
-	@rm Omission-x86_64.AppImage
-	@rm Omission.tar.gz
+	@echo "\033[1mCleaning up release files.\033[0m"
+	@rm -rf release/
 
 .PHONY: appimage
-appimage: appimage_check build appimage_prep appimage_build appimage_post
-	@echo "AppImage created! See Omission.tar.gz"
+appimage: appimage_check build appimage_prep appimage_build
+	@echo "AppImage created! See release/Omission.tar.gz"
 
 .PHONY: appimage_check
 appimage_check:
-	@test -s ${APPIMAGETOOL}
-	@echo "appimagetool location confirmed."
+	@test -s ${TOOL}
+	@echo "appimagetool location confirmed: @{TOOL}"
 
 .PHONY: appimage_prep
 appimage_prep:
-	@mkdir -p dist/Omission.AppDir/usr/bin
+	@echo "Removing extraneous files..."
+	@rm -rf dist/Omission/build
+	@rm -rf dist/Omission/deploy_linux
+	@rm -rf dist/Omission/deploy_windows
+	@rm -rf dist/Omission/codealike.json
+	@echo "Creating AppDir..."
+	@cp -rf deploy_linux/appimage dist/Omission.AppDir
 	@cp -rf dist/Omission/* dist/Omission.AppDir/usr/bin
 	@chmod +x -R dist/Omission.AppDir
-	@cp appimage/AppRun dist/Omission.AppDir/
-	@cp appimage/omission.png dist/Omission.AppDir/
-	@cp appimage/omission.desktop dist/Omission.AppDir/
 	@echo "Run appimagetool on the dist/Omission.AppDir folder to package."
 
 .PHONY: appimage_build
 appimage_build:
-	@test -s ${APPIMAGETOOL}
-	@${APPIMAGETOOL} dist/Omission.AppDir
-	@echo "AppImage created!"
+	@test -s ${TOOL}
+	@${TOOL} dist/Omission.AppDir
+	@mkdir -p release
+	@mv -f Omission*.AppImage release/
+	@echo "AppImage created in release/"
 
+# TODO: REMOVE ME
 .PHONY: appimage_post
 appimage_post:
-	@test -s Omission-*.AppImage
+	@test -s release/Omission-*.AppImage
 	@mkdir -p dist/deploy
-	@cp -f Omission-*.AppImage dist/deploy/
-	@cp -rf deploy_linux/* dist/deploy/
+	@cp -f release/Omission-*.AppImage dist/deploy/
+	@cp -rf deploy_linux/*.desktop dist/deploy/
+	@cp -rf deploy_linux/*.png dist/deploy/
+	@cp -rf deploy_linux/*.sh dist/deploy/
 	@tar -cvzf Omission.tar.gz -C dist/deploy .
-	@echo "Deployment tarball created!"
+	@mkdir -p release
+	@mv -f Omission.tar.gz release/
+	@echo "Deployment tarball created in release/"

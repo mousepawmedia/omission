@@ -56,7 +56,7 @@ exe = EXE(pyz,
           strip=None,
           upx=True,
           console=False,
-          icon=join('deploy_linux', 'omission.ico'))
+          icon=join('deploy_windows', 'omission.ico'))
 
 with open('blacklist.txt') as f:
     excludes = [x.strip() for x in f.readlines()]

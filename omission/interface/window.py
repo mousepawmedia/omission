@@ -152,7 +152,7 @@ class OmissionApp(App):
        """
 
         # Icon
-        Config.set('kivy', 'window_icon', os.path.join("omission", "resources", "icons", "omission_icon.png"))
+        Config.set('kivy', 'window_icon', os.path.join(os.path.dirname(__file__), "resources", "icons", "omission_icon.png"))
 
         # Workaround for https://github.com/kivy/kivy/issues/3576
         Config.set('graphics', 'multisamples', '0')
@@ -173,7 +173,7 @@ class OmissionApp(App):
 
         # Set the title and icon.
         self.title = "Omission"
-        self.icon = os.path.join("omission", "resources", "icons", "omission_icon.png")
+        self.icon = os.path.join(os.path.dirname(__file__), os.pardir, "resources", "icons", "omission_icon.png")
 
         # Create the window.
         omission_app = OmissionWindow()

@@ -2,8 +2,9 @@
 Version=1.0
 Name=Omission
 Comment=A deceptively simple word puzzle.
-Exec=/opt/omission/Omission.AppImage
-Icon=/opt/omission/omission.png
+Exec=Omission
+Icon=omission
 Type=Application
 Categories=Game;LogicGame;
 Terminal=false
+Name[en_US]=Omission
