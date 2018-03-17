@@ -9,10 +9,8 @@ none:
 	@echo "  make appimage        Package as AppImage. Requires TOOL= to be specified."
 	@echo "    e.g. 'make appimage TOOL=~/Downloads/appimagetool-x86_64.AppImage'"
 	@echo
-	@echo "  make appimage_check  Ensure TOOL is a valid path to appimagetool."
 	@echo "  make appimage_pre    Prepare the build files for AppImage packaging."
 	@echo "  make appimage_build  Package the AppImage using the appimagetool (specified with TOOL=)."
-	@echo "  make appimage_post   Tarball the AppImage with it's install scripts for deployment."
 
 .PHONY: build
 # Create a virtual environment for Python3 and use it for building
@@ -48,13 +46,8 @@ distclean: clean
 	@rm -rf release/
 
 .PHONY: appimage
-appimage: appimage_check build appimage_prep appimage_build
+appimage: build appimage_prep appimage_build
 	@echo "AppImage created! See release/Omission.tar.gz"
-
-.PHONY: appimage_check
-appimage_check:
-	@test -s ${TOOL}
-	@echo "appimagetool location confirmed: @{TOOL}"
 
 .PHONY: appimage_prep
 appimage_prep:
@@ -76,17 +69,3 @@ appimage_build:
 	@mkdir -p release
 	@mv -f Omission*.AppImage release/
 	@echo "AppImage created in release/"
-
-# TODO: REMOVE ME
-.PHONY: appimage_post
-appimage_post:
-	@test -s release/Omission-*.AppImage
-	@mkdir -p dist/deploy
-	@cp -f release/Omission-*.AppImage dist/deploy/
-	@cp -rf deploy_linux/*.desktop dist/deploy/
-	@cp -rf deploy_linux/*.png dist/deploy/
-	@cp -rf deploy_linux/*.sh dist/deploy/
-	@tar -cvzf Omission.tar.gz -C dist/deploy .
-	@mkdir -p release
-	@mv -f Omission.tar.gz release/
-	@echo "Deployment tarball created in release/"
