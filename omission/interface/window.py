@@ -7,13 +7,16 @@ User Interface [Omission]
 import os
 os.environ['KIVY_AUDIO'] = 'sdl2'
 
+# Workaround for https://github.com/kivy/kivy/issues/3576
+from kivy.config import Config
+Config.set('graphics', 'multisamples', '0')
+
 #pylint: disable=C0413
 
 import os.path
 
 import kivy
 from kivy.app import App
-from kivy.config import Config
 from kivy.core.window import Window
 from kivy.uix.floatlayout import FloatLayout
 
