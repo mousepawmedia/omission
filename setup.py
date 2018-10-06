@@ -12,20 +12,17 @@ setup(name='Omission',
       packages=['omission',
                 'omission.data',
                 'omission.game',
-                'omission.interface'],
+                'omission.kivy-interface'],
       package_data={'omission': ['resources/audio/*.ogg',
                                  'resources/content/*.txt',
                                  'resources/font/open-dyslexic/*.otf',
                                  'resources/font/orbitron/*.otf',
                                  'resources/font/source-sans-pro/*.otf',
                                  'resources/icons/*.png',
-                                 'interface/omission.kv'
+                                 'kivy-interface/omission.kv'
                                 ]
                    },
       entry_points={'gui_scripts': ['omission = omission.__main__:main']},
-      setup_requires=[
-          #'Cython == 0.25.2'
-          ],
       install_requires=[
           #'Cython == 0.25.2',
           'kivy >= 1.10.0',

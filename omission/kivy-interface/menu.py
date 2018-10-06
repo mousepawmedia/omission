@@ -102,7 +102,7 @@ class Menu(BoxLayout):
 
     def get_settings(self, mode=None):
         """
-        Load the saved settings into the interface.
+        Load the saved settings into the kivy-interface.
         """
         # Prevent UI changes from triggering a save.
         self._change_killswitch = True
@@ -160,7 +160,7 @@ class Menu(BoxLayout):
 
     def get_scores(self):
         """
-        Load the scores into the interface.
+        Load the scores into the kivy-interface.
         """
         self.load_settings()
         # If we have a mode loaded.
@@ -175,7 +175,7 @@ class Menu(BoxLayout):
 
     def load_settings(self):
         """
-        Load the settings from the interface.
+        Load the settings from the kivy-interface.
         """
         # For any of the modes...
         if self.mode:

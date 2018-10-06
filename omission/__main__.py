@@ -2,13 +2,19 @@
 Main Class [Omission]
 """
 
-from omission import run
+import sys
+from omission.interface.window import OmissionWindow
+from PySide2.QtWidgets import QApplication
 
 def main():
     """
-    Main function.
+    Run Omission
     """
-    run.run()
+    app = QApplication(sys.argv)
+    window = OmissionWindow()
+    window.show()
+    app.exec_()
+
 
 if __name__ == '__main__':
     main()

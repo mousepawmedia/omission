@@ -3,52 +3,38 @@ Sound Playback Functions [Omission]
 """
 
 import os.path
-import pkg_resources
 
-from kivy.core.audio import SoundLoader
+from PySide2.QtCore import QUrl
+from PySide2.QtMultimedia import QMediaPlayer, QMediaContent
+
 
 class SoundPlayer(object):
     """
     Play game sounds.
     """
     def __init__(self):
-        soundfolder = os.path.join(os.pardir, "resources", "audio")
+        self.player = QMediaPlayer()
+
+        soundfolder = os.path.abspath(os.path.join(os.pardir, "omission", "resources", "audio"))
+        print(soundfolder)
 
         self.vol = 1
 
-        self.alarm = SoundLoader.load(pkg_resources.resource_filename(
-            __name__,
-            os.path.join(
-                soundfolder, 'alarm.ogg')))
+        self.alarm = QMediaContent(QUrl.fromLocalFile(os.path.join(soundfolder, 'alarm.ogg')))
 
-        self.bell = SoundLoader.load(pkg_resources.resource_filename(
-            __name__,
-            os.path.join(
-                soundfolder, 'bell.ogg')))
+        self.bell = QMediaContent(QUrl.fromLocalFile(os.path.join(soundfolder, 'bell.ogg')))
 
-        self.lowbell = SoundLoader.load(pkg_resources.resource_filename(
-            __name__,
-            os.path.join(
-                soundfolder, 'lowbell.ogg')))
+        self.lowbell = QMediaContent(QUrl.fromLocalFile(os.path.join(soundfolder, 'lowbell.ogg')))
 
-        self.ding = SoundLoader.load(pkg_resources.resource_filename(
-            __name__,
-            os.path.join(
-                soundfolder, 'ding.ogg')))
+        self.ding = QMediaContent(QUrl.fromLocalFile(os.path.join(soundfolder, 'ding.ogg')))
 
-        self.gameover = SoundLoader.load(pkg_resources.resource_filename(
-            __name__,
-            os.path.join(
-                soundfolder, 'gameover.ogg')))
+        self.gameover = QMediaContent(QUrl.fromLocalFile(os.path.join(soundfolder, 'gameover.ogg')))
 
         self.bonus = list()
 
         for i in range(1, 9):
-            soundpath = pkg_resources.resource_filename(
-                __name__,
-                os.path.join(
-                    soundfolder, 'bonus' + str(i) + '.ogg'))
-            sound = SoundLoader.load(soundpath)
+            soundpath = os.path.join(soundfolder, 'bonus' + str(i) + '.ogg')
+            sound = QMediaContent(QUrl.fromLocalFile(soundpath))
             self.bonus.append(sound)
 
     def get_datastring(self):
@@ -81,32 +67,36 @@ class SoundPlayer(object):
         Plays the alarm sound effect.
         """
         if self.alarm:
-            self.alarm.volume = self.vol
-            self.alarm.play()
+            self.player.setMedia(self.alarm)
+            self.player.setVolume(self.vol)
+            self.player.play()
 
     def play_bell(self):
         """
         Plays the low bell (wrong) sound effect.
         """
         if self.bell:
-            self.bell.volume = self.vol
-            self.bell.play()
+            self.player.setMedia(self.bell)
+            self.player.setVolume(self.vol)
+            self.player.play()
 
     def play_lowbell(self):
         """
         Plays the low bell (wrong) sound effect.
         """
         if self.lowbell:
-            self.lowbell.volume = self.vol
-            self.lowbell.play()
+            self.player.setMedia(self.lowbell)
+            self.player.setVolume(self.vol)
+            self.player.play()
 
     def play_ding(self):
         """
         Plays the ding (correct) sound effect.
         """
         if self.ding:
-            self.ding.volume = self.vol
-            self.ding.play()
+            self.player.setMedia(self.ding)
+            self.player.setVolume(self.vol)
+            self.player.play()
 
     def play_bonus(self, level):
         """
@@ -119,13 +109,15 @@ class SoundPlayer(object):
                 soundlev = 7
 
             if self.bonus[soundlev]:
-                self.bonus[soundlev].volume = self.vol
-                self.bonus[soundlev].play()
+                self.player.setMedia(self.bonus[soundlev])
+                self.player.setVolume(self.vol)
+                self.player.play()
 
     def play_gameover(self):
         """
         Plays the gameover sound effect.
         """
-        self.gameover.volume = self.vol
         if self.gameover:
-            self.gameover.play()
+            self.player.setMedia(self.gameover)
+            self.player.setVolume(self.vol)
+            self.player.play()

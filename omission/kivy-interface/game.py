@@ -15,7 +15,7 @@ from omission.game.gameround import GameRoundSettings
 
 class Gameplay(BoxLayout):
     """
-    The gameplay interface.
+    The gameplay kivy-interface.
     """
     # pylint: disable=R0902
     def __init__(self, **kwargs):
@@ -36,7 +36,7 @@ class Gameplay(BoxLayout):
         self.solution_pause = False
         # Holds keyboard bindings.
         self._keyboard = None
-        # Reset the interface.
+        # Reset the kivy-interface.
         self.reset()
 
     def _bind_keyboard(self):
@@ -141,7 +141,7 @@ class Gameplay(BoxLayout):
         """
         # Stop the game
         self.playing = False
-        # Reset the interface without hiding the score.
+        # Reset the kivy-interface without hiding the score.
         self.reset(False)
         # Play the gameover sound.
         self.soundplayer.play_gameover()
@@ -169,7 +169,7 @@ class Gameplay(BoxLayout):
 
             # Otherwise, if the answer was wrong...
             else:
-                # Update the rest of the interface: lives, tries, etc.
+                # Update the rest of the kivy-interface: lives, tries, etc.
                 self.update_status(False, True)
                 solution_str += "ANSWER: " + str(solution[0]) + "\n\n"
 
@@ -193,7 +193,7 @@ class Gameplay(BoxLayout):
                 # Set a string, which we'll display anyway.
                 solution_str = "GAME OVER\nENTER to return to menu."
                 self.ids.lbl_puzzle.text = solution_str
-                # Update the rest of the interface: lives, tries, etc.
+                # Update the rest of the kivy-interface: lives, tries, etc.
                 self.update_status(False, True)
             # We always pause, since resuming handles game progression.
             self.pause_game(True)
@@ -272,7 +272,7 @@ class Gameplay(BoxLayout):
         for ltr in self._guesses:
             guess_str += ltr + '\n'
 
-        # Print the guesses in the interface.
+        # Print the guesses in the kivy-interface.
         self.ids.lbl_guess.text = guess_str
 
     def update_score(self):
@@ -298,7 +298,7 @@ class Gameplay(BoxLayout):
 
     def update_status(self, check_mode=False, no_alarm=False):
         """
-        Update the interface.
+        Update the kivy-interface.
         """
         # pylint: disable=R0912
         info = self.gameround.get_status()
@@ -366,7 +366,7 @@ class Gameplay(BoxLayout):
 
     def reset(self, reset_score=True):
         """
-        Reset the interface to game-over mode.
+        Reset the kivy-interface to game-over mode.
         """
         if reset_score:
             self.ids.lbl_score.text = score_to_scorestring(0)

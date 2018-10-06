@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "${workspaceFolder}/buildvenv/bin/python"
+    "python.pythonPath": "${workspaceFolder}/buildvenv/bin/python",
+    "python.linting.pylintEnabled": false
 }

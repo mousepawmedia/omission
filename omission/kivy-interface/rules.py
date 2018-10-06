@@ -31,7 +31,7 @@ class Rules(BoxLayout):
     # pylint: disable=R0201
     def _on_kbd_down(self, keyboard, keycode, text, modifiers):
         """
-        Handles keyboard presses for the interface.
+        Handles keyboard presses for the kivy-interface.
         """
         # pylint: disable=W0613
         if self._viewing == 0:
