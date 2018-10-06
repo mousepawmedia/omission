@@ -19,17 +19,11 @@ Passages have been trimmed and rearranged to be no more than 4-5 lines.
  - Jarek G. Thomas
  - Anne McDonald (Content)
  - Jane McArthur (Content)
- - tshirtman (omission.spec)
-
-Thanks to the following:
-
- - tshirtman (Freenode/#kivy): Pyinstaller help
- - pabs (OFTC/#packaging): Debian packaging help
 
 ## Dependencies
 
  - Python3
- - Kivy >= 1.10
+ - PySide2
  - appdirs >= 1.4.3
 
 ## Installing
