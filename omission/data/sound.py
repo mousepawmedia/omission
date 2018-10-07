@@ -55,7 +55,6 @@ class SoundPlayer(object):
         self.player = QMediaPlayer()
 
         soundfolder = os.path.abspath(os.path.join(os.pardir, "omission", "resources", "audio"))
-        print(soundfolder)
 
         self.vol = 1
 

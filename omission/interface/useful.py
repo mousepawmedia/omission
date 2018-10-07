@@ -1,8 +1,8 @@
 """
-User Interface [Omission]
+Useful Interface Functions [Omission]
 Version: 2.0
 
-The main user interface class.
+A collection of common functions needed by the interface.
 
 Author(s): Jason C. McDonald
 """
@@ -41,70 +41,30 @@ Author(s): Jason C. McDonald
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
-import os
-from PySide2.QtWidgets import QMainWindow
-from PySide2.QtGui import QIcon
+from PySide2.QtWidgets import QWidget
 
-from omission.data.data_loader import DataLoader
-from omission.interface.game import Gameplay
 
-class OmissionWindow(QMainWindow):
+def sec_to_timestring(seconds):
     """
-    Application-level class, builds the main window.
+    Converts seconds to time string (MM:SS).
     """
-
-    def __init__(self):
-        """
-        Initialize a new OmissionWindow.
-        """
-        super().__init__()
-        self.title = "Omission"
-        self.icon = os.path.join(os.path.dirname(__file__), os.pardir, "resources", "icons", "omission_icon.png")
-
-        # Create our score loader.
-        self.dataloader = DataLoader()
-
-        # Initialize the window
-        self.initUI()
-
-    def initUI(self):
-        # Define window title and icon
-        self.setWindowTitle(self.title)
-        self.setWindowIcon(QIcon(self.icon))
-
-        # TODO: Work out styling
-        self.setStyleSheet("QMainWindow {background-color : black;}")
-
-        # Set minimum window size.
-        self.setMinimumWidth(800)
-        self.setMinimumHeight(600)
-
-        self.show()
-
-        # TODO: TEMP ONLY
-        self.start_game()
-
-    def closeEvent(self, event):
-        """
-        Cleanup tasks when closing application.
-        """
-        # TODO: Define kill_callback?
-        # Save game data
-        self.dataloader.write_out()
-
-    def start_game(self):
-        """
-        Start a new game.
-        """
-        print('Start game')
-        game = Gameplay(self)
-        self.setCentralWidget(game)
-
-    def keyPressEvent(self, event):
-        """
-        Handles keyboard events for the entire application.
-        """
-        # TODO: Relay to active widget
-        pass
+    # Prevent numbers less than zero.
+    if seconds < 0:
+        seconds = 0
+    minutes = int(seconds / 60)
+    seconds -= (minutes * 60)
+    return str(minutes).zfill(2) + ":" + str(seconds).zfill(2)
 
 
+def score_to_scorestring(score):
+    """
+    Converts score to the score string.
+    """
+    fill_depth = 10
+    return str(score).zfill(fill_depth)
+
+
+def to_widget(layout):
+    widget = QWidget()
+    widget.setLayout(layout)
+    return widget

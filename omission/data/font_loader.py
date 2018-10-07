@@ -52,7 +52,7 @@ class FontLoader(object):
     def __init__(self):
         self.dyslexic_mode = False
 
-        fontfolder = os.path.join(os.pardir, "resources", "font")
+        fontfolder = os.path.abspath(os.path.join(os.pardir, "omission", "resources", "font"))
 
         self.opendyslexic_bold = pkg_resources.resource_filename(
             __name__,
