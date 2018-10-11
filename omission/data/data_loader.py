@@ -65,6 +65,23 @@ from omission.game.gameround import GameRoundSettings
 # :100:Bob
 # SCO=T:5:2:3:1:30:3:1
 
+class StasisCube():
+    """
+    Contains static instances of everything that needs to be shared among game objects.
+    """
+    dataloader = None
+    app = None
+
+    def __init__(self, app):
+        """
+        Initializes a new instance of the StasisCube.
+        """
+        if not StasisCube.dataloader:
+            StasisCube.dataloader = DataLoader()
+            StasisCube.app = app
+
+
+
 class DataLoader(object):
     """
     Load scores and other stored data from our config file.

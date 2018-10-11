@@ -41,19 +41,19 @@ Author(s): Jason C. McDonald
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
-from PySide2.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel
+from PySide2.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QProgressBar
 
-from omission.data import img_loader
 from omission.game.contentloader import ContentLoader
 from omission.game.gameround import GameRound, GameMode, GameStatus, GameRoundSettings
-from omission.interface.useful import to_widget
+from omission.interface.factory import Factory
+from omission.data.data_loader import StasisCube
 
 class Gameplay(QWidget):
     """
     The gameplay interface.
     """
 
-    def __init__(self, root):
+    def __init__(self):
         super().__init__()
 
         self.loader = ContentLoader()
@@ -62,7 +62,7 @@ class Gameplay(QWidget):
         self.gameround = None
 
         # Get global soundplayer
-        self.soundplayer = root.dataloader.soundplayer
+        self.soundplayer = StasisCube.dataloader.soundplayer
 
         # Track guesses
         self._guesses = []
@@ -76,39 +76,62 @@ class Gameplay(QWidget):
         toprow = QHBoxLayout()
 
         topleft = QVBoxLayout()
-        self.lblLabelTries = QLabel("Tries Left")
+        self.lblLabelTries = Factory.label("Tries Left", 12)
         topleft.addWidget(self.lblLabelTries)
-        self.lblTries = QLabel("3")
+
+        self.lblTries = Factory.label("3", 18)
         topleft.addWidget(self.lblTries)
-        toprow.addWidget(to_widget(topleft))
+        toprow.addWidget(Factory.layout_to_widget(topleft))
 
         topcenter = QVBoxLayout()
-        self.lblLabelScore = QLabel("Score")
+        self.lblLabelScore = Factory.label("Score", 12)
         topcenter.addWidget(self.lblLabelScore)
-        self.lblScore = QLabel("00000000")
-        topcenter.addWidget(self.lblScore)
-        toprow.addWidget(to_widget(topcenter))
 
+        self.lblScore = Factory.label("00000000", 24)
+        topcenter.addWidget(self.lblScore)
+        toprow.addWidget(Factory.layout_to_widget(topcenter))
 
         topright = QVBoxLayout()
-        self.lblLabelHint = QLabel("Letters Removed")
+        self.lblLabelHint = Factory.label("Letters Removed", 12)
         topright.addWidget(self.lblLabelHint)
-        self.lblHint = QLabel("?")
+
+        self.lblHint = Factory.label("?", 18)
         topright.addWidget(self.lblHint)
-        toprow.addWidget(to_widget(topright))
+
+        toprow.addWidget(Factory.layout_to_widget(topright))
 
         # Convert top row to widget and add to window
-        self.layout.addWidget(to_widget(toprow))
+        self.layout.addWidget(Factory.layout_to_widget(toprow))
 
         # Second section: main game
         centerrow = QHBoxLayout()
 
-        self.lblPassage = QLabel("Example")
-        self.lblPassage.setStyleSheet("QLabel {background-color : red; color : blue; }")
-
+        self.lblPassage = Factory.label("Lorem ipsum dolar set amet nonummy.", 16, True)
+        self.lblPassage.setSizePolicy(Factory.size_policy(2, 1))
+        self.lblPassage.setObjectName("passage") # use the correct stylesheet rule
         centerrow.addWidget(self.lblPassage)
 
-        self.layout.addWidget(to_widget(centerrow))
+        self.lblGuesses = Factory.label("L\nO\nR\nE\nM", 18)
+        self.lblGuesses.setMinimumWidth(70)
+        centerrow.addWidget(self.lblGuesses)
+
+        self.layout.addWidget(Factory.layout_to_widget(centerrow))
+
+        # Third section: timer/lives
+        bottomrow = QHBoxLayout()
+
+        self.lblMode = Factory.icon('clock.png', 30, 30)
+        bottomrow.addWidget(self.lblMode)
+
+        self.barTimer = QProgressBar()
+        self.barTimer.setTextVisible(False)
+        self.barTimer.setValue(50)
+        bottomrow.addWidget(self.barTimer)
+
+        self.lblTimer = Factory.label('5:00', 18)
+        bottomrow.addWidget(self.lblTimer)
+
+        self.layout.addWidget(Factory.layout_to_widget(bottomrow))
 
         self.setLayout(self.layout)
 

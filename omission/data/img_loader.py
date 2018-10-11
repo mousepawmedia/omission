@@ -42,14 +42,11 @@ Author(s): Jason C. McDonald
 # on how to contribute to our projects.
 
 import os.path
-import pkg_resources
 
 
 def load_image(filename):
     """
     Return the path to the image with the given filename.
     """
-    imgpath = pkg_resources.resource_filename(
-        __name__,
-        os.path.abspath(os.path.join(os.pardir, "omission", "resources", "icons", filename)))
+    imgpath = os.path.abspath(os.path.join(os.pardir, "omission", "resources", "icons", filename))
     return imgpath

@@ -41,12 +41,38 @@ Author(s): Jason C. McDonald
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
-import os
-from PySide2.QtWidgets import QMainWindow
+import os, sys
+from PySide2.QtWidgets import QApplication, QMainWindow
 from PySide2.QtGui import QIcon
 
-from omission.data.data_loader import DataLoader
+from omission.data.data_loader import StasisCube
 from omission.interface.game import Gameplay
+
+
+class OmissionApp:
+    """
+    Application-level class for Omission.
+    Stores critical static objects.
+    """
+
+    def __init__(self):
+        """
+        Initializes a new instance of the Omission application.
+        """
+        self.app = QApplication(sys.argv)
+
+        # Initialize the data storage
+        StasisCube(self)
+
+        with open(os.path.join('interface', 'stylesheet.qss'), 'r') as stylesheet_file:
+            stylesheet = stylesheet_file.read()
+            self.app.setStyleSheet(stylesheet)
+
+        # Initialize the main interface window
+        self.window = OmissionWindow()
+        self.window.show()
+        self.app.exec_()
+
 
 class OmissionWindow(QMainWindow):
     """
@@ -61,9 +87,6 @@ class OmissionWindow(QMainWindow):
         self.title = "Omission"
         self.icon = os.path.join(os.path.dirname(__file__), os.pardir, "resources", "icons", "omission_icon.png")
 
-        # Create our score loader.
-        self.dataloader = DataLoader()
-
         # Initialize the window
         self.initUI()
 
@@ -71,9 +94,6 @@ class OmissionWindow(QMainWindow):
         # Define window title and icon
         self.setWindowTitle(self.title)
         self.setWindowIcon(QIcon(self.icon))
-
-        # TODO: Work out styling
-        self.setStyleSheet("QMainWindow {background-color : black;}")
 
         # Set minimum window size.
         self.setMinimumWidth(800)
@@ -90,14 +110,14 @@ class OmissionWindow(QMainWindow):
         """
         # TODO: Define kill_callback?
         # Save game data
-        self.dataloader.write_out()
+        StasisCube.dataloader.write_out()
 
     def start_game(self):
         """
         Start a new game.
         """
         print('Start game')
-        game = Gameplay(self)
+        game = Gameplay()
         self.setCentralWidget(game)
 
     def keyPressEvent(self, event):

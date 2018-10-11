@@ -41,19 +41,8 @@ Author(s): Jason C. McDonald
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
-import sys
-from omission.interface.window import OmissionWindow
-from PySide2.QtWidgets import QApplication
-
-def main():
-    """
-    Run Omission
-    """
-    app = QApplication(sys.argv)
-    window = OmissionWindow()
-    window.show()
-    app.exec_()
+from omission.interface.app import OmissionApp
 
 
 if __name__ == '__main__':
-    main()
+    app = OmissionApp()

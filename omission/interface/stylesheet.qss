@@ -1,0 +1,22 @@
+QMainWindow {
+    background-color: #000000;
+}
+
+QLabel {
+    color: #0BFF09;
+}
+
+QLabel#passage {
+    color: #FFFFFF;
+    background-color: #013300;
+}
+
+QProgressBar {
+    background-color: #013300;
+}
+
+QProgressBar:chunk {
+    background-color: #0BFF09;
+    width: 10px;
+    margin: 0.5px;
+}

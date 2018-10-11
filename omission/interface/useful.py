@@ -43,6 +43,7 @@ Author(s): Jason C. McDonald
 
 from PySide2.QtWidgets import QWidget
 
+global_dataloader = None
 
 def sec_to_timestring(seconds):
     """
@@ -62,9 +63,3 @@ def score_to_scorestring(score):
     """
     fill_depth = 10
     return str(score).zfill(fill_depth)
-
-
-def to_widget(layout):
-    widget = QWidget()
-    widget.setLayout(layout)
-    return widget

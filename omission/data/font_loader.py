@@ -44,6 +44,9 @@ Author(s): Jason C. McDonald
 import os.path
 import pkg_resources
 
+from PySide2.QtGui import QFontDatabase
+
+
 class FontLoader(object):
     """
     Loads the correct font based on settings.
@@ -54,33 +57,31 @@ class FontLoader(object):
 
         fontfolder = os.path.abspath(os.path.join(os.pardir, "omission", "resources", "font"))
 
-        self.opendyslexic_bold = pkg_resources.resource_filename(
-            __name__,
-            os.path.join(
-                fontfolder, "open-dyslexic", "OpenDyslexic-Bold.otf"
-                )
-            )
+        self.fontdb = QFontDatabase()
 
-        self.opendyslexic_regular = pkg_resources.resource_filename(
-            __name__,
-            os.path.join(
-                fontfolder, "open-dyslexic", "OpenDyslexic-Regular.otf"
-                )
-            )
+        self.opendyslexic_bold = os.path.join(
+            fontfolder, "open-dyslexic", "OpenDyslexic-Bold.otf"
+        )
 
-        self.orbitron = pkg_resources.resource_filename(
-            __name__,
-            os.path.join(
-                fontfolder, "orbitron", "orbitron-medium.otf"
-                )
-            )
+        self.fontdb.addApplicationFont(self.opendyslexic_bold)
 
-        self.sourcesans_regular = pkg_resources.resource_filename(
-            __name__,
-            os.path.join(
-                fontfolder, "source-sans-pro", "SourceSansPro-Regular.otf"
-                )
-            )
+        self.opendyslexic_regular = os.path.join(
+            fontfolder, "open-dyslexic", "OpenDyslexic-Regular.otf"
+        )
+
+        self.fontdb.addApplicationFont(self.opendyslexic_regular)
+
+        self.orbitron = os.path.join(
+            fontfolder, "orbitron", "orbitron-medium.otf"
+        )
+
+        self.fontdb.addApplicationFont(self.orbitron)
+
+        self.sourcesans_regular = os.path.join(
+            fontfolder, "source-sans-pro", "SourceSansPro-Regular.otf"
+        )
+
+        self.fontdb.addApplicationFont(self.sourcesans_regular)
 
     def get_datastring(self):
         """
@@ -101,22 +102,21 @@ class FontLoader(object):
         """
         return self.dyslexic_mode
 
-    def decorative(self):
+    def decorative(self, size: int=12):
         """
-        Returns the path to the decorative font, usually Orbitron.
+        :return: a QFont for decorative font
         """
         if self.dyslexic_mode:
-            fontpath = self.opendyslexic_bold
+            return self.fontdb.font('OpenDyslexic', 'bold', size)
         else:
-            fontpath = self.orbitron
-        return fontpath
+            return self.fontdb.font('Orbitron', 'bold', size)
 
-    def passage(self):
+    def passage(self, size:int=12):
         """
         Returns the path to the passage font, usually Source Sans Pro.
         """
         if self.dyslexic_mode:
-            fontpath = self.opendyslexic_regular
+            return self.fontdb.font('OpenDyslexic', 'regular', size)
         else:
-            fontpath = self.sourcesans_regular
+            return self.fontdb.font('Source Sans Pro', 'regular', size)
         return fontpath
