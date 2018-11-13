@@ -1,8 +1,6 @@
 """
-Settings [Omission]
+Data Enumerations [Omission]
 Version: 2.0
-
-Contains the static instances of all the loaded game settings.
 
 Author(s): Jason C. McDonald
 """
@@ -41,17 +39,22 @@ Author(s): Jason C. McDonald
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
-from omission.data.game_round_settings import GameRoundSettings
+from enum import Enum
 
 
-class Settings(object):
+class GameStatus(Enum):
     """
-    Contains static instances of the settings for each mode.
+    The different responses to an answer.
     """
+    Incorrect = 1,
+    Skipped = 2,
+    Correct = 3
 
-    timed = GameRoundSettings.default_timed()
-    survival = GameRoundSettings.default_survival()
-    infinite = GameRoundSettings.default_infinite()
 
-    def __init__(self):
-        pass
+class GameMode(Enum):
+    """
+    The different gameplay modes.
+    """
+    Timed = 1,
+    Survival = 2,
+    Infinite = 3

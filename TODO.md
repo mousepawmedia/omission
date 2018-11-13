@@ -16,7 +16,7 @@ this new version respecting TDD.
 * Scoreboard as a class with static data
 * Data Loader should propegate Settings and Scoreboard
 
-Use `__repr__` for the string representations we write out
+Use `__str__` for the string representations we write out
 to the file(s).
 
 NOTE: The loader should no longer be accessed by other classes,

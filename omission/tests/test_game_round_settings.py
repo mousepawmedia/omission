@@ -1,8 +1,6 @@
 """
-Settings [Omission]
+Tests: Game Round Settings [Omission]
 Version: 2.0
-
-Contains the static instances of all the loaded game settings.
 
 Author(s): Jason C. McDonald
 """
@@ -42,16 +40,33 @@ Author(s): Jason C. McDonald
 # on how to contribute to our projects.
 
 from omission.data.game_round_settings import GameRoundSettings
+from omission.data.data_enums import GameMode
+
+def test_default_timed():
+    timed1 = GameRoundSettings.default_timed()
+    timed2 = GameRoundSettings.default_timed()
+    assert timed1.mode == GameMode.Timed
+    # Ensure the instances are distinct
+    timed1.set_solution_pause(False)
+    assert not timed1.solution_pause
+    assert timed2.solution_pause
 
 
-class Settings(object):
-    """
-    Contains static instances of the settings for each mode.
-    """
+def test_default_survival():
+    survival1 = GameRoundSettings.default_survival()
+    survival2 = GameRoundSettings.default_survival()
+    assert survival1.mode == GameMode.Survival
+    # Ensure the instances are distinct.
+    survival1.set_solution_pause(False)
+    assert not survival1.solution_pause
+    assert survival2.solution_pause
 
-    timed = GameRoundSettings.default_timed()
-    survival = GameRoundSettings.default_survival()
-    infinite = GameRoundSettings.default_infinite()
 
-    def __init__(self):
-        pass
+def test_default_infinite():
+    infinite1 = GameRoundSettings.default_infinite()
+    infinite2 = GameRoundSettings.default_infinite()
+    assert infinite1.mode == GameMode.Infinite
+    # Ensure the instances are distinct.
+    infinite1.set_solution_pause(False)
+    assert not infinite1.solution_pause
+    assert infinite2.solution_pause

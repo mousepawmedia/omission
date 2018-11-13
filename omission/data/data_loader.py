@@ -56,6 +56,8 @@ Author(s): Jason C. McDonald
 
 from collections import OrderedDict
 
+from omission.data.settings import Settings
+
 
 class DataLoader(object):
     """
