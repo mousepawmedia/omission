@@ -10,8 +10,8 @@ should resume use of Maniphest for issue tracking.)
 NOTE: Be sure to add PyTest tests for everything! We're building
 this new version respecting TDD.
 
-* Add GameMode and GameStatus enumerations (from gameround.py)
-* GameRoundSettings
+* ~~Add GameMode and GameStatus enumerations (from gameround.py)~~
+* ~~GameRoundSettings~~
 * Settings as a class with static data
 * Scoreboard as a class with static data
 * Data Loader should propegate Settings and Scoreboard

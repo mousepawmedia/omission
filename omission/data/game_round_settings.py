@@ -69,13 +69,17 @@ class GameRoundSettings(object):
         # Whether to pause on solution
         self.solution_pause = True
 
-    def set_timed(self, time=30, bonus=2, penalty=1, tries=3):
+    def set_timed(self, time=30, bonus=2, penalty=1, tries=3, count_at=1, clue_at=3, chain=2, solution_pause=True):
         """
         Switch to Timed mode
         :param time: timer length in seconds
         :param bonus: seconds added to timer on correct guess
         :param penalty: seconds removed from timer on incorrect guess
         :param tries: attempts before puzzle is discarded
+        :param count_at: tries until "letters removed" clue shown
+        :param clue_at: tries until underscores shown
+        :param chain: seconds until chain expires
+        :param solution_pause: True to show, False to skip solution
         :return: None
         """
         self.mode = GameMode.Timed
@@ -83,85 +87,82 @@ class GameRoundSettings(object):
         self.bonus = bonus
         self.penalty = penalty
         self.tries = tries
+        # If > tries, hint won't ever be displayed
+        # If 0, hint will always be displayed
+        self.count_at = count_at
+        self.clue_at = clue_at
+        self.chain = chain
+        self.solution_pause = solution_pause
 
     @classmethod
     def default_timed(cls):
         """
-        Creates a default Timed game round settings object
+        Creates a default Timed game round settings object instance
         :return: GameRoundSettings
         """
         r = GameRoundSettings()
         r.set_timed()
         return r
 
-    def set_survival(self, lives=5, tries=1):
+    def set_survival(self, lives=5, tries=1, count_at=1, clue_at=3, chain=2, solution_pause=True):
         """
         Switch to Survival mode
         :param lives: lives per round
         :param tries: attempts before puzzle is discarded
+        :param count_at: tries until "letters removed" clue shown
+        :param clue_at: tries until underscores shown
+        :param chain: seconds until chain expires
+        :param solution_pause: True to show, False to skip solution
         :return: None
         """
         self.mode = GameMode.Survival
         self.limit = lives
         self.tries = tries
+        # If > tries, hint won't ever be displayed
+        # If 0, hint will always be displayed
+        self.count_at = count_at
+        self.clue_at = clue_at
+        self.chain = chain
+        self.solution_pause = solution_pause
 
     @classmethod
     def default_survival(cls):
         """
-        Creates a default Survival game round settings object
+        Creates a default Survival game round settings object instance
         :return: GameRoundSettings
         """
         r = GameRoundSettings()
         r.set_survival()
         return r
 
-    def set_infinite(self, tries=3):
+    def set_infinite(self, tries=3, count_at=1, clue_at=3, chain=2, solution_pause=True):
         """
         Switch to Infinite mode
         :param tries: attempts before puzzle is discarded
+        :param count_at: tries until "letters removed" clue shown
+        :param clue_at: tries until underscores shown
+        :param chain: seconds until chain expires
+        :param solution_pause: True to show, False to skip solution
         :return: None
         """
         self.mode = GameMode.Infinite
         self.tries = tries
+        # If > tries, hint won't ever be displayed
+        # If 0, hint will always be displayed
+        self.count_at = count_at
+        self.clue_at = clue_at
+        self.chain = chain
+        self.solution_pause = solution_pause
 
     @classmethod
     def default_infinite(cls):
         """
-        Creates a default Timed game round settings object
+        Creates a default Timed game round settings object instance
         :return: GameRoundSettings
         """
         r = GameRoundSettings()
         r.set_infinite()
         return r
-
-    # NOTE: While pure setters may not be perfectly Pythonic, it ensures the interface is consistent.
-    def set_solution_pause(self, solution_pause=True):
-        """
-        Set whether to show the solution.
-        :param solution_pause: True to show, False to skip solution
-        :return: None
-        """
-        self.solution_pause = solution_pause
-
-    def set_chain(self, chain=2):
-        """
-        Set the cutoff time for chain bonuses
-        :param chain: seconds until chain expires
-        :return: None
-        """
-        self.chain = chain
-
-    def set_clues(self, count_at=1, clue_at=3):
-        """
-        Define the clue timings
-        If > tries, it won't ever be displayed
-        If 0, it will always be displayed
-        :param count_at: tries until "letters removed" clue shown
-        :param clue_at: tries until underscores shown
-        :return: None
-        """
-        self.count_at = count_at
-        self.clue_at = clue_at
 
     def __str__(self):
         """
@@ -169,7 +170,7 @@ class GameRoundSettings(object):
         """
         output = ""
 
-        # DEF=T:time:bonus:penalty:tries:hint:clue:chain:solution
+        # T:time:bonus:penalty:tries:hint:clue:chain:solution
         if self.mode == GameMode.Timed:
             output += "T:" + \
                 str(self.limit) + ":" + \
@@ -180,7 +181,7 @@ class GameRoundSettings(object):
                 str(self.clue_at) + ":" + \
                 str(self.chain) + ":" + \
                 str(int(self.solution_pause))
-        # DEF=S:lives:tries:hint:clue:chain:solution
+        # S:lives:tries:hint:clue:chain:solution
         elif self.mode == GameMode.Survival:
             output += "S:" + \
                 str(self.limit) + ":" + \
@@ -189,7 +190,7 @@ class GameRoundSettings(object):
                 str(self.clue_at) + ":" + \
                 str(self.chain) + ":" + \
                 str(int(self.solution_pause))
-        # DEF=I:tries:hint:clue:chain:solution
+        # I:tries:hint:clue:chain:solution
         elif self.mode == GameMode.Infinite:
             output += "I:" + \
                 str(self.tries) + ":" + \
