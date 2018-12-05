@@ -40,6 +40,7 @@ Author(s): Jason C. McDonald
 # on how to contribute to our projects.
 
 import random
+import re
 
 from omission.data.scoreboard import Scoreboards, Scoreboard
 
@@ -62,7 +63,7 @@ def generate_sample_data(items=Scoreboard.retain):
     return sample_data
 
 
-def generate_sample_scoreboard(data=None, items=Scoreboard.retain, game_round_settings="test"):
+def generate_sample_scoreboard(data=None, items=Scoreboard.retain, game_round_settings="I:0:0:0:0:0"):
     if not data:
         # Generate enough sample data to fill up the scoreboard
         data = generate_sample_data(items)
@@ -119,7 +120,7 @@ def test_scoreboard_datastring():
 
 def test_check_score():
     # Generate an empty scoreboard
-    scoreboard = Scoreboard("test")
+    scoreboard = Scoreboard("I:0:0:0:0:0")
     # Any score should be accepted if the scoreboard is empty
     assert scoreboard.check_score(MIN_SCORE - 1)
 
@@ -143,9 +144,21 @@ def test_invalid_board():
 
 def test_valid_board():
     # Generate and store a test scoreboard
-    test_board = Scoreboard("test")
+    test_board = Scoreboard("I:0:0:0:0:0")
     Scoreboards.store_scoreboard(test_board)
 
     # Access and validate the scoreboard
-    retrieved = Scoreboards.get_scoreboard("test")
-    assert retrieved.gameround_datastring == "test"
+    retrieved = Scoreboards.get_scoreboard("I:0:0:0:0:0")
+    assert retrieved.gameround_datastring == "I:0:0:0:0:0"
+
+
+def test_boards_datastring():
+    # Define our patterns
+    boarddata = re.compile(r'^SCO=[TSI][:\d]+\d$')
+    scoredata = re.compile(r'^:\d+:\w+$')
+
+    datastring = Scoreboards.datastring
+    frags = datastring.splitlines()
+
+    for f in frags:
+        assert boarddata.match(f) or scoredata.match(f)

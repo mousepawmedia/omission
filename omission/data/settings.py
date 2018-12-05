@@ -43,17 +43,8 @@ Author(s): Jason C. McDonald
 
 import textwrap
 
+from omission.common.classproperty import classproperty
 from omission.data.game_round_settings import GameRoundSettings
-
-
-# SOURCE: https://stackoverflow.com/a/5192374/472647
-class classproperty(object):
-
-    def __init__(self, f):
-        self.f = f
-
-    def __get__(self, obj, owner):
-        return self.f(owner)
 
 
 class Settings(object):

@@ -45,6 +45,8 @@ from collections import OrderedDict
 import itertools
 import textwrap
 
+from omission.common.classproperty import classproperty
+
 
 class Scoreboard(object):
     """
@@ -154,4 +156,9 @@ class Scoreboards(object):
         """
         cls._boards[board.gameround_datastring] = board
 
-    # TODO: Return datastrings for each scoreboard stored?
+    @classproperty
+    def datastring(cls):
+        r = ""
+        for data, board in cls._boards.items():
+            r += board.datastring
+        return r
