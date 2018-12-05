@@ -122,7 +122,7 @@ def test_datastring_timed():
     timed.solution_pause = bool(test_data[7])
 
     # Get datastring and split by colons
-    frags = str(timed).split(':')
+    frags = timed.datastring.split(':')
 
     # Check that the datastring matches the test data
     # T:time:bonus:penalty:tries:hint:clue:chain:solution
@@ -159,7 +159,7 @@ def test_datastring_survival():
     )
 
     # Get datastring and split by colons
-    frags = str(survival).split(':')
+    frags = survival.datastring.split(':')
 
     # Check that the object data matches the test data
     survival.lives = test_data[0]
@@ -208,7 +208,7 @@ def test_datastring_infinite():
     infinite.solution_pause = bool(test_data[4])
 
     # Get datastring and split by colons
-    frags = str(infinite).split(':')
+    frags = infinite.datastring.split(':')
 
     # Check that the datastring matches the object data
     # I:tries:hint:clue:chain:solution

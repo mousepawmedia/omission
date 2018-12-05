@@ -1,8 +1,6 @@
 """
-Settings [Omission]
+Tests: Settings [Omission]
 Version: 2.0
-
-Contains the static instances of all the loaded game settings.
 
 Author(s): Jason C. McDonald
 """
@@ -41,41 +39,14 @@ Author(s): Jason C. McDonald
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
-import textwrap
-
-from omission.data.game_round_settings import GameRoundSettings
+from omission.data.settings import Settings
 
 
-# SOURCE: https://stackoverflow.com/a/5192374/472647
-class classproperty(object):
-
-    def __init__(self, f):
-        self.f = f
-
-    def __get__(self, obj, owner):
-        return self.f(owner)
-
-
-class Settings(object):
-    """
-    Contains static instances of the settings for each mode.
-    """
-
-    # The currently loaded settings for each game round.
-    timed = GameRoundSettings.default_timed()
-    survival = GameRoundSettings.default_survival()
-    infinite = GameRoundSettings.default_infinite()
-
-    # The sound volume (0-10)
-    vol = 10
-    # Whether to use the dyslexia font
-    dys = False
-
-    @classproperty
-    def datastring(cls):
-        return textwrap.dedent(f"""\
-            DEF={cls.timed.datastring}
-            DEF={cls.survival.datastring}
-            DEF={cls.infinite.datastring}
-            VOL={cls.vol}
-            DYS={int(cls.dys)}""")
+def test_settings_datastring():
+    datastring = Settings.datastring
+    frags = datastring.split('\n')
+    assert frags[0] == f'DEF={Settings.timed.datastring}'
+    assert frags[1] == f'DEF={Settings.survival.datastring}'
+    assert frags[2] == f'DEF={Settings.infinite.datastring}'
+    assert frags[3] == f'VOL={Settings.vol}'
+    assert frags[4] == f'DYS={int(Settings.dys)}'

@@ -164,7 +164,8 @@ class GameRoundSettings(object):
         r.set_infinite()
         return r
 
-    def __str__(self):
+    @property
+    def datastring(self):
         """
         :return: the datastring representing the GameRoundSettings object
         """

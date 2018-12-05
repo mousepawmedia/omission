@@ -41,13 +41,15 @@ Author(s): Jason C. McDonald
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
+from omission.data.settings import Settings
+
 
 def run():
     """
     Start the game.
     :return: None
     """
-    print("Hello, world!")
+    print(Settings.datastring)
 
 
 if __name__ == '__main__':
