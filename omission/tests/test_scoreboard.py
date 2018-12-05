@@ -41,7 +41,7 @@ Author(s): Jason C. McDonald
 
 import random
 
-from omission.data.scoreboard import Scoreboard
+from omission.data.scoreboard import Scoreboards, Scoreboard
 
 random.seed()
 sample_names = ["Gallus", "Ocellus", "Silverstream", "Yona", "Sandbar", "Smoulder"]
@@ -119,3 +119,18 @@ def test_check_score():
     assert not scoreboard.check_score(MIN_SCORE - 1)
     # A score higher than another score (or all scores) present should be accepted
     assert scoreboard.check_score(MAX_SCORE + 1)
+
+
+def test_invalid_board():
+    # Attempt to access a non-existent board
+    assert Scoreboards.get_scoreboard("DEADBEEF") is None
+
+
+def test_valid_board():
+    # Generate and store a test scoreboard
+    test_board = Scoreboard("test")
+    Scoreboards.store_scoreboard(test_board)
+
+    # Access and validate the scoreboard
+    retrieved = Scoreboards.get_scoreboard("test")
+    assert retrieved.gameround_datastring == "test"

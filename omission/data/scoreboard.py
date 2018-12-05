@@ -113,3 +113,22 @@ class Scoreboard(object):
         :return: the scores from this scoreboard, as a list of tuples
         """
         return [(score, name) for score, name in self.scoreboard.items()]
+
+
+class Scoreboards(object):
+    """
+    Statically stores all the scoreboards, indexed by their game settings.
+    """
+
+    _boards = dict()
+
+    @classmethod
+    def get_scoreboard(cls, datastring):
+        try:
+            return cls._boards[datastring]
+        except KeyError:
+            return None
+
+    @classmethod
+    def store_scoreboard(cls, board: Scoreboard):
+        cls._boards[board.gameround_datastring] = board
