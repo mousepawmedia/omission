@@ -102,6 +102,21 @@ def test_scoreboard_sort():
         assert score[1] == sample[1]
 
 
+def test_scoreboard_datastring():
+    # Create a scoreboard and retrieve its scores and datastring
+    scoreboard = generate_sample_scoreboard()
+    scores = scoreboard.get_scores()
+    datastring = scoreboard.datastring
+
+    frags = datastring.splitlines()
+
+    # Validate the top line of the datastring
+    assert frags[0] == f'SCO={scoreboard.gameround_datastring}'
+    # Validate the scores in the datastring
+    for i, s in enumerate(scores):
+        assert frags[i+1] == f':{s[0]}:{s[1]}'
+
+
 def test_check_score():
     # Generate an empty scoreboard
     scoreboard = Scoreboard("test")

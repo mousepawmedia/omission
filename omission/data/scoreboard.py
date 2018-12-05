@@ -43,6 +43,7 @@ Author(s): Jason C. McDonald
 
 from collections import OrderedDict
 import itertools
+import textwrap
 
 
 class Scoreboard(object):
@@ -114,6 +115,16 @@ class Scoreboard(object):
         """
         return [(score, name) for score, name in self.scoreboard.items()]
 
+    @property
+    def datastring(self):
+        """
+        :return: The generated datastring for the scoreboard
+        """
+        r = f'SCO={self.gameround_datastring}\n'
+        for score, name in self.scoreboard.items():
+            r += f':{score}:{name}\n'
+        return r
+
 
 class Scoreboards(object):
     """
@@ -124,6 +135,11 @@ class Scoreboards(object):
 
     @classmethod
     def get_scoreboard(cls, datastring):
+        """
+        Retrieve a scoreboard by its game round settings
+        :param datastring: the datastring for the game round settings
+        :return: the scoreboard if it exists, else None
+        """
         try:
             return cls._boards[datastring]
         except KeyError:
@@ -131,4 +147,11 @@ class Scoreboards(object):
 
     @classmethod
     def store_scoreboard(cls, board: Scoreboard):
+        """
+        Store or update a scoreboard
+        :param board: the scoreboard to store
+        :return: None
+        """
         cls._boards[board.gameround_datastring] = board
+
+    # TODO: Return datastrings for each scoreboard stored?
