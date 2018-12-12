@@ -55,17 +55,51 @@ Author(s): Jason C. McDonald
 # SCO=T:5:2:3:1:30:3:1
 
 from collections import OrderedDict
+import os.path
+import re
+
+from appdirs import user_data_dir
 
 from omission.data.settings import Settings
-
+from omission.data.scoreboard import Scoreboards
 
 class DataLoader(object):
     """
     Statically load scores and other stored data from our config file.
     """
 
-    settings = Settings()
-    scoreboards = OrderedDict()
+    appname = "Omission"
+    appauthor = "MousePaw Media"
+    directory = user_data_dir(appname, appauthor)
+    path = os.path.join(directory, "scores.data")
+
 
     def __init__(self):
         pass
+
+    @classmethod
+    def read_in(cls):
+        try:
+            with open(cls.path, 'r') as scorefile:
+                rawdata = scorefile.readlines()
+        except FileNotFoundError:
+            # The file doesn't yet exist, that's fine. Carry on.
+            pass
+
+        for d in rawdata:
+            if not Settings.parse_datastring(d):
+                Scoreboards.parse_datastring(d)
+
+    @classmethod
+    def write_out(cls):
+        # Create the folders, if necessary
+        os.makedirs(cls.directory, 0x777, True)
+
+        # Fetch the datastrings to write out
+        data = ''
+        data += Settings.datastring
+        data += Scoreboards.datastring
+
+        # Write out the data to a file.
+        with open(cls.path, 'w') as scorefile:
+            scorefile.write(data)

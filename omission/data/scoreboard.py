@@ -43,7 +43,7 @@ Author(s): Jason C. McDonald
 
 from collections import OrderedDict
 import itertools
-import textwrap
+import re
 
 from omission.common.classproperty import classproperty
 
@@ -55,6 +55,10 @@ class Scoreboard(object):
 
     # This determines how many scores we keep
     retain = 6
+
+    # Datastring patterns
+    pattern_datastring_scoreboard = re.compile(r'^SCO=[TSI:\d]')
+    pattern_datastring_score = re.compile(r'^:[\d:]+')
 
     def __init__(self, datastring):
         """
@@ -127,6 +131,25 @@ class Scoreboard(object):
             r += f':{score}:{name}\n'
         return r
 
+    def parse_score(self, datastring):
+        """
+        :param datastring: the datastring to parse
+        :return: True if successful, else False
+        """
+        # Ensure the datastring fits the pattern for a score.
+        if self.pattern_datastring_score.match(datastring):
+            # Attempt to extract and store the score data.
+            data = datastring.split(':')
+            try:
+                self.add_score(int(data[1]), data[2])
+            except (IndexError, ValueError):
+                return False
+            else:
+                return True
+        # If the datastring isn't a score, report failure.
+        else:
+            return False
+
 
 class Scoreboards(object):
     """
@@ -135,16 +158,32 @@ class Scoreboards(object):
 
     _boards = dict()
 
+    # Tracks the last header we were parsing
+    __last_parse_header = None
+
     @classmethod
-    def get_scoreboard(cls, datastring):
+    def get_scoreboard(cls, datastring: str):
         """
-        Retrieve a scoreboard by its game round settings
+        Retrieve a scoreboard by its game round settings.
         :param datastring: the datastring for the game round settings
-        :return: the scoreboard if it exists, else None
+        :return: the scoreboard, if it exists; else None
         """
         try:
             return cls._boards[datastring]
         except KeyError:
+            None
+
+    @classmethod
+    def create_scoreboard(cls, datastring: str):
+        """
+        Create a new scoreboard
+        :param datastring: the datastring for the game round settings
+        :return: the created scoreboard, else None if it already existed
+        """
+        if cls.get_scoreboard(datastring) is None:
+            cls._boards[datastring] = Scoreboard(datastring)
+            return cls._boards[datastring]
+        else:
             return None
 
     @classmethod
@@ -156,9 +195,44 @@ class Scoreboards(object):
         """
         cls._boards[board.gameround_datastring] = board
 
+    @classmethod
+    def delete_scoreboard(cls, datastring: str):
+        """
+        Delete a scoreboard by its game round settings.
+        :param datastring: the datastring for the game round settings
+        :return: True if deleted, False if it wasn't present
+        """
+        if cls._boards.pop(datastring, False):
+            return True
+        # Otherwise, if no such board was found...
+        return False
+
     @classproperty
     def datastring(cls):
         r = ""
         for data, board in cls._boards.items():
             r += board.datastring
         return r
+
+    @classmethod
+    def parse_datastring(cls, datastring: str):
+        # If we have a new scoreboard header, parse it out and store it.
+        if Scoreboard.pattern_datastring_scoreboard.match(datastring):
+            try:
+                # Parse out the game round settings for the scoreboard
+                cls.__last_parse_header = datastring.split('=')[1]
+                # Create the new scoreboard if it doesn't already exist.
+                if not cls.get_scoreboard(cls.__last_parse_header):
+                    cls.create_scoreboard(cls.__last_parse_header)
+            except (IndexError, ValueError):
+                return False
+            else:
+                return True
+        # If we already received a scoreboard header, and the datastring isn't a new one...
+        elif cls.__last_parse_header:
+            # Attempt to parse the datastring as a score.
+            board = cls.get_scoreboard(cls.__last_parse_header)
+            return board.parse_score(datastring)
+        else:
+            # If the datastring failed to be parsed as a scoreboard heading or score, report failure...
+            return False

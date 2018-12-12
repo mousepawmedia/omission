@@ -45,7 +45,8 @@ import re
 from omission.data.scoreboard import Scoreboards, Scoreboard
 
 random.seed()
-sample_names = ["Gallus", "Ocellus", "Silverstream", "Yona", "Sandbar", "Smoulder"]
+SAMPLE_NAMES = ["Gallus", "Ocellus", "Silverstream", "Yona", "Sandbar", "Smoulder"]
+SAMPLE_GAME_ROUND_SETTINGS = "I:0:0:0:0:0"
 MIN_SCORE = 100
 MAX_SCORE = 10000
 
@@ -57,13 +58,13 @@ def generate_sample_data(items=Scoreboard.retain):
         sample_data.append(
             (
                 random.randint(MIN_SCORE, MAX_SCORE),
-                sample_names[random.randint(0, len(sample_names) - 1)]
+                SAMPLE_NAMES[random.randint(0, len(SAMPLE_NAMES) - 1)]
             )
         )
     return sample_data
 
 
-def generate_sample_scoreboard(data=None, items=Scoreboard.retain, game_round_settings="I:0:0:0:0:0"):
+def generate_sample_scoreboard(data=None, items=Scoreboard.retain, game_round_settings=SAMPLE_GAME_ROUND_SETTINGS):
     if not data:
         # Generate enough sample data to fill up the scoreboard
         data = generate_sample_data(items)
@@ -118,9 +119,19 @@ def test_scoreboard_datastring():
         assert frags[i+1] == f':{s[0]}:{s[1]}'
 
 
+def test_scores_parse():
+    sample_scoreboard = generate_sample_scoreboard()
+    test_scoreboard = Scoreboard(SAMPLE_GAME_ROUND_SETTINGS)
+    datastrings = sample_scoreboard.datastring.splitlines()
+    for d in datastrings[1:]:
+        assert test_scoreboard.parse_score(d)
+
+    assert sample_scoreboard.datastring == test_scoreboard.datastring
+
+
 def test_check_score():
     # Generate an empty scoreboard
-    scoreboard = Scoreboard("I:0:0:0:0:0")
+    scoreboard = Scoreboard(SAMPLE_GAME_ROUND_SETTINGS)
     # Any score should be accepted if the scoreboard is empty
     assert scoreboard.check_score(MIN_SCORE - 1)
 
@@ -144,12 +155,12 @@ def test_invalid_board():
 
 def test_valid_board():
     # Generate and store a test scoreboard
-    test_board = Scoreboard("I:0:0:0:0:0")
+    test_board = Scoreboard(SAMPLE_GAME_ROUND_SETTINGS)
     Scoreboards.store_scoreboard(test_board)
 
     # Access and validate the scoreboard
-    retrieved = Scoreboards.get_scoreboard("I:0:0:0:0:0")
-    assert retrieved.gameround_datastring == "I:0:0:0:0:0"
+    retrieved = Scoreboards.get_scoreboard(SAMPLE_GAME_ROUND_SETTINGS)
+    assert retrieved.gameround_datastring == SAMPLE_GAME_ROUND_SETTINGS
 
 
 def test_boards_datastring():
@@ -162,3 +173,22 @@ def test_boards_datastring():
 
     for f in frags:
         assert boarddata.match(f) or scoredata.match(f)
+
+
+def test_boards_parse():
+    # Ensure we don't have a scoreboard like the one we're parsing in
+    Scoreboards.delete_scoreboard(SAMPLE_GAME_ROUND_SETTINGS)
+
+    # Parse in the datastring for a sample scoreboard
+    sample_scoreboard = generate_sample_scoreboard()
+    datastring = sample_scoreboard.datastring
+    for d in datastring.splitlines():
+        assert Scoreboards.parse_datastring(d)
+
+    # Ensure the data was correctly parsed and used to create a new board.
+    board = Scoreboards.get_scoreboard(SAMPLE_GAME_ROUND_SETTINGS)
+    assert board is not None
+    assert board.datastring == sample_scoreboard.datastring
+
+
+

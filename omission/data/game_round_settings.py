@@ -41,6 +41,8 @@ Author(s): Jason C. McDonald
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
+import re
+
 from omission.data.data_enums import GameMode
 
 
@@ -48,6 +50,10 @@ class GameRoundSettings(object):
     """
     Contains the settings for a single round of gameplay.
     """
+
+    pattern_datastring_settings_timed = re.compile(r'^DEF=T[:\d]+')
+    pattern_datastring_settings_survial = re.compile(r'^DEF=S[:\d]+')
+    pattern_datastring_settings_infinite = re.compile(r'^DEF=I[:\d]+')
 
     def __init__(self):
         # The gameplay mode for the round.
@@ -200,3 +206,60 @@ class GameRoundSettings(object):
                 str(self.chain) + ":" + \
                 str(int(self.solution_pause))
         return output
+
+    def parse_datastring(self, datastring: str):
+        """
+        Redefine the game round settings based on a datastring
+        :param datastring: the datastring to extract the settings from
+        :return: True if datastring successfully parsed, else False
+        """
+        if datastring[:4] == 'DEF=':
+            datastring = datastring[4:]
+            data = datastring.split(':')
+
+            # Validate and parse Timed gameround datastring
+            if data[0] == 'T' and len(data) == 9:
+                try:
+                    self.mode = GameMode.Timed
+                    self.limit = int(data[1])
+                    self.bonus = int(data[2])
+                    self.penalty = int(data[3])
+                    self.tries = int(data[4])
+                    self.count_at = int(data[5])
+                    self.clue_at = int(data[6])
+                    self.chain = int(data[7])
+                    self.solution_pause = bool(int(data[8]))
+                except (ValueError, IndexError):
+                    return False
+                else:
+                    return True
+            # Validate and parse Survival gameround datastring
+            elif data[0] == 'S' and len(data) == 7:
+                try:
+                    self.mode = GameMode.Survival
+                    self.limit = int(data[1])
+                    self.tries = int(data[2])
+                    self.count_at = int(data[3])
+                    self.clue_at = int(data[4])
+                    self.chain = int(data[5])
+                    self.solution_pause = bool(int(data[6]))
+                except (ValueError, IndexError):
+                    return False
+                else:
+                    return True
+            # Validate and parse Infinite gameround datastring
+            elif data[0] == 'I' and len(data) == 6:
+                try:
+                    self.mode = GameMode.Infinite
+                    self.tries = int(data[1])
+                    self.count_at = int(data[2])
+                    self.clue_at = int(data[3])
+                    self.chain = int(data[4])
+                    self.solution_pause = bool(int(data[5]))
+                except (ValueError, IndexError):
+                    return False
+                else:
+                    return True
+
+        # in any other case, datastring wasn't valid
+        return False

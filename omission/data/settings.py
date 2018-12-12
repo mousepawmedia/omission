@@ -42,6 +42,7 @@ Author(s): Jason C. McDonald
 # on how to contribute to our projects.
 
 import textwrap
+import re
 
 from omission.common.classproperty import classproperty
 from omission.data.game_round_settings import GameRoundSettings
@@ -62,6 +63,10 @@ class Settings(object):
     # Whether to use the dyslexia font
     dys = False
 
+    # The regex for settings datastrings
+    pattern_datastring_settings_volume = re.compile(r'^VOL=\d+')
+    pattern_datastring_settings_dyslexic = re.compile(r'^DYS=[01]')
+
     @classproperty
     def datastring(cls):
         return textwrap.dedent(f"""\
@@ -70,3 +75,50 @@ class Settings(object):
             DEF={cls.infinite.datastring}
             VOL={cls.vol}
             DYS={int(cls.dys)}""")
+
+    @classmethod
+    def parse_datastring(cls, datastring: str):
+        """
+        :param datastring: the datastring to parse
+        :return: True if successfully parsed, else False
+        """
+
+        if GameRoundSettings.pattern_datastring_settings_timed.match(datastring):
+            return cls.timed.parse_datastring(datastring)
+        elif GameRoundSettings.pattern_datastring_settings_survial.match(datastring):
+            return cls.timed.parse_datastring(datastring)
+        elif GameRoundSettings.pattern_datastring_settings_infinite.match(datastring):
+            return cls.infinite.parse_datastring(datastring)
+        elif cls.pattern_datastring_settings_volume.match(datastring):
+            return cls.volume_from_datastring(datastring)
+        elif cls.pattern_datastring_settings_dyslexic.match(datastring):
+            return cls.dyslexic_from_datastring(datastring)
+
+        return False
+
+
+    @classmethod
+    def volume_from_datastring(cls, datastring: str):
+        if datastring[:4] == 'VOL=':
+            data = datastring.split('=')
+            try:
+                cls.vol = int(data[1])
+            except (ValueError, IndexError):
+                return False
+            else:
+                return True
+        else:
+            return False
+
+    @classmethod
+    def dyslexic_from_datastring(cls, datastring: str):
+        if datastring[:4] == 'DYS=':
+            data = datastring.split('=')
+            try:
+                cls.dys = bool(int(data[1]))
+            except (ValueError, IndexError):
+                return False
+            else:
+                return True
+        else:
+            return False
