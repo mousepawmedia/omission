@@ -8,16 +8,11 @@ debian/debhelper-build-stamp
 debian/files
 debian/omission.substvars
 
-# Created by https://www.gitignore.io/api/snapcraft
-
-### Snapcraft ###
-# Snapcraft
-parts/
-prime/
-stage/
-*.snap
-
-# End of https://www.gitignore.io/api/snapcraft
+# Ignore secrets
+.env
+.pk
+.pem
+.pub
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
