@@ -42,7 +42,7 @@ Author(s): Jason C. McDonald
 import random
 
 from omission.data.game_round_settings import GameRoundSettings
-from omission.data.data_enums import GameMode
+from omission.data.game_enums import GameMode
 
 # Initialize the random number generator.
 random.seed()
@@ -219,3 +219,13 @@ def test_datastring_infinite():
     assert frags[4] == str(test_data[3])
     assert frags[5] == str(test_data[4])
     assert len(frags) == 6
+
+
+def test_datastring_parse():
+    """
+    Validate that a datastring is parsed correctly.
+    """
+    survival = GameRoundSettings.default_survival()
+    test = GameRoundSettings.default_infinite()
+    assert test.parse_datastring('DEF=' + survival.datastring)
+    assert test.datastring == survival.datastring

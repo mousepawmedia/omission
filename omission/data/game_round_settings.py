@@ -43,7 +43,7 @@ Author(s): Jason C. McDonald
 
 import re
 
-from omission.data.data_enums import GameMode
+from omission.data.game_enums import GameMode
 
 
 class GameRoundSettings(object):

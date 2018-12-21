@@ -11,17 +11,24 @@ NOTE: Be sure to add PyTest tests for everything! We're building
 this new version respecting TDD.
 
 * ~~Add GameMode and GameStatus enumerations (from gameround.py)~~
+
 * ~~GameRoundSettings~~
+
 * ~~Settings as a class with static data~~
+
 * ~~Scoreboard as a class with static data~~
-* Data Loader should propegate Settings and Scoreboard
 
-Use `__str__` for the string representations we write out
-to the file(s).
+* ~~Data Loader should propegate Settings and Scoreboard~~
 
-NOTE: The loader should no longer be accessed by other classes,
-unless they are calling it to ACTUALLY load data! (Separation
-of concerns and all that.)
+* ~~GameTimer class~~
+
+* GameTimer tests
+
+* GameItem class
+
+* GameRound class
+
+* Use dictionary for GameRound status, NOT a tuple!
 
 * Font Loader (functions, not class)
 
@@ -30,6 +37,4 @@ of concerns and all that.)
 * Image Loader (functions, not class??)
 
 * Content Loader, perhaps as a generator?
-
-* GameRound class
 

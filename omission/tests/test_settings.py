@@ -50,3 +50,17 @@ def test_settings_datastring():
     assert frags[2] == f'DEF={Settings.infinite.datastring}'
     assert frags[3] == f'VOL={Settings.vol}'
     assert frags[4] == f'DYS={int(Settings.dys)}'
+
+
+def test_parse_vol():
+    assert Settings.volume_from_datastring('VOL=12')
+    assert Settings.vol == 12
+    assert Settings.volume_from_datastring('VOL=5')
+    assert Settings.vol == 5
+
+
+def test_parse_dys():
+    assert Settings.dyslexic_from_datastring('DYS=1')
+    assert Settings.dys
+    assert Settings.dyslexic_from_datastring('DYS=0')
+    assert not Settings.dys

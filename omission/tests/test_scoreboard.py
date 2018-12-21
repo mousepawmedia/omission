@@ -189,6 +189,3 @@ def test_boards_parse():
     board = Scoreboards.get_scoreboard(SAMPLE_GAME_ROUND_SETTINGS)
     assert board is not None
     assert board.datastring == sample_scoreboard.datastring
-
-
-

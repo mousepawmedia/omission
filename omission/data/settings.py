@@ -96,7 +96,6 @@ class Settings(object):
 
         return False
 
-
     @classmethod
     def volume_from_datastring(cls, datastring: str):
         if datastring[:4] == 'VOL=':

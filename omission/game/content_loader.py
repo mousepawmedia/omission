@@ -1,8 +1,8 @@
 """
-Data Loader [Omission]
+Content Loader [Omission]
 Version: 2.0
 
-Loads scores and settings from files.
+Loads and generates content from resource files.
 
 Author(s): Jason C. McDonald
 """
@@ -41,62 +41,60 @@ Author(s): Jason C. McDonald
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
-# Our data layout follows these conventions:
-# DEF=T:3:2:3:1:30:3:1
-# DEF=S:3:2:3:1:3
-# DEF=I:3:2:3:1
-# VOL=10
-# DYS=1
-# SCO=T:3:2:3:1:30:3:1
-# :852:Fred
-# :1936523:Jason
-# :5832:Jarek
-# :100:Bob
-# SCO=T:5:2:3:1:30:3:1
-
+import random
+import re
 import os.path
-
-from appdirs import user_data_dir
-
-from omission.common import constants
-from omission.data.settings import Settings
-from omission.data.scoreboard import Scoreboards
+import pkg_resources
 
 
-class DataLoader(object):
+class ContentLoader(object):
     """
-    Statically load scores and other stored data from our config file.
+    Loads content from the content file, parses it, and enables
+    random retrieval of passages.
     """
-
-    directory = user_data_dir(constants.APP_NAME, constants.APP_AUTHOR)
-    path = os.path.join(directory, "scores.data")
 
     def __init__(self):
-        pass
+        """
+        Open the file and load the contents in.
+        """
+        # Seed random.
+        random.seed()
+        # Start tracking the last given index.
+        self._index = 0
+        # Load the content from the file into an array.
+        path = pkg_resources.resource_filename(
+            __name__,
+            os.path.join(os.pardir, 'resources', 'content', 'content.txt')
+        )
 
-    @classmethod
-    def read_in(cls):
-        try:
-            with open(cls.path, 'r') as scorefile:
-                rawdata = scorefile.readlines()
-        except FileNotFoundError:
-            # The file doesn't yet exist, that's fine. Carry on.
-            pass
+        with open(path, 'rt', encoding='utf-8') as content_file:
+            raw_content = content_file.read()
 
-        for d in rawdata:
-            if not Settings.parse_datastring(d):
-                Scoreboards.parse_datastring(d)
+        # Passages are separated by double newlines (blank lines).
+        self._content = re.split(r'\n\n', raw_content)
+        # Shuffle the content.
+        self.reshuffle()
 
-    @classmethod
-    def write_out(cls):
-        # Create the folders, if necessary
-        os.makedirs(cls.directory, 0x777, True)
+    def get_next(self):
+        """
+        Get a random passage from the file.
+        :return: a string of content
+        """
+        # If we've overshot the length of the array (unlikely)...
+        if self._index >= len(self._content):
+            self.reshuffle()
+        else:
+            # We increment first.
+            self._index += 1
 
-        # Fetch the datastrings to write out
-        data = ''
-        data += Settings.datastring
-        data += Scoreboards.datastring
+        # Return the item before our current index position.
+        return self._content[self._index - 1]
 
-        # Write out the data to a file.
-        with open(cls.path, 'w') as scorefile:
-            scorefile.write(data)
+    def reshuffle(self, restart=True):
+        """
+        Reshuffle the content and optionally restart our walk through it.
+        :return: None
+        """
+        random.shuffle(self._content)
+        if restart:
+            self._index = 0
