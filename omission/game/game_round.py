@@ -66,7 +66,7 @@ class GameRound(object):
         self._gameover_callback = gameover_callback
         self._tick_callback = tick_callback
 
-        self._loader = ContentLoader()
+        self.loader = ContentLoader()
         self._settings = settings
 
         # If we're playing Timed mode...
@@ -108,7 +108,7 @@ class GameRound(object):
 
     def new_item(self):
         # Get a new item.
-        self.item = ContentItem(self._loader.get_next())
+        self.item = GameItem(self.loader)
         # Reset tries
         self.attempt = 0
         # Set a new lap on our timer (start of question)
@@ -132,7 +132,7 @@ class GameRound(object):
     def get_score(self):
         pass
 
-    def get_soluiton(self):
+    def get_solution(self):
         pass
 
     def pause(self):

@@ -43,25 +43,28 @@ Author(s): Jason C. McDonald
 
 from threading import Timer
 
+
 class GameTimer(object):
     """
     The timer object for a game round.
     """
 
-    def __init__(self, length: int, life_signal, gameover_callback=None, tick_callback=None):
+    def __init__(self, duration: int, life_signal, gameover_callback=None, tick_callback=None, tick_duration=1.0):
         """
         Create a new GameTimer
-        :param length: duration in seconds. If 0, infinite until stopped.
+        :param duration: duration in seconds. If 0, infinite until stopped.
         :param life_signal: The signal that calls for the timer to stop.
         :param gameover_callback: The function to call when the timer is done.
         :param tick_callback: The function to call on each tick.
+        :param tick_duration: the duration of each tick (default 1.0 second)
         """
-        self.length = length
+
+        self.duration = duration
+        self.tick_length = tick_duration
         self.gameover_callback = gameover_callback
         self.tick_callback = tick_callback
 
-        # Define a one second timer
-        self._timer = Timer(1.0, self._timer_step)
+        # The self._timer object is defined by self.start()
 
         # The number of seconds that have elapsed
         self.elapsed = 0
@@ -79,14 +82,13 @@ class GameTimer(object):
         :return: None
         """
         self.elapsed += 1
-        if self.length > 0 and self.elapsed >= self.length:
+        if self.duration > 0 and self.elapsed >= self.duration:
             self._timer_done()
         else:
             # If there's still time left...
             if self.tick_callback:
                 self.tick_callback()
             # Elapse another second.
-            self._timer = None
             self.start()
 
     def _timer_done(self):
@@ -102,8 +104,8 @@ class GameTimer(object):
         :return: the number of seconds in the timer as a percentage.
         """
         # For finite timers...
-        if self.length > 0:
-            return 100 - int(self.elapsed / self.length * 100)
+        if self.duration > 0:
+            return 100 - int(self.elapsed / self.duration * 100)
         # Otherwise, if this is an infinite timer...
         else:
             # Always return 100%
@@ -115,8 +117,8 @@ class GameTimer(object):
         the number of seconds elapsed in an infinite timer.
         """
         # For finite timers...
-        if self.length > 0:
-            return self.length - self.elapsed
+        if self.duration > 0:
+            return self.duration - self.elapsed
         # Otherwise, if this is an infinite timer...
         else:
             return self.elapsed
@@ -137,8 +139,8 @@ class GameTimer(object):
         """
         self.elapsed += seconds
         # Elapsed should never be greater than the finite timer's max
-        if self.length > 0 and self.elapsed >= self.length:
-            self.elapsed = self.length
+        if self.duration > 0 and self.elapsed >= self.duration:
+            self.elapsed = self.duration
 
     def mark_lap(self):
         """
@@ -174,8 +176,9 @@ class GameTimer(object):
         Start/resume the timer.
         :return:
         """
+        self._timer = None
         if not self._timer:
-            self._timer = Timer(1.0, self._timer_step())
+            self._timer = Timer(self.tick_length, self._timer_step)
         if self.alive:
             self._timer.start()
 

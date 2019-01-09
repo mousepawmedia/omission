@@ -42,7 +42,7 @@ Author(s): Jason C. McDonald
 import random
 
 from omission.data.game_round_settings import GameRoundSettings
-from omission.data.game_enums import GameMode
+from omission.common.game_enums import GameMode
 
 # Initialize the random number generator.
 random.seed()

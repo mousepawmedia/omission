@@ -43,7 +43,7 @@ Author(s): Jason C. McDonald
 
 import re
 
-from omission.data.game_enums import GameMode
+from omission.common.game_enums import GameMode
 
 
 class GameRoundSettings(object):
@@ -58,7 +58,7 @@ class GameRoundSettings(object):
     def __init__(self):
         # The gameplay mode for the round.
         self.mode = GameMode.Timed
-        # The timer length in timed mode OR the number of lives.
+        # The timer duration in timed mode OR the number of lives.
         self.limit = 30
         # The max number of attempts before discarding a puzzle.
         self.tries = 3
@@ -78,7 +78,7 @@ class GameRoundSettings(object):
     def set_timed(self, time=30, bonus=2, penalty=1, tries=3, count_at=1, clue_at=3, chain=2, solution_pause=True):
         """
         Switch to Timed mode
-        :param time: timer length in seconds
+        :param time: timer duration in seconds
         :param bonus: seconds added to timer on correct guess
         :param penalty: seconds removed from timer on incorrect guess
         :param tries: attempts before puzzle is discarded
