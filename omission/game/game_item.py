@@ -72,17 +72,12 @@ class GameItem(object):
             while not self._letter.isalpha():
                 self._letter = random.choice(self._original).lower()
 
-            # We do this manually in a loop for the express purpose of
-            # tracking the number of removals we did.
-            for char in self._original:
-                # We replace all removed letters with underscores,
-                # incrementing our removal counter for each removed.
-                if char.lower() == self._letter:
-                    self._puzzle += '_'
-                    self._removals += 1
-                # All other characters are copied
-                else:
-                    self._puzzle += char
+            # We replace all removed letters with underscores,
+            # incrementing our removal counter for each removed.
+            self._puzzle = self._original
+            self._puzzle.replace(self._letter.lower(), '_')
+            self._puzzle.replace(self._letter.upper(), '_')
+            self._removals = self._puzzle.find('_')
 
     def get_puzzle(self, underscores=False):
         """

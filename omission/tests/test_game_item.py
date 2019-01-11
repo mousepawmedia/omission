@@ -44,14 +44,32 @@ from omission.game.content_loader import ContentLoader
 
 def test_puzzle_generation():
     loader = ContentLoader()
-    item = GameItem(loader)
-
-    assert item._original.upper() == item._puzzle.replace('_', item._letter).upper()
-
+    for i in range(loader.total_items):
+        item = GameItem(loader)
+        original = item._original.upper()
+        rebuilt = item._puzzle.replace('_', item._letter).upper()
+        assert item._removals == item._puzzle.find('_')
+        assert original == rebuilt
 
 def test_puzzle_obfuscation():
-    pass
-    # Must run multiple times (ideally for ALL content items)
-    # Assert that the first letter is NOT lowercase.
-    # Assert that there are no double spaces.
-    # Assert that there is no leading space.
+    loader = ContentLoader()
+    for i in range(loader.total_items):
+        item = GameItem(loader)
+        puzzle = item.get_puzzle(underscores=False)
+        assert not puzzle[0].islower()
+        assert not puzzle[0] == ' '
+        assert puzzle.find("  ") == -1
+
+def test_puzzle_obfuscation_safe():
+    """
+    Ensure the puzzle obfuscation does not damage the actual letters.
+    """
+    loader = ContentLoader()
+    for i in range(loader.total_items):
+        item = GameItem(loader)
+        original = item.get_solution().upper()
+        puzzle = item.get_puzzle(underscores=False).upper()
+        original = original.replace(' ', '')
+        puzzle = puzzle.replace(' ', '')
+        original.replace(item.get_answer(), '')
+        assert original == puzzle

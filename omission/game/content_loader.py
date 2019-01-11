@@ -75,6 +75,20 @@ class ContentLoader(object):
         # Shuffle the content.
         self.reshuffle()
 
+    @property
+    def total_items(self):
+        """
+        :return: the total number of content items available
+        """
+        return len(self._content)
+
+    @property
+    def remaining_items(self):
+        """
+        :return: the remaining number of content items available
+        """
+        return len(self._content) - self._index
+
     def get_next(self):
         """
         Get a random passage from the file.

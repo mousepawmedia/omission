@@ -42,7 +42,8 @@ Author(s): Jason C. McDonald
 # on how to contribute to our projects.
 
 from omission.data.settings import Settings
-
+from omission.game.content_loader import ContentLoader
+from omission.game.game_item import GameItem
 
 def run():
     """
@@ -50,7 +51,6 @@ def run():
     :return: None
     """
     print(Settings.datastring)
-
 
 if __name__ == '__main__':
     run()
