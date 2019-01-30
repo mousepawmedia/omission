@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
-
 """
-Omission
+Tests: Game Round [Omission]
 Version: 2.0
 
 Author(s): Jason C. McDonald
@@ -41,43 +39,45 @@ Author(s): Jason C. McDonald
 # See https://www.mousepawmedia.com/developers for information
 # on how to contribute to our projects.
 
-from omission.data.settings import Settings
-from omission.game.content_loader import ContentLoader
-from omission.game.game_item import GameItem
-
 import math
 from omission.common.game_enums import GameStatus
 from omission.data.game_round_settings import GameRoundSettings
 from omission.game.game_round import GameRound
 
-def done(score):
-    print("Game over!")
-    print(score)
-
-def tick():
-    print("Tick")
-
-def run():
+def test_timed():
     """
-    Start the game.
-    :return: None
+    Test the basic behaviors of timed mode.
     """
-    # print(Settings.datastring)
+
+    is_gameover = False
+    final_score = 0
+
+    def tick():
+        pass
+
+    def done(score):
+        nonlocal is_gameover, final_score
+        is_gameover = True
+        final_score = score
+
     settings = GameRoundSettings.default_timed()
     round = GameRound(settings, lambda x: x, done, tick, 0.01)
 
     round.start_round()
 
+    # Get five answers right.
     for i in range(5):
         round.check_answer(round.answer)
 
+    # Run out the clock.
     doom = math.ceil(round.seconds / settings.penalty)
     for i in range(doom):
-        for j in range(settings.tries - 1):
-            round.check_answer('?')
-        round.check_answer('?')
+        for j in range(settings.tries-1):
+            assert round.check_answer('?') == GameStatus.Incorrect
+        assert round.check_answer('?') == GameStatus.Skipped
         round.new_item()
 
-
-#if __name__ == '__main__':
-#    run()
+    # FIXME: Failing here. Somehow, done() is never being called in this test
+    # However, this same scenario works in app.py
+    assert is_gameover
+    assert final_score > 0

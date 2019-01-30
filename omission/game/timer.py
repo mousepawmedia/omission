@@ -65,6 +65,7 @@ class GameTimer(object):
         self.tick_callback = tick_callback
 
         # The self._timer object is defined by self.start()
+        self._timer = None
 
         # The number of seconds that have elapsed
         self.elapsed = 0
@@ -99,7 +100,8 @@ class GameTimer(object):
         if self.gameover_callback:
             self.gameover_callback()
 
-    def get_remaining_percent(self):
+    @property
+    def remaining_percent(self):
         """
         :return: the number of seconds in the timer as a percentage.
         """
@@ -111,7 +113,8 @@ class GameTimer(object):
             # Always return 100%
             return 100
 
-    def get_seconds(self):
+    @property
+    def seconds(self):
         """
         :return: the remaining number of seconds in a finite timer OR
         the number of seconds elapsed in an infinite timer.

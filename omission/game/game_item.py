@@ -47,17 +47,23 @@ from omission.game.content_loader import ContentLoader
 
 class GameItem(object):
 
-    def __init__(self, loader: ContentLoader):
+    def __init__(self, loader: ContentLoader, limit: int):
         """
         Generate a new puzzle using the given content loader.
         :param loader: the ContentLoader to use
         """
+
         # The original passage (solution)
         self._original = loader.get_next()
         # The passage with a letter removed
         self._puzzle = ""
         # The number of instances of the letter we remove.
         self._removals = 0
+
+        # The number of attempts allowed
+        self._limit = limit
+        # The number of attempts used
+        self._tries = 0
 
         # Prepare random
         random.seed()
@@ -102,27 +108,61 @@ class GameItem(object):
             # Return the obfuscated form.
             return puzzle
 
-    def get_answer(self):
+    @property
+    def answer(self):
         """
         :return: the missing letter
         """
-        return self._letter
+        return self._letter.upper()
 
-    def get_solution(self):
+    @property
+    def solution(self):
         """
         :return: the complete passage
         """
         return self._original
 
-    def check_answer(self, letter: str):
-        """
-        Check if the given letter is the correct answer.
-        :return: True if correct, else False
-        """
-        return letter.lower() == self._letter
-
-    def get_removals(self):
+    @property
+    def removals(self):
         """
         :return: the number of instances of the letter that were removed
         """
         return self._removals
+
+    @property
+    def tries_left(self):
+        """
+        :return: the number of tries left
+        """
+        return self._limit - self._tries
+
+    @property
+    def tries_used(self):
+        """
+        :return: the number of tries used
+        """
+        return self._tries
+
+    @property
+    def has_tries(self):
+        """
+        :return: whether we have tries left
+        """
+        # A limit less than 1 is infinite; we can always try again
+        if self._limit <= 0:
+            return True
+
+        # If we have a limit, return whether we have tries left
+        return self._tries < self._limit
+
+    def check_answer(self, letter: str):
+        """
+        Check if the given letter is the correct answer, while managing tries.
+        :return: True if correct, else False
+        """
+        if letter.upper() == self._letter.upper():
+            return True
+        else:
+            if self._limit > 0:
+                self._tries += 1
+            return False

@@ -47,7 +47,6 @@ import re
 from omission.common.classproperty import classproperty
 from omission.data.game_round_settings import GameRoundSettings
 
-
 class Settings(object):
     """
     Contains static instances of the settings for each mode.

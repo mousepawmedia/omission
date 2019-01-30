@@ -191,16 +191,16 @@ def test_finite_time():
             # Pause the timer, to ensure our results are accurate
             timer.stop()
             # Check the seconds remaining
-            assert timer.get_seconds() == duration - check_at
+            assert timer.seconds == duration - check_at
             # Check the percentage remaining
-            assert timer.get_remaining_percent() == (check_at / duration) * 100
+            assert timer.remaining_percent == (check_at / duration) * 100
             # Yes, we checked. Don't do it again.
             checked = True
             # Resume the timer
             timer.start()
 
-    assert timer.get_seconds() == 0
-    assert timer.get_remaining_percent() == 0
+    assert timer.seconds == 0
+    assert timer.remaining_percent == 0
 
 
 def test_infinite_time():
@@ -224,9 +224,9 @@ def test_infinite_time():
             # Stop the timer, to ensure our results are accurate.
             timer.stop()
             # Check the seconds elapsed
-            assert timer.get_seconds() == check_at
+            assert timer.seconds == check_at
             # Check the percentage is always 100%
-            assert timer.get_remaining_percent() == 100
+            assert timer.remaining_percent == 100
             # Yes, we checked. Don't do it again.
             checked = True
             # Don't resume the timer. We're done.

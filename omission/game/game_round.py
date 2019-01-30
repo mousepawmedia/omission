@@ -45,6 +45,7 @@ from omission.common.game_enums import GameMode, GameStatus
 from omission.data.game_round_settings import GameRoundSettings
 from omission.game.content_loader import ContentLoader
 from omission.game.timer import GameTimer
+from omission.game.game_item import GameItem
 
 
 class GameRound(object):
@@ -54,7 +55,8 @@ class GameRound(object):
     """
 
     def __init__(self, settings: GameRoundSettings, life_signal,
-                 gameover_callback=None, tick_callback=None):
+                 gameover_callback=None, tick_callback=None,
+                 tick_duration: (float, int) = 1.0):
         """
         Create a new gameplay round.
         :param settings: the settings for the game round
@@ -70,82 +72,263 @@ class GameRound(object):
         self._settings = settings
 
         # If we're playing Timed mode...
-        if self.settings.mode == GameMode.Timed:
+        if self._settings.mode == GameMode.Timed:
             # Create and hook up a finite timer.
-            self._timer = GameTimer(self.settings.limit, life_signal, self.gameover, self.tick)
+            self._timer = GameTimer(self._settings.limit, life_signal, self.gameover, self.tick, tick_duration)
         # Otherwise, for all other modes...
         else:
             # Create and hook up an infinite timer.
             self._timer = GameTimer(0, life_signal, None, self.tick)
 
+        # We'll default to -1 for infinite lives
+        self._lives = -1
+
         # If we're playing Survival mode...
-        if self.settings.mode == GameMode.Survival:
+        if self._settings.mode == GameMode.Survival:
             # Create the life counter.
-            self._lives = self.settings.limit
+            self._lives = self._settings.limit
 
         # Flag whether we're paused
-        self.paused = False
-        # The current puzzle item
-        self.item = None
-        # The current attempt
-        self.attempt = 0
+        self._paused = False
+        # The current puzzle item. Generate one to start with.
+        self.item = GameItem(self.loader, self._settings.tries)
         # The current score
-        self.score = 0
+        self._score = 0
         # The last item score
-        self.item_score = 0
+        self._item_score = 0
         # The current chain multiplier. Default 1.
-        self.chain = 1
+        self._chain = 1
 
     def start_round(self):
         """
         Start the round.
         :return: None
         """
-        # Load the first item.
-        self.new_item()
+        # Load the first item, if nothing is already loaded.
+        if not self.item:
+            self.new_item()
         # Start the game timer.
         self._timer.start()
 
     def new_item(self):
+        """
+        Load a new game item into the round.
+        :return: None
+        """
         # Get a new item.
-        self.item = GameItem(self.loader)
-        # Reset tries
-        self.attempt = 0
+        self.item = GameItem(self.loader, self._settings.tries)
         # Set a new lap on our timer (start of question)
         self._timer.mark_lap()
 
-    def get_status(self):
-        pass
+    @property
+    def lives(self):
+        """
+        :return: the number of lives remaining (-1 if infinite)
+        """
+        return self._lives
 
-    def get_puzzle(self):
-        pass
+    @property
+    def percent_remaining(self):
+        if self._settings.mode == GameMode.Timed:
+            return self._timer.remaining_percent
+        elif self._settings.mode == GameMode.Survival:
+            return (self._lives / self._settings.limit) * 100
+        elif self._settings.mode == GameMode.Infinite:
+            return 100
 
-    def get_tries(self):
-        pass
+    @property
+    def seconds(self):
+        """
+        :return: time remaining (in Timed mode) or time elapsed
+        """
+        return self._timer.seconds
 
+    @property
+    def mode(self):
+        """
+        :return: the GameMode of the round
+        """
+        return self._settings.mode
+
+    @property
+    def score(self):
+        return self._score
+
+    @property
+    def item_score(self):
+        return self._item_score
+
+    @property
+    def chain(self):
+        return self._chain
+
+    @property
+    def solution(self):
+        return self.item.solution
+
+    @property
     def answer(self):
-        pass
+        return self.item.answer
+
+    @property
+    def removals(self) -> str:
+        """
+        Retrieves the removals as a string, accounting for when the hint is supposed to be displayed
+        :return: string showing removal count, or "?", as appropriate
+        """
+        if (self.item.tries_used + 1) >= self._settings.count_at:
+            return str(self.item.removals)
+        else:
+            return "?"
+
+    @property
+    def puzzle(self):
+        """
+        Retrieves the puzzle, accounting for when the underscores (clue) are supposed to be displayed
+        :return: puzzle, with or without underscores as appropriate
+        """
+        # We must account for the off-by-one: in settings, first try is 1; in item, first try is 0
+        if (self.item.tries_used + 1) >= self._settings.clue_at:
+            return self.item.get_puzzle(underscores=True)
+        else:
+            return self.item.get_puzzle(underscores=False)
+
+    def check_answer(self, letter: str, progress=False):
+        """
+        Pass answer in.
+        :return: GameStatus
+        """
+        # If the answer is correct...
+        if self.item.check_answer(letter):
+
+            # Figure out the score before we do ANYTHING else
+            self.calculate_item_score()
+
+            if self.mode == GameMode.Timed:
+                # Add five seconds to the time.
+                # Be sure to do this AFTER calculating score!
+                self._timer.add_time(self._settings.bonus)
+
+            if progress:
+                # Get the next item.
+                self.new_item()
+
+            # Indicate the answer was correct
+            return GameStatus.Correct
+
+        # Otherwise, if the answer was incorrect...
+        else:
+            # In Timed mode, give penalty
+            if self.mode == GameMode.Timed:
+                self._timer.remove_time(self._settings.penalty)
+
+            # Expire any chains.
+            self._chain = 1
+
+            # If we've still got tries left...
+            if self.item.has_tries:
+                # Indicate the answer was incorrect
+                return GameStatus.Incorrect
+
+            # Otherwise, if we've used all our tries...
+            else:
+                # No attempts on this puzzle left.
+
+                # If we're on Survival mode...
+                if self.mode == GameMode.Survival:
+                    # Remove a life
+                    self._lives -= 1
+                    # If we're out of lives
+                    if self._lives <= 0:
+                        self.gameover()
+
+                if progress:
+                    self.new_item()
+
+                # Indicate the answer was incorrect AND skipped.
+                return GameStatus.Skipped
 
     def calculate_item_score(self):
-        pass
+        """
+        Calculate the item score and add it to the main score.
+        :return: None
+        """
+        # Stop time, to prevent processing time from leaking into score.
+        self._timer.stop()
 
-    def get_score(self):
-        pass
+        # Get the number of letters that were removed, but don't go above 10.
+        letters = min(self.item.removals, 10)
 
-    def get_solution(self):
-        pass
+        # Calculate the base score based on letters removed
+        # 1 letter = 100 points, 5 letters = 60 points, 10+ letters = 10 points
+        base_score = 100-((letters-1)*10)
+
+        # Calculate the attempt bonus: +1x for each remaining try (minimum 1x, to prevent zeroing out score)
+        try_bonus = max(self.item.tries_left + 1, 1)
+
+        # Calculate the time bonus: 5s= +1x, 4s = +2x, ... 1s = +5x (no bonus for 6+)
+        time = max(self._timer.since_lap(), 6)
+        time_bonus = 6 - time
+
+        # Calculate the item score using bonuses and current chain
+        self._item_score = base_score * (try_bonus + time_bonus) * self._chain
+        # Add to the main score
+        self._score += self._item_score
+
+        # Update the chain bonus for NEXT time (if claimed!)
+        if time < self._settings.chain:
+            self._chain += 1
+        else:
+            self._chain = 1
+
+        # Resume time
+        self._timer.start()
+
+    @property
+    def paused(self):
+        """
+        :return: True if paused, else False
+        """
+        return self._paused
 
     def pause(self):
-        pass
-
-    def is_paused(self):
-        pass
+        """
+        Pause the game
+        :return: None
+        """
+        if not self._paused:
+            self._paused = True
+            self._timer.stop()
 
     def resume(self):
-        pass
+        """
+        Unpause the game
+        :return: None
+        """
+        if self._paused:
+            self._paused = False
+            self._timer.start()
 
     def gameover(self):
-        pass
+        """
+        End the game, calling the gameover callback function, and passing the final score to it.
+        :return: None
+        """
+        # Stop the timer
+        self._timer.stop()
+        # If we have a gameover callback, call it now...
+        if self._gameover_callback:
+            self._gameover_callback(self._score)
 
     def tick(self):
-        pass
+        """
+        Runs every second
+        :return: None
+        """
+        # If we had a chain, but it should have expired...
+        if self._chain > 1 and self._timer.since_lap() >= self._settings.chain:
+            self._chain = 1
+        # If we have a tick callback, call it now...
+        if self._tick_callback:
+            self._tick_callback()
+
