@@ -1,61 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2018 MousePaw Media <developers@mousepawmedia.com> -->
+<!-- Copyright 2021 MousePaw Media -->
 <component type="desktop-application">
-  <id>com.mousepawmedia.omission</id>
-  <metadata_license>MIT</metadata_license>
-  <project_license>BSD-3-Clause</project_license>
-  <name>Omission</name>
-  <summary>A deceptively simple word puzzle</summary>
+    <id>com.mousepawmedia.omission</id>
+    <metadata_license>CC-BY-3.0</metadata_license>
+    <project_license>BSD-3-Clause</project_license>
+    <name>Omission</name>
+    <summary>A deceptively simple word puzzle.</summary>
 
-​  <description>
-​    <p>
-      In today's age of texting and social media, we pride ourselves on our
-      ability to 'read typos'. Our eyes have adapted to overlook misspellings
-      and missing letters. In today's age of texting and social media, we pride
-      ourselves on our ability to 'read typos'. Our eyes have adapted to
-      overlook misspellings and missing letters.
-    </p>
-    <p>
-      Omission challenges you to put your language detective skills to the
-      test with a deceptively simple challenge: Find the missing letter! A
-      famous quotation will be displayed, with all the instances of a single
-      letter removed.
-    </p>
-    <p>
-      How fast can you figure out the missing letter? It's a race to beat the
-      clock (unless you choose another mode) as you try to complete as many
-      passages as you can. The faster you answer, the more points you gain.
-    </p>
-    <p>
-      But don't let your guard down! Omission is designed to conceal any
-      evidence of the missing letter, and that's enough to sometimes stump
-      even the professional writers who designed it!
-    </p>
-  </description>
+    <description>
+        <p>
+            In today&apos;s age of texting and social media, we pride ourselves on our
+            ability to &apos;read typos&apos;. Our eyes have adapted to overlook misspellings
+            and missing letters. In today&apos;s age of texting and social media, we pride
+            ourselves on our ability to &apos;read typos&apos;. Our eyes have adapted to
+            overlook misspellings and missing letters.
+        </p>
+        <p>
+            Omission challenges you to put your language detective skills to the
+            test with a deceptively simple challenge: Find the missing letter! A
+            famous quotation will be displayed, with all the instances of a single
+            letter removed.
+        </p>
+        <p>
+            How fast can you figure out the missing letter? It&apos;s a race to beat the
+            clock (unless you choose another mode) as you try to complete as many
+            passages as you can. The faster you answer, the more points you gain.
+        </p>
+        <p>
+            But don&apos;t let your guard down! Omission is designed to conceal any
+            evidence of the missing letter, and that&apos;s enough to sometimes stump
+            even the professional writers who designed it!
+        </p>
+    </description>
 
-  <launchable type="desktop-id">omission</launchable>
+    <launchable type="desktop-id">com.mousepawmedia.omission.desktop</launchable>
 
-  <screenshots>
-    <screenshot type="default">
-      <caption>Omission Gameplay: Timed Mode</caption>
-      <image>https://mousepawgames.com/img/screenshots/omission/omission_timed.jpg</image>
-    </screenshot>
-  </screenshots>
+    <screenshots>
+        <screenshot type="default">
+            <caption>Omission Gameplay: Timed Mode</caption>
+            <image>https://mousepawgames.com/img/screenshots/omission/omission_timed.jpg</image>
+        </screenshot>
+    </screenshots>
 
-  <url type="homepage">https://mousepawgames.com/games/omission</url>
+    <url type="homepage">https://mousepawgames.com/games/omission</url>
+    <developer_name>MousePaw Media</developer_name>
+    <update_contact>support_AT_mousepawmedia.com</update_contact>
 
-  <developer_name>MousePaw Media</developer_name>
-  <update_contact>support_AT_mousepawmedia.com</update_contact>
+    <provides>
+        <binary>omission</binary>
+    </provides>
 
-  <provides>
-    <binary>omission</binary>
-  </provides>
-
-  <releases>
-    <release version="1.0.0rc2" date="2018-03-16">
-      <description>
-        <p>Initial release (pre-release 2)</p>
-      </description>
-    </release>
-</releases>
-​</component>
+    <releases>
+        <release version="1.0.0" date="2021-03-20">
+            <description>
+                <p>Initial release</p>
+            </description>
+        </release>
+    </releases>
+</component>

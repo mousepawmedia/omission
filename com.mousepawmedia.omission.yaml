@@ -1,10 +1,10 @@
-app-id: com.codemouse92.timecard
+app-id: com.mousepawmedia.omission
 default-branch: stable
-base: io.qt.qtwebkit.BaseApp
-base-version: "5.14"
-runtime: org.kde.Platform
-runtime-version: "5.14"
-sdk: org.kde.Sdk
+# base: io.qt.qtwebkit.BaseApp
+# base-version: "5.14"
+runtime: org.gnome.Platform
+runtime-version: "3.38"
+sdk: org.gnome.Sdk
 command: Omission
 cleanup:
     - /include
@@ -35,10 +35,10 @@ modules:
       build-commands:
         - python3 -m pip install --prefix=${FLATPAK_DEST} --no-binary kivy kivy
         - python3 setup.py install --prefix=${FLATPAK_DEST}
-        - install -Dm644 app/share/icons/${FLATPAK_ID}.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
-        - install -Dm644 app/share/applications/${FLATPAK_ID}.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
-        - install -Dm644 app/share/metainfo/${FLATPAK_ID}.appdata.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.appdata.xml
+        - install -Dm644 share/icons/${FLATPAK_ID}.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
+        - install -Dm644 share/applications/${FLATPAK_ID}.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+        - install -Dm644 share/metainfo/${FLATPAK_ID}.appdata.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.appdata.xml
       sources:
         - type: git
-          url: https://github.com/codemouse92/timecard
-          branch: stable
+          url: https://github.com/mousepawmedia/omission
+          branch: repackage
