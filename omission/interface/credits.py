@@ -84,7 +84,6 @@ Allie Jensen
 Jarek Thomas
 Ethan Thompson
 Jane McArthur
-(Your Name Here, Tester!)
 """, """
 -- Special Thanks --
 #python and #kivy IRC channels (Freenode)
@@ -100,7 +99,7 @@ The OMISSION text content (content.txt) is Public Domain.
 """, """
 -- License (Cont.) --
 The OMISSION logo and sound effects are
-Copyright 2017 MousePaw Media. All Rights Reserved.
+Copyright 2021 MousePaw Media. All Rights Reserved.
 """, """
 MousePaw Games
 Scamper Into Adventure!

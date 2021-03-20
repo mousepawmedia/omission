@@ -10,7 +10,8 @@ dist
 Makefile
 omission.spec
 setup.py
-snap
+flatpak
+.flatpak-builder
 pylintrc
 __pycache__
 *.pyc

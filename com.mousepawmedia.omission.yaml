@@ -1,7 +1,5 @@
 app-id: com.mousepawmedia.omission
 default-branch: stable
-# base: io.qt.qtwebkit.BaseApp
-# base-version: "5.14"
 runtime: org.gnome.Platform
 runtime-version: "3.38"
 sdk: org.gnome.Sdk
@@ -49,4 +47,4 @@ modules:
       sources:
         - type: git
           url: https://github.com/mousepawmedia/omission
-          branch: repackage
+          tag: v1.0.0
