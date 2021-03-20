@@ -116,3 +116,7 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Flatpak
+.flatpak-builder/
+flatpak/

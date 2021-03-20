@@ -1,5 +1,2 @@
-# NOTE: cython must be installed BEFORE running `pip install kivy`. It is only
-# here for technical correctness.
-cython == 0.25.2
 kivy >= 1.10.0
 appdirs >= 1.4.3
