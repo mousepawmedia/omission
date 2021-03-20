@@ -5,7 +5,7 @@ default-branch: stable
 runtime: org.gnome.Platform
 runtime-version: "3.38"
 sdk: org.gnome.Sdk
-command: Omission
+command: omission
 cleanup:
     - /include
     - /share/aclocal
@@ -27,13 +27,21 @@ finish-args:
     - --env=PATH=/app/bin
     - --env=PYTHONPATH=/app/packages/python
 modules:
+    - name: kivy
+      buildsystem: simple
+      build-options:
+        build-args:
+          - "--share=network"
+      build-commands:
+        - python3 -m pip install --prefix=${FLATPAK_DEST} --ignore-installed pygments
+        - python3 -m pip install --prefix=${FLATPAK_DEST} kivy[full]==2.0.0 --no-binary kivy
+
     - name: omission
       buildsystem: simple
       build-options:
         build-args:
           - "--share=network"
       build-commands:
-        - python3 -m pip install --prefix=${FLATPAK_DEST} --no-binary kivy kivy
         - python3 setup.py install --prefix=${FLATPAK_DEST}
         - install -Dm644 share/icons/${FLATPAK_ID}.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
         - install -Dm644 share/applications/${FLATPAK_ID}.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
