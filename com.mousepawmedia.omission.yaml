@@ -47,4 +47,5 @@ modules:
       sources:
         - type: git
           url: https://github.com/mousepawmedia/omission
-          tag: v1.0.0
+          branch: fresh
+          #tag: v1.0.0
