@@ -5,6 +5,7 @@ from kivy_deps import sdl2, glew
 block_cipher = None
 
 added_files = [
+    ('src/omission/interface/omission.kv', 'omission/interface')
 	('src/omission/resources/audio/*.ogg','omission/resources/audio'),
 	('src/omission/resources/content/*.txt','omission/resources/content'),
 	('src/omission/resources/font','omission/resources/font'),
