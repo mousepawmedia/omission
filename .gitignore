@@ -120,3 +120,6 @@ ENV/
 # Flatpak
 .flatpak-builder/
 flatpak/
+
+# Inno Setup
+Output/
