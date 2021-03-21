@@ -5,13 +5,13 @@ from kivy_deps import sdl2, glew
 block_cipher = None
 
 added_files = [
-	('omission/resources/audio/*.ogg','omission/resources/audio'),
-	('omission/resources/content/*.txt','omission/resources/content'),
-	('omission/resources/font','omission/resources/font'),
-	('omission/resources/icons/*.png','omission/resources/icons')
+	('src/omission/resources/audio/*.ogg','omission/resources/audio'),
+	('src/omission/resources/content/*.txt','omission/resources/content'),
+	('src/omission/resources/font','omission/resources/font'),
+	('src/omission/resources/icons/*.png','omission/resources/icons')
 ]
 
-a = Analysis(['omission\\__main__.py'],
+a = Analysis(['src\\omission\\__main__.py'],
              pathex=['C:\\Users\\Jason C. McDonald\\repos\\omission'],
              binaries=[],
              datas=added_files,

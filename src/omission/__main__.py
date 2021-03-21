@@ -1,12 +1,17 @@
 """
-Starts Omission
+Main Class [Omission]
 """
 
 from omission.interface.window import OmissionApp
 
-def run():
+
+def main():
     """
-    Run Omission
+    Starts Omission.
     """
     app = OmissionApp()
     app.run()
+
+
+if __name__ == '__main__':
+    main()
