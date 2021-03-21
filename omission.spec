@@ -1,72 +1,41 @@
+# -*- mode: python ; coding: utf-8 -*-
 
-NAME = 'Omission'
-import os
-from os.path import join
-from kivy.utils import platform
+from kivy_deps import sdl2, glew
 
-if platform == 'win':
-    from kivy.deps import sdl2, glew
-else:
-    glew = sdl2 = None
+block_cipher = None
 
-
-IS_LINUX = os.name == 'posix' and os.uname()[0] == 'Linux'
-if IS_LINUX:
-    from PyInstaller.depend import dylib
-    dylib._unix_excludes.update({
-        r'.*nvidia.*': 1,
-        r'.*libdrm.*': 1,
-  r'.*hashlib.*': 1,
-        })
-
-    dylib.exclude_list = dylib.ExcludeList()
-
-from kivy.tools.packaging.pyinstaller_hooks import get_hooks
-
-binexcludes = [
-     'gobject', 'gio', 'gtk', 'gi', 'wx', 'twisted', 'curses',
-     'gstreamer', 'libffi', 'libglib', 'libmikmod', 'libflac', 'libvorbis',
-     'libgstreamer', 'libvorbisfile', 'include', 'libstdc++.so.6',
-     'gst_plugins', 'liblapack', 'pygame', 'lib/', 'include', 'kivy_install/modules',
+added_files = [
+	('omission/resources/audio/*.ogg','omission/resources/audio'),
+	('omission/resources/content/*.txt','omission/resources/content'),
+	('omission/resources/font','omission/resources/font'),
+	('omission/resources/icons/*.png','omission/resources/icons')
 ]
 
-a = Analysis(['omission/__main__.py'],
-             pathex=['.'],
-             hiddenimports=['numpy.core.multiarray'],
-             excludes=binexcludes,
-             **get_hooks())
-
-pyz = PYZ(a.pure)
-
-name = '%s%s' % (NAME, '.exe' if os.name == 'nt' else '')
-
-def not_in(x, binexcludes):
-    return not any(y in x.lower() for y in binexcludes)
-
-a.binaries = [
-    x for x in a.binaries
-    if not_in(x[0], binexcludes)
-]
-
+a = Analysis(['omission\\__main__.py'],
+             pathex=['C:\\Users\\Jason C. McDonald\\repos\\omission'],
+             binaries=[],
+             datas=added_files,
+             hiddenimports=[],
+             hookspath=[],
+             runtime_hooks=[],
+             excludes=[],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher,
+             noarchive=False)
+pyz = PYZ(a.pure, a.zipped_data,
+             cipher=block_cipher)
 exe = EXE(pyz,
           a.scripts,
-          exclude_binaries=True,
-          name=name,
+          a.binaries,
+          a.zipfiles,
+          a.datas,
+          *[Tree(p) for p in (sdl2.dep_bins + glew.dep_bins)],
+          name='omission',
           debug=False,
-          strip=None,
+          bootloader_ignore_signals=False,
+          strip=False,
           upx=True,
-          console=False,
-          icon=join('deploy_windows', 'omission.ico'))
-
-with open('blacklist.txt') as f:
-    excludes = [x.strip() for x in f.readlines()]
-
-coll = COLLECT(exe,
-               Tree('.', excludes=excludes),
-               a.binaries,
-               a.zipfiles,
-               a.datas,
-               *([Tree(p) for p in (sdl2.dep_bins + glew.dep_bins)] if sdl2 else []),
-               strip=None,
-               upx=True,
-               name=NAME)
+          upx_exclude=[],
+          runtime_tmpdir=None,
+          console=True , icon='deploy_windows\\omission.ico')
