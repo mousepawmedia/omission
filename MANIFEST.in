@@ -1,8 +1,8 @@
 include README.md LICENSE.md
-include src/resources/audio/*.ogg
-include src/resources/content/*.txt
-include src/resources/font/open-dyslexic/*.otf
-include src/resources/font/orbitron/*.otf
-include src/resources/font/source-sans-pro/*.otf
-include src/resources/icons/*.png
-include src/interface/omission.kv
+include src/omission/resources/audio/*.ogg
+include src/omission/resources/content/*.txt
+include src/omission/resources/font/open-dyslexic/*.otf
+include src/omission/resources/font/orbitron/*.otf
+include src/omission/resources/font/source-sans-pro/*.otf
+include src/omission/resources/icons/*.png
+include src/omission/interface/omission.kv
