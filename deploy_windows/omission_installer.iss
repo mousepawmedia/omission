@@ -19,7 +19,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultGroupName={#MyAppName}
+DefaultGroupName=MousePaw Media
 LicenseFile=C:\Users\Jason C. McDonald\repos\omission\deploy_windows\LICENSE.txt
 OutputBaseFilename=setup
 Compression=lzma
@@ -32,7 +32,10 @@ CloseApplications=no
 RestartApplications=False
 DisableWelcomePage=False
 WizardImageFile=C:\Users\Jason C. McDonald\repos\omission\deploy_windows\sidebar.bmp
-CreateAppDir=False
+DefaultDirName=C:\Program Files (x86)\MousePaw Media\Omission\
+UsePreviousAppDir=False
+DisableDirPage=no
+UsePreviousGroup=False
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
