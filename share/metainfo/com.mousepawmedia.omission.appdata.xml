@@ -33,6 +33,8 @@
         </p>
     </description>
 
+    <content_rating type="oars-1.0" />
+
     <launchable type="desktop-id">com.mousepawmedia.omission.desktop</launchable>
 
     <screenshots>
