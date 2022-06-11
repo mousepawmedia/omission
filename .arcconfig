@@ -1,4 +1,5 @@
 {
-	"phabricator.uri" : "https://phabricator.mousepawmedia.net",
+	"history.immutable" : true,
+	"phabricator.uri" : "https://phab.mousepawmedia.com",
 	"repository.callsign" : "O"
 }
